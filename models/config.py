@@ -143,6 +143,9 @@ class GalgameOcrReaderConfig:
     ocr_reader_known_screen_timeout_seconds: float = 5.0
     ocr_reader_max_unobserved_advances_before_hold: int = 3
     ocr_reader_unobserved_advance_hold_duration_seconds: float = 0.0
+    # Кэш результата OCR по хэшу кадра: если захваченный кадр не изменился,
+    # повторно используем предыдущий результат распознавания без инференса.
+    ocr_reader_frame_cache_enabled: bool = True
 
 
 @dataclass(slots=True)
@@ -178,6 +181,9 @@ class GalgameRapidOcrConfig:
     rapidocr_ocr_version: str = "PP-OCRv4"
     rapidocr_auto_detect_lang: bool = True
     rapidocr_auto_detect_last_lang: str = ""
+    # Классификатор ориентации (Cls) RapidOCR: не нужен для горизонтального
+    # текста диалогов VN и экономит один инференс на каждую строку.
+    rapidocr_use_cls: bool = False
 
 
 @dataclass(slots=True, init=False)
@@ -361,6 +367,10 @@ class GalgameConfig:
             "ocr_reader",
             "ocr_reader_unobserved_advance_hold_duration_seconds",
         ),
+        "ocr_reader_frame_cache_enabled": (
+            "ocr_reader",
+            "ocr_reader_frame_cache_enabled",
+        ),
         "vision_classifier_enabled": ("vision", "vision_classifier_enabled"),
         "vision_classifier_model_dir": ("vision", "vision_classifier_model_dir"),
         "vision_classifier_model_name": ("vision", "vision_classifier_model_name"),
@@ -384,6 +394,7 @@ class GalgameConfig:
         "rapidocr_ocr_version": ("rapidocr", "rapidocr_ocr_version"),
         "rapidocr_auto_detect_lang": ("rapidocr", "rapidocr_auto_detect_lang"),
         "rapidocr_auto_detect_last_lang": ("rapidocr", "rapidocr_auto_detect_last_lang"),
+        "rapidocr_use_cls": ("rapidocr", "rapidocr_use_cls"),
     }
 
     def __init__(

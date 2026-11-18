@@ -837,6 +837,10 @@ def build_config(raw_config: dict[str, Any]) -> GalgameConfig:
             0.0,
             minimum=0.0,
         ),
+        ocr_reader_frame_cache_enabled=_coerce_bool(
+            ocr_reader_obj.get("frame_cache_enabled"),
+            True,
+        ),
         ocr_reader_languages=str(ocr_reader_obj.get("languages") or "chi_sim+jpn+eng"),
         ocr_reader_left_inset_ratio=_coerce_float(
             ocr_reader_obj.get("left_inset_ratio"),
@@ -979,6 +983,10 @@ def build_config(raw_config: dict[str, Any]) -> GalgameConfig:
         rapidocr_auto_detect_lang=_coerce_bool(
             rapidocr_obj.get("auto_detect_lang"),
             True,
+        ),
+        rapidocr_use_cls=_coerce_bool(
+            rapidocr_obj.get("use_cls"),
+            False,
         ),
     )
 
