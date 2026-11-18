@@ -80,6 +80,7 @@ class CaptureMixin:
         self._last_capture_timing = {}
         self._consecutive_same_capture_frames = 0
         self._stale_capture_backend = False
+        self._ocr_frame_cache.clear()
         self._last_rejected_ocr_text = ""
         self._last_rejected_ocr_reason = ""
         self._last_rejected_ocr_at = ""
@@ -1005,7 +1006,47 @@ class CaptureMixin:
         capture_hash = self._capture_image_hash(frame)
         capture_hash_duration = max(0.0, self._time_fn() - hash_started_at)
         ocr_started_at = self._time_fn()
-        extraction = self._extract_text_from_image(frame, plan=plan)
+        # Frame gating: если кроп по текущему профилю не изменился (хэш
+        # кадра совпал с закешированным), повторно используем результат
+        # прошлого распознавания и не вызываем инференс. Повторный текст
+        # продолжает питать stability-счётчик как раньше, а смена реплики
+        # меняет хэш — полный OCR срабатывает немедленно.
+        ocr_skipped_reason = ""
+        cached_entry = (
+            self._ocr_frame_cache.get(self._capture_profile_key(profile))
+            if bool(getattr(self._config, "ocr_reader_frame_cache_enabled", True))
+            and capture_hash
+            else None
+        )
+        if cached_entry is not None and cached_entry[0] == capture_hash:
+            _cached_hash, cached_text, _cached_detail, cached_boxes, cached_confidence = (
+                cached_entry
+            )
+            extraction = OcrExtractionResult(
+                text=cached_text,
+                backend=plan.primary,
+                backend_detail="frame_cache_hit",
+                boxes=list(cached_boxes),
+                ocr_confidence=cached_confidence,
+                text_source="bottom_region",
+            )
+            ocr_skipped_reason = "frame_unchanged"
+        else:
+            extraction = self._extract_text_from_image(frame, plan=plan)
+            if (
+                bool(getattr(self._config, "ocr_reader_frame_cache_enabled", True))
+                and capture_hash
+            ):
+                self._ocr_frame_cache[self._capture_profile_key(profile)] = (
+                    capture_hash,
+                    str(extraction.text or ""),
+                    str(extraction.backend_detail or ""),
+                    list(extraction.boxes or []),
+                    float(extraction.ocr_confidence or 0.0),
+                )
+                # Не даём кэшу разрастаться: диалог/меню/фолбэк — несколько кропов.
+                while len(self._ocr_frame_cache) > 4:
+                    self._ocr_frame_cache.pop(next(iter(self._ocr_frame_cache)))
         ocr_duration = max(0.0, self._time_fn() - ocr_started_at)
         vision_frame = frame
         if isinstance(frame_info, dict):
@@ -1055,6 +1096,20 @@ class CaptureMixin:
             "ocr_extract_duration_seconds": ocr_duration,
             "background_hash_skipped": background_hash_skipped,
         }
+        if ocr_skipped_reason:
+            extraction.timing["ocr_skipped_reason"] = ocr_skipped_reason
+        else:
+            # Диагностика: фактические провайдеры ONNX Runtime (DML/CPU).
+            # Только в полном OCR-прогоне: кэш не создаёт новых сессий.
+            backend_impl = getattr(extraction.backend, "backend", None)
+            get_providers = getattr(backend_impl, "execution_providers", None)
+            if callable(get_providers):
+                try:
+                    providers = [str(p) for p in (get_providers() or [])]
+                except Exception:
+                    providers = []
+                if providers:
+                    extraction.timing["ocr_execution_providers"] = ",".join(providers)
         if isinstance(frame_info, dict):
             extraction.capture_backend_kind = str(
                 frame_info.get("galgame_capture_backend_kind")

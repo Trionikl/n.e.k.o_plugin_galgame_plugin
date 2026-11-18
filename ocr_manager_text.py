@@ -651,7 +651,13 @@ class TextMixin:
         self._vision_classifier_detail = "matched"
         return classification
 
-    def _rapidocr_cache_key(self) -> tuple[str, str, str, str, str]:
+    def _rapidocr_cache_key(self) -> tuple[str, str, str, str, str, bool]:
+        return (
+            *self._rapidocr_runtime_cache_key_base(),
+            bool(getattr(self._config, "rapidocr_use_cls", False)),
+        )
+
+    def _rapidocr_runtime_cache_key_base(self) -> tuple[str, str, str, str, str]:
         return _rapidocr_runtime_cache_key(
             install_target_dir_raw=self._config.rapidocr_install_target_dir,
             engine_type=self._config.rapidocr_engine_type,
@@ -671,6 +677,7 @@ class TextMixin:
             lang_type=self._config.rapidocr_lang_type,
             model_type=self._config.rapidocr_model_type,
             ocr_version=self._config.rapidocr_ocr_version,
+            use_cls=bool(getattr(self._config, "rapidocr_use_cls", False)),
         )
         self._rapidocr_backend_cache_key = key
         self._rapidocr_backend_cache = backend

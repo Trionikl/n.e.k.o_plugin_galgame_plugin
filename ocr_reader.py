@@ -336,6 +336,12 @@ class OcrReaderManager(
         self._capture_region_occluded = False
         self._capture_target_foreground = False
         self._last_capture_image_hash = ""
+        # Кэш результата OCR: ключ — _capture_profile_key (кроп по профилю),
+        # значение — (хэш кадра, text, backend_detail, boxes, ocr_confidence).
+        # Позволяет пропускать инференс, пока кадр не изменился (frame gating).
+        self._ocr_frame_cache: dict[
+            tuple[float, float, float, float], tuple[str, str, str, list[Any], float]
+        ] = {}
         self._last_capture_source_size: dict[str, float] = {}
         self._last_capture_rect: dict[str, float] = {}
         self._last_capture_window_rect: dict[str, float] = {}
@@ -391,7 +397,7 @@ class OcrReaderManager(
             self.start_foreground_advance_monitor()
         self._capture_backend_kind = str(getattr(self._capture_backend, "selection", "custom"))
         self._capture_backend_detail = ""
-        self._rapidocr_backend_cache_key: tuple[str, str, str, str, str] | None = None
+        self._rapidocr_backend_cache_key: tuple[str, str, str, str, str, bool] | None = None
         self._rapidocr_backend_cache: RapidOcrBackend | None = None
         self._ocr_lang_detector = _OcrLangDetector()
         self._ocr_lang_cooldown_seconds = 60.0

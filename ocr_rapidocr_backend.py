@@ -59,12 +59,14 @@ class RapidOcrBackend:
         lang_type: str,
         model_type: str,
         ocr_version: str,
+        use_cls: bool = False,
     ) -> None:
         self._install_target_dir_raw = install_target_dir_raw
         self._engine_type = engine_type
         self._lang_type = lang_type
         self._model_type = model_type
         self._ocr_version = ocr_version
+        self._use_cls = bool(use_cls)
         self._runtime = None
         self._runtime_lock = threading.Lock()
         self._runtime_cache_key: tuple[str, str, str, str, str] | None = None
@@ -150,7 +152,10 @@ class RapidOcrBackend:
 
                 runtime = self._ensure_runtime()
                 with _RAPIDOCR_INFERENCE_LOCK:
-                    runtime(np.asarray(Image.new("RGB", (640, 360), "white")))
+                    runtime(
+                        np.asarray(Image.new("RGB", (640, 360), "white")),
+                        use_cls=self._use_cls,
+                    )
                 self._warmup_completed = True
             except Exception as exc:
                 self._warmup_error = str(exc)
@@ -161,6 +166,24 @@ class RapidOcrBackend:
                         pass
 
         threading.Thread(target=_warmup, name="galgame-rapidocr-warmup", daemon=True).start()
+
+    def execution_providers(self) -> list[str]:
+        """Фактические ONNX Runtime провайдеры сессии детектора (диагностика).
+
+        Возвращает чистый list[str] — MessagePack-безопасно для RPC-ответов.
+        """
+        session = getattr(
+            getattr(getattr(self._runtime, "text_det", None), "infer", None),
+            "session",
+            None,
+        )
+        get_providers = getattr(session, "get_providers", None)
+        if not callable(get_providers):
+            return []
+        try:
+            return [str(provider) for provider in (get_providers() or [])]
+        except Exception:
+            return []
 
     def close(self) -> None:
         """Release Python references that own RapidOCR's native ONNX sessions."""
@@ -187,7 +210,7 @@ class RapidOcrBackend:
         runtime = self._ensure_runtime()
         prepared = _prepare_ocr_image(image, apply_filters=False).convert("RGB")
         with _RAPIDOCR_INFERENCE_LOCK:
-            output = runtime(np.asarray(prepared))
+            output = runtime(np.asarray(prepared), use_cls=self._use_cls)
         return _rapidocr_text_from_output(output)
 
     def extract_text_with_boxes(self, image: Any) -> tuple[str, list[OcrTextBox]]:
@@ -196,7 +219,7 @@ class RapidOcrBackend:
         runtime = self._ensure_runtime()
         prepared = _prepare_ocr_image(image, apply_filters=False).convert("RGB")
         with _RAPIDOCR_INFERENCE_LOCK:
-            output = runtime(np.asarray(prepared))
+            output = runtime(np.asarray(prepared), use_cls=self._use_cls)
         lines = _rapidocr_lines_from_output(output)
         if not lines:
             return "", []

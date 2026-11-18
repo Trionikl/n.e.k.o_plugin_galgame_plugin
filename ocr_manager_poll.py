@@ -93,6 +93,7 @@ class PollMixin:
         self._last_capture_timing = {}
         self._consecutive_same_capture_frames = 0
         self._stale_capture_backend = False
+        self._ocr_frame_cache.clear()
         self._last_background_hash = ""
         self._last_background_hash_capture_at = 0.0
         self._pending_background_hash = ""
