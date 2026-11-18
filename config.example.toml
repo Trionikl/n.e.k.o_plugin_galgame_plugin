@@ -112,6 +112,10 @@ screen_awareness_model_min_confidence = 0.55
 screen_templates = []
 screen_type_transition_emit = true
 known_screen_timeout_seconds = 5.0
+# Frame gating: если захваченный кадр не изменился (считаем быстрый hash),
+# повторно используем результат прошлого OCR и не вызываем инференс.
+# Экономит CPU/GPU при чтении текста. Отключить: frame_cache_enabled = false.
+frame_cache_enabled = true
 
 [rapidocr]
 enabled = true
@@ -128,3 +132,8 @@ ocr_version = "PP-OCRv4"
 # Auto-detect game text language and switch RapidOCR recognition models when
 # the target model is already available. Set false to always use lang_type.
 auto_detect_lang = true
+# Orientation classifier (Cls) of RapidOCR. Keep false for horizontal VN
+# dialogue text — it skips one inference per detected line and is not needed
+# for non-rotated game UI. Set true only if the target can show upside-down
+# text regions.
+use_cls = false
