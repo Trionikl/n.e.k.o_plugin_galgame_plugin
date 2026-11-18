@@ -344,3 +344,25 @@ def make_error(
     if details:
         payload["details"] = dict(details)
     return payload
+
+
+def to_msgpack_safe(obj: Any) -> Any:
+    if obj is None or isinstance(obj, (str, int, float, bool)):
+        return obj
+    if isinstance(obj, dict):
+        return {str(k): to_msgpack_safe(v) for k, v in obj.items()}
+    elif isinstance(obj, (list, tuple, set)):
+        return [to_msgpack_safe(v) for v in obj]
+    elif hasattr(obj, "__fspath__"):
+        return str(obj)
+    elif hasattr(obj, "item"):
+        try:
+            return obj.item()
+        except Exception:
+            pass
+    elif hasattr(obj, "tolist"):
+        try:
+            return obj.tolist()
+        except Exception:
+            pass
+    return str(obj)

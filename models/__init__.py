@@ -90,6 +90,7 @@ from .sanitizers import (
     sanitize_screen_ui_elements,
     sanitize_session_snapshot,
     sanitize_snapshot_state,
+    to_msgpack_safe,
 )
 from .sanitizers import (
     _bool as _bool,
@@ -265,4 +266,5 @@ __all__ = [
     "sanitize_screen_ui_elements",
     "sanitize_session_snapshot",
     "sanitize_snapshot_state",
+    "to_msgpack_safe",
 ]

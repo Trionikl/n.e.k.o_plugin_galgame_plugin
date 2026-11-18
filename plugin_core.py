@@ -100,6 +100,7 @@ from .models import (
     compute_ocr_window_aspect_ratio,
     json_copy,
     make_error,
+    to_msgpack_safe,
 )
 from .models import MODE_CHOICE_ADVISOR as MODE_CHOICE_ADVISOR
 from .models import OCR_CAPTURE_PROFILE_RATIO_KEYS as OCR_CAPTURE_PROFILE_RATIO_KEYS
@@ -3118,7 +3119,7 @@ class GalgamePlugin(
                 payload["agent_diagnostic"] = f"agent_status_unavailable: {exc}"
                 payload["agent_diagnostic_required"] = True
         payload["primary_diagnosis"] = build_primary_diagnosis(payload)
-        return payload
+        return to_msgpack_safe(payload)
 
     def _resolve_current_run_id(self, extra_args: dict[str, Any] | None = None) -> str:
         current = str(getattr(self.ctx, "run_id", "") or "").strip()
