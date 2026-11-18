@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from ._common import (
     OCR_CAPTURE_PROFILE_SAVE_SCOPES,
     OCR_CAPTURE_PROFILE_STAGE_DEFAULT,
@@ -51,9 +52,11 @@ class _GalgameSetOcrCaptureProfileMixin:
         clear: bool = False,
         **_,
     ):
-        def _parse_ratio(name: str, value: float) -> float:
+        def _parse_ratio(name: str, value: float | str) -> float:
             if isinstance(value, bool):
                 raise ValueError(f"{name} must be a number")
+            if isinstance(value, str):
+                value = value.replace(",", ".").strip()
             try:
                 parsed = float(value)
             except (TypeError, ValueError) as exc:
@@ -107,4 +110,16 @@ class _GalgameSetOcrCaptureProfileMixin:
             return Err(SdkError(str(exc)))
         except Exception as exc:
             return Err(SdkError(f"persist OCR capture profile failed: {exc}"))
-        return Ok(payload)
+
+        # Безопасная очистка типов для MessagePack (преобразует Path, set, datetime)
+        try:
+            safe_payload = json.loads(
+                json.dumps(
+                    payload,
+                    default=lambda o: list(o) if isinstance(o, (set, tuple)) else str(o),
+                )
+            )
+        except Exception:
+            safe_payload = {"status": "ok"}
+
+        return Ok(safe_payload)
