@@ -25,7 +25,7 @@ from plugin.plugins._shared.rapidocr.rapidocr_support import (
 from plugin.sdk.plugin import (
     Err,
     NekoPluginBase,
-    Ok,
+    Ok as _SdkOk,
     SdkError,
     lifecycle,
     neko_plugin,
@@ -116,6 +116,7 @@ from ..models import (
     make_error,
     normalize_rapidocr_ocr_version,
     parse_ocr_capture_profile_bucket_key,
+    to_msgpack_safe,
 )
 from ..ocr_reader import OcrReaderManager
 from ..ocr_runtime_types import utc_now_iso
@@ -196,6 +197,10 @@ from ..state import GalgameSharedState, build_initial_state
 from ..store import GalgameStore
 from ..textractor_support import install_textractor
 from ..ui_api import build_open_ui_payload
+
+
+def Ok(value: Any = None) -> Any:
+    return _SdkOk(to_msgpack_safe(value))
 
 
 def inspect_rapidocr_installation(**kwargs):
