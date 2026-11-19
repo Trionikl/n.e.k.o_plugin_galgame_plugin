@@ -72,6 +72,7 @@ from .service import (
     mode_allows_agent_actuation,
     mode_allows_agent_push,
     mode_allows_choice_push,
+    mode_allows_scene_push,
     resolve_effective_current_line,
 )
 
@@ -175,6 +176,7 @@ __all__ = [
     "mode_allows_agent_actuation",
     "mode_allows_agent_push",
     "mode_allows_choice_push",
+    "mode_allows_scene_push",
     "OCR_CAPTURE_PROFILE_STAGE_CONFIG",
     "OCR_CAPTURE_PROFILE_STAGE_DEFAULT",
     "OCR_CAPTURE_PROFILE_STAGE_DIALOGUE",

@@ -43,7 +43,14 @@ from .service import (
 
 
 class LLMGateway:
-    def __init__(self, plugin, logger, config, *, backend: GalgameLLMBackend | None = None) -> None:
+    def __init__(
+        self,
+        plugin: Any,
+        logger: logging.Logger,
+        config: GalgameLLMConfig,
+        *,
+        backend: GalgameLLMBackend | None = None,
+    ) -> None:
         self._plugin = plugin
         self._logger = logger
         self._config = config
@@ -213,6 +220,14 @@ class LLMGateway:
                 context,
                 diagnostic=diagnostic,
             ),
+        )
+
+    async def narrate_line(self, context: dict[str, Any]) -> dict[str, Any]:
+        return await self._invoke_cached(
+            operation="narrate_line",
+            context=context,
+            validate=lambda raw: isinstance(raw, dict) and "narration" in raw,
+            degraded=lambda diagnostic: {"narration": "\n".join(str(item) for item in list(context.get("lines") or []))},
         )
 
     async def _invoke_cached(

@@ -19,7 +19,7 @@ if TYPE_CHECKING:
     from utils.llm_client import ChatOpenAI
 
 _ALLOWED_OPERATIONS = frozenset(
-    {"explain_line", "summarize_scene", "suggest_choice", "agent_reply"}
+    {"explain_line", "summarize_scene", "suggest_choice", "agent_reply", "narrate_line"}
 )
 _EXPLAIN_EVIDENCE_TYPES = frozenset({"current_line", "history_line", "choice"})
 _KEY_POINT_TYPES = frozenset({"plot", "emotion", "decision", "reveal", "objective"})
@@ -464,6 +464,19 @@ class GalgameLLMBackend:
         operation: str,
         context: dict[str, Any],
     ) -> list[dict[str, str]]:
+        if operation == "narrate_line":
+            lines = list(context.get("lines") or [])
+            joined = "\n".join(str(item) for item in lines)
+            return [
+                {
+                    "role": "system",
+                    "content": "You are a faithful Galgame dialogue narrator. Output a JSON object with a single key 'narration' containing the literal dialogue text, exactly as given, without commentary, markdown, or summary.",
+                },
+                {
+                    "role": "user",
+                    "content": f"Please format and narrate these lines verbatim:\n{joined}",
+                },
+            ]
         result = build_prompt_messages_with_metadata(operation, context, self._config)
         _PROMPT_METADATA.set(dict(result.metadata))
         return result.messages
@@ -496,6 +509,9 @@ class GalgameLLMBackend:
             return self._normalize_summarize(raw)
         if operation == "suggest_choice":
             return self._normalize_suggest(raw, context)
+        if operation == "narrate_line":
+            narration = str(raw.get("narration") or "").strip()
+            return {"narration": narration}
         return self._normalize_agent_reply(raw)
 
     def _normalize_explain(self, raw: dict[str, Any]) -> dict[str, Any]:

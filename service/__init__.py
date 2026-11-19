@@ -37,6 +37,7 @@ from ..dependency_status import (
 from ..dialogue_library import built_in_dialogue_library_status
 from ..dxcam_support import inspect_dxcam_installation
 from ..models import (
+    MODE_NARRATOR,
     DATA_SOURCE_BRIDGE_SDK,
     DATA_SOURCE_MEMORY_READER,
     DATA_SOURCE_OCR_READER,
@@ -48,6 +49,7 @@ from ..models import (
     MODE_CHOICE_ADVISOR,
     MODE_COMPANION,
     MODE_SILENT,
+    MODE_NARRATOR,
     MODES,
     OCR_CAPTURE_PROFILE_STAGE_DEFAULT,
     OCR_CAPTURE_PROFILE_STAGES,
@@ -494,7 +496,7 @@ def _sanitize_ocr_screen_templates(value: object) -> list[dict[str, Any]]:
     return templates
 
 
-def _coerce_ocr_capture_backend(value: object, default: str = "smart") -> str:
+def _coerce_ocr_capture_backend(value: object, default: str = "dxcam") -> str:
     normalized = str(value or default).strip().lower()
     # Legacy stored "imagegrab" auto-migrates to "mss" — same GDI capability,
     # mss is faster + cross-platform. The set below intentionally excludes
@@ -594,10 +596,12 @@ def build_config(raw_config: dict[str, Any]) -> GalgameConfig:
     galgame = raw_config.get("galgame")
     llm = raw_config.get("llm")
     memory_reader = raw_config.get("memory_reader")
+    narrator = raw_config.get("narrator")
 
     galgame_obj = galgame if isinstance(galgame, dict) else {}
     llm_obj = llm if isinstance(llm, dict) else {}
     memory_reader_obj = memory_reader if isinstance(memory_reader, dict) else {}
+    narrator_obj = narrator if isinstance(narrator, dict) else {}
     ocr_reader = raw_config.get("ocr_reader")
     ocr_reader_obj = ocr_reader if isinstance(ocr_reader, dict) else {}
     rapidocr = raw_config.get("rapidocr")
@@ -606,6 +610,11 @@ def build_config(raw_config: dict[str, Any]) -> GalgameConfig:
     vision_obj = vision if isinstance(vision, dict) else {}
     vision_classifier = vision_obj.get("classifier")
     vision_classifier_obj = vision_classifier if isinstance(vision_classifier, dict) else {}
+    tts_output_pipeline = str(
+        galgame_obj.get("tts_output_pipeline") or "agent"
+    ).strip().lower()
+    if tts_output_pipeline not in {"off", "direct", "agent"}:
+        tts_output_pipeline = "agent"
     rapidocr_lang_type_raw = str(rapidocr_obj.get("lang_type") or "").strip()
     if rapidocr_lang_type_raw == "ch":
         _logger.warning(
@@ -617,7 +626,7 @@ def build_config(raw_config: dict[str, Any]) -> GalgameConfig:
     default_mode = (
         default_mode_obj
         if isinstance(default_mode_obj, str) and default_mode_obj in MODES
-        else MODE_COMPANION
+        else MODE_NARRATOR
     )
     bridge_root_value = galgame_obj.get("bridge_root")
     bridge_root_raw = str(bridge_root_value).strip() if bridge_root_value is not None else ""
@@ -755,6 +764,33 @@ def build_config(raw_config: dict[str, Any]) -> GalgameConfig:
             llm_obj.get("llm_repeat_similarity_threshold"), 0.85
         ),
         reader_mode=_coerce_reader_mode(galgame_obj.get("reader_mode")),
+        tts_output_pipeline=tts_output_pipeline,
+        narrator_enabled=_coerce_bool(narrator_obj.get("enabled"), True),
+        narrator_max_lines_per_push=_coerce_int(
+            narrator_obj.get("max_lines_per_push"), 3, minimum=1
+        ),
+        narrator_max_chars=_coerce_int(
+            narrator_obj.get("max_chars"), 240, minimum=1
+        ),
+        narrator_drop_after_seconds=_coerce_float(
+            narrator_obj.get("drop_after_seconds"), 12.0, minimum=0.0
+        ),
+        narrator_dedupe_window=_coerce_int(
+            narrator_obj.get("dedupe_window"), 128, minimum=1
+        ),
+        narrator_include_speaker=_coerce_bool(
+            narrator_obj.get("include_speaker"), True
+        ),
+        narrator_direct_audio_enabled=_coerce_bool(
+            narrator_obj.get("direct_audio_enabled"), False
+        ),
+        narrator_tts_model=str(
+            narrator_obj.get("tts_model") or "gemini-2.5-flash-preview-tts"
+        ).strip(),
+        narrator_tts_voice=str(narrator_obj.get("tts_voice") or "Leda").strip(),
+        narrator_tts_api_key_env=str(
+            narrator_obj.get("tts_api_key_env") or "GOOGLE_API_KEY"
+        ).strip(),
         memory_reader_enabled=_coerce_bool(
             memory_reader_obj.get("enabled"),
             _default_memory_reader_enabled(),
@@ -795,7 +831,7 @@ def build_config(raw_config: dict[str, Any]) -> GalgameConfig:
         ocr_reader_backend_selection_explicit="backend_selection" in ocr_reader_obj,
         ocr_reader_capture_backend=_coerce_ocr_capture_backend(
             ocr_reader_obj.get("capture_backend"),
-            "smart",
+            "dxcam",
         ),
         ocr_reader_capture_backend_explicit="capture_backend" in ocr_reader_obj,
         ocr_reader_install_manifest_url=str(
@@ -1258,11 +1294,11 @@ def summarize_status(
     active_data_source: str,
 ) -> str:
     if active_data_source == DATA_SOURCE_OCR_READER and active_session_id:
-        prefix = "已通过 OCR 读取连接（降级模式）"
+        prefix = "Подключено через OCR (резервный режим)"
     elif active_data_source == DATA_SOURCE_MEMORY_READER and active_session_id:
-        prefix = "已通过内存读取连接（降级模式）"
+        prefix = "Подключено через чтение памяти (резервный режим)"
     elif active_data_source == DATA_SOURCE_BRIDGE_SDK and active_session_id:
-        prefix = "已通过 Bridge SDK 连接"
+        prefix = "Подключено через Bridge SDK"
     else:
         prefix = connection_state
     parts = [prefix, f"state={connection_state}", f"mode={mode}"]
@@ -1315,8 +1351,8 @@ def _is_textractor_missing_error_message(message: str) -> bool:
 
     Memory Reader surfaces these as the legacy English string when the
     invalid_textractor_path code lands in last_error.message; we want to
-    re-classify them as "Memory Reader 缺 Textractor" warnings rather than
-    showing the raw "插件运行出错" diagnosis.
+    re-classify them as "Memory Reader missing Textractor" warnings rather than
+    showing the raw "plugin error" diagnosis.
     """
     normalized = _status_text(message).lower()
     return (
@@ -1447,39 +1483,39 @@ def build_ocr_background_status(local_state: dict[str, Any]) -> dict[str, Any]:
         )
     )
     capture_backend_advice = (
-        "确认目标游戏窗口可见且未最小化；若后台截图仍失败，请切换截图方式或重新选择 OCR 窗口。"
+        "Убедитесь, что окно игры видно и не свёрнуто; если фоновый захват не работает, смените способ захвата или заново выберите окно OCR."
     )
 
     if target_unavailable:
         state = "target_unavailable"
-        message = "目标游戏窗口不可用于 OCR 截图；请确认窗口存在、可见且未最小化。"
+        message = "Целевое окно игры недоступно для OCR-захвата. Убедитесь, что окно существует, видно и не свёрнуто."
     elif capture_backend_blocked:
         state = "capture_backend_blocked"
         message = (
-            "OCR 截图后端当前被窗口状态或捕获方式阻塞。"
+            "Бэкенд OCR-захвата заблокирован состоянием окна или способом захвата."
             if not (trigger_mode == OCR_TRIGGER_MODE_INTERVAL and target_in_background)
-            else "定时 OCR 正在尝试后台读取，但截图后端被窗口状态或捕获方式阻塞。"
+            else "Периодический OCR пытается читать в фоне, но бэкенд захвата заблокирован состоянием окна или способом захвата."
         )
-        message = f"{message}{capture_backend_advice}"
+        message = f"{message} {capture_backend_advice}"
     elif background_polling:
         state = "background_polling"
-        message = "定时 OCR 正在尝试后台读取；实际效果取决于窗口可见性、非最小化状态和截图后端。"
+        message = "Периодический OCR пытается читать в фоне; результат зависит от видимости окна, его состояния (не свёрнуто) и способа захвата."
     elif ocr_window_capture_available and target_in_background:
         state = "visible_background_readable"
-        message = "OCR 可读取可见游戏窗口；自动推进等待游戏窗口成为前台焦点。"
+        message = "OCR может читать видимое окно игры; автопродвижение ждёт, пока окно игры станет активным."
     elif foreground_resume_pending:
         state = "foreground_resume_pending"
         message = (
-            "游戏窗口不是前台焦点；自动推进等待前台确认。"
+            "Окно игры не в фокусе; автопродвижение ждёт подтверждения фокуса."
             if ocr_window_capture_eligible
-            else "等待目标游戏窗口回到前台；切回后会触发 OCR 重新采集。"
+            else "Ожидание возврата окна игры в фокус; после возврата будет запущен повторный OCR-захват."
         )
     elif target_known and target_is_foreground:
         state = "foreground_active"
-        message = "目标游戏窗口在前台，OCR 可按当前触发方式采集。"
+        message = "Окно игры в фокусе, OCR может работать по текущему режиму срабатывания."
     else:
         state = "idle"
-        message = "OCR 后台读取状态未激活。"
+        message = "Фоновое чтение OCR не активно."
 
     return {
         "state": state,
@@ -1497,7 +1533,6 @@ def build_ocr_background_status(local_state: dict[str, Any]) -> dict[str, Any]:
         "input_target_foreground": target_is_foreground,
         "input_target_block_reason": input_target_block_reason,
     }
-
 
 def build_primary_diagnosis(local_state: dict[str, Any]) -> dict[str, Any]:
     runtime = local_state.get("ocr_reader_runtime")
@@ -1555,7 +1590,7 @@ def build_primary_diagnosis(local_state: dict[str, Any]) -> dict[str, Any]:
     # missing the dev needs to run `uv sync --group galgame`, not click an
     # in-app install button. We still honor inspection_failed signals so a
     # corrupt wheel surfaces a warning
-    # instead of being silently swept under "插件运行出错".
+    # instead of being silently swept under "Ошибка работы плагина".
     dependency_status = local_state.get("dependency_status")
     dependency_status_obj = dependency_status if isinstance(dependency_status, dict) else {}
     textractor = local_state.get("textractor")
@@ -1580,7 +1615,7 @@ def build_primary_diagnosis(local_state: dict[str, Any]) -> dict[str, Any]:
         # whether `active_data_source` already flipped to MEMORY_READER. In
         # AUTO mode the data_source switch only happens after the first
         # successful read, so without this signal the textractor warning
-        # silently falls through into "插件运行出错" with the legacy English
+        # silently falls through into "Ошибка работы плагина" with the legacy English
         # error string.
         memory_runtime_detail == "invalid_textractor_path"
         or reader_mode == READER_MODE_MEMORY
@@ -1610,50 +1645,50 @@ def build_primary_diagnosis(local_state: dict[str, Any]) -> dict[str, Any]:
         and not (textractor_missing_signal and memory_reader_path_active)
     ):
         dependency_labels = {
-            "rapidocr": "RapidOCR（OCR 文字识别）",
-            "dxcam": "DXcam（屏幕截图）",
+            "rapidocr": "RapidOCR (движок распознавания текста)",
+            "dxcam": "DXcam (захват экрана)",
         }
-        failed_text = "、".join(
+        failed_text = ", ".join(
             dependency_labels.get(key, key) for key in generic_inspection_failed_dependencies
         )
         return _primary_diagnosis(
             "warning",
-            "依赖状态检查失败",
-            f"无法确认依赖状态：{failed_text}。功能可能已降级，请刷新状态或查看插件日志。",
+            "Не удалось проверить состояние зависимостей",
+            f"Не удалось подтвердить состояние зависимостей: {failed_text}. Часть функций может быть ограничена. Обновите статус или проверьте логи плагина.",
             [
-                _diagnosis_action("refresh_all", "刷新全部"),
-                _diagnosis_action("debug_details", "查看调试详情"),
+                _diagnosis_action("refresh_all", "Обновить всё"),
+                _diagnosis_action("debug_details", "Подробности отладки"),
             ],
         )
 
     if textractor_missing_signal and memory_reader_path_active:
         return _primary_diagnosis(
             "warning",
-            "Memory Reader 不可用——缺少 Textractor",
+            "Memory Reader недоступен — отсутствует Textractor",
             (
-                "未检测到 TextractorCLI.exe。Memory Reader 内存读取暂不可用；"
-                "如果你只使用 OCR，可以继续使用；如果需要内存读取，请安装 Textractor 后刷新状态。"
+                "TextractorCLI.exe не найден. Чтение памяти (Memory Reader) временно недоступно; "
+                "если вы используете только OCR, можно продолжать работу. Для чтения памяти установите Textractor и обновите статус."
             ),
             [
-                _diagnosis_action("install_textractor", "安装 Textractor"),
-                _diagnosis_action("refresh_all", "刷新全部"),
+                _diagnosis_action("install_textractor", "Установить Textractor"),
+                _diagnosis_action("refresh_all", "Обновить всё"),
             ],
         )
 
     if self_ui_guard_signal:
         return _primary_diagnosis(
             "warning",
-            "OCR 截到了插件 UI，已忽略",
+            "OCR захватил интерфейс плагина — результат проигнорирован",
             (
-                "OCR Reader 识别到的文字像 N.E.K.O 插件管理页，而不是游戏画面。"
-                "这次结果已被丢弃，避免把插件界面文字写成台词。"
-                "请切回游戏窗口，或重新选择 OCR 目标窗口。"
+                "OCR Reader распознал текст, похожий на страницу управления плагином N.E.K.O, а не на игру. "
+                "Результат отброшен, чтобы не записать интерфейс плагина как реплику. "
+                "Вернитесь в окно игры или заново выберите целевое окно OCR."
             ),
             [
-                _diagnosis_action("focus_game", "切回游戏窗口"),
-                _diagnosis_action("select_ocr_window", "选择游戏窗口"),
-                _diagnosis_action("refresh_ocr_windows", "刷新窗口"),
-                _diagnosis_action("debug_details", "查看调试详情"),
+                _diagnosis_action("focus_game", "Вернуться в окно игры"),
+                _diagnosis_action("select_ocr_window", "Выбрать окно игры"),
+                _diagnosis_action("refresh_ocr_windows", "Обновить окна"),
+                _diagnosis_action("debug_details", "Подробности отладки"),
             ],
             title_i18n_key="ui.diag.self_ui_guard.title",
             message_i18n_key="ui.diag.self_ui_guard.body",
@@ -1662,11 +1697,11 @@ def build_primary_diagnosis(local_state: dict[str, Any]) -> dict[str, Any]:
     if generic_last_error_message:
         return diagnosis(
             "error",
-            "插件运行出错",
-            f"{generic_last_error_message}。可以先刷新状态；如果仍然出现，请查看调试详情。",
+            "Ошибка работы плагина",
+            f"{generic_last_error_message}. Попробуйте обновить статус; если ошибка повторится, откройте подробности отладки.",
             [
-                _diagnosis_action("refresh_all", "刷新全部"),
-                _diagnosis_action("debug_details", "查看调试详情"),
+                _diagnosis_action("refresh_all", "Обновить всё"),
+                _diagnosis_action("debug_details", "Подробности отладки"),
             ],
         )
 
@@ -1678,22 +1713,22 @@ def build_primary_diagnosis(local_state: dict[str, Any]) -> dict[str, Any]:
     ):
         return diagnosis(
             "warning",
-            "游戏窗口已最小化",
-            "检测到游戏窗口，但窗口已最小化，OCR 不能截图。请恢复游戏窗口后继续。",
+            "Окно игры свёрнуто",
+            "Окно игры найдено, но сейчас оно свёрнуто — OCR не может сделать захват. Разверните окно и продолжите.",
             [
-                _diagnosis_action("refresh_ocr_windows", "我已恢复，刷新窗口"),
-                _diagnosis_action("select_ocr_window", "选择游戏窗口"),
+                _diagnosis_action("refresh_ocr_windows", "Развернуть и обновить"),
+                _diagnosis_action("select_ocr_window", "Выбрать окно игры"),
             ],
         )
 
     if context_state == "poll_not_running":
         return diagnosis(
             "error",
-            "OCR 轮询没有继续运行",
-            ocr_capture_diagnostic or "OCR 轮询尚未完成首次截图，新台词不会继续刷新。",
+            "Опрос OCR не выполняется",
+            ocr_capture_diagnostic or "OCR ещё не завершил первый цикл опроса — новые реплики не будут обновляться.",
             [
-                _diagnosis_action("refresh_all", "刷新全部"),
-                _diagnosis_action("debug_details", "查看调试详情"),
+                _diagnosis_action("refresh_all", "Обновить всё"),
+                _diagnosis_action("debug_details", "Подробности отладки"),
             ],
         )
 
@@ -1703,65 +1738,65 @@ def build_primary_diagnosis(local_state: dict[str, Any]) -> dict[str, Any]:
     ):
         return diagnosis(
             "warning",
-            "OCR 已跳过插件页面内容",
+            "OCR пропустил содержимое страницы плагина",
             (
-                "本次截图看起来包含 N.E.K.O 插件页面或调试窗口内容，已跳过写入。"
-                "请切回游戏窗口，确认插件页面没有遮挡游戏后刷新状态；"
-                "必要时重新选择 OCR 窗口或重新截图校准。"
+                "Похоже, последний снимок содержит страницу управления или отладки плагина N.E.K.O — запись пропущена. "
+                "Вернитесь в окно игры, убедитесь, что страница плагина не перекрывает игру, и обновите статус; "
+                "при необходимости заново выберите окно OCR или выполните перекалибровку."
             ),
             [
-                _diagnosis_action("focus_game", "切回游戏窗口"),
-                _diagnosis_action("select_ocr_window", "选择游戏窗口"),
-                _diagnosis_action("recalibrate_ocr", "重新截图校准"),
-                _diagnosis_action("debug_details", "查看调试详情"),
+                _diagnosis_action("focus_game", "Вернуться в окно игры"),
+                _diagnosis_action("select_ocr_window", "Выбрать окно игры"),
+                _diagnosis_action("recalibrate_ocr", "Перекалибровать захват"),
+                _diagnosis_action("debug_details", "Подробности отладки"),
             ],
         )
 
     if context_state == "capture_failed" or last_capture_error:
-        message = last_capture_error or "截图或识别后端返回错误，新台词不会更新。"
+        message = last_capture_error or "Бэкенд захвата или модуль распознавания вернул ошибку — новые реплики не будут обновляться."
         actions = [
-            _diagnosis_action("recalibrate_ocr", "重新截图校准"),
-            _diagnosis_action("capture_backend", "切换截图方式"),
-            _diagnosis_action("debug_details", "查看调试详情"),
+            _diagnosis_action("recalibrate_ocr", "Перекалибровать захват"),
+            _diagnosis_action("capture_backend", "Сменить способ захвата"),
+            _diagnosis_action("debug_details", "Подробности отладки"),
         ]
         if interval_background_blocked:
             message = (
-                f"{message}当前为定时 OCR 后台读取，后台截图可能受窗口最小化、不可见或截图后端限制影响。"
-                "请确认窗口可见且未最小化；如果仍失败，切换截图方式或重新选择 OCR 窗口。"
+                f"{message} Сейчас активен периодический фоновый OCR: возможность фонового захвата ограничена видимостью окна, его состоянием (не свёрнуто) и способом захвата."
+                " Убедитесь, что окно игры видно и не свёрнуто; если ошибка сохраняется, смените способ захвата или заново выберите окно OCR."
             )
             actions = [
-                _diagnosis_action("focus_game", "切回游戏窗口"),
-                _diagnosis_action("capture_backend", "切换截图方式"),
-                _diagnosis_action("select_ocr_window", "选择游戏窗口"),
-                _diagnosis_action("debug_details", "查看调试详情"),
+                _diagnosis_action("focus_game", "Вернуться в окно игры"),
+                _diagnosis_action("capture_backend", "Сменить способ захвата"),
+                _diagnosis_action("select_ocr_window", "Выбрать окно игры"),
+                _diagnosis_action("debug_details", "Подробности отладки"),
             ]
         return diagnosis(
             "error",
-            "截图或文字识别失败",
+            "Ошибка захвата или распознавания текста",
             message,
             actions,
         )
 
     if bool(runtime_obj.get("stale_capture_backend")) or context_state == "stale_capture_backend":
-        message = "当前截图源可能停在旧画面。请切回游戏窗口，或切换截图方式后再试。"
+        message = "Источник захвата, похоже, показывает старый кадр. Вернитесь в окно игры или смените способ захвата и повторите попытку."
         actions = [
-            _diagnosis_action("focus_game", "切回游戏窗口"),
-            _diagnosis_action("capture_backend", "切换截图方式"),
-            _diagnosis_action("refresh_ocr_windows", "刷新窗口"),
+            _diagnosis_action("focus_game", "Вернуться в окно игры"),
+            _diagnosis_action("capture_backend", "Сменить способ захвата"),
+            _diagnosis_action("refresh_ocr_windows", "Обновить окна"),
         ]
         if interval_background_blocked:
             message = (
-                "定时 OCR 后台读取时截图画面没有更新。请确认游戏窗口可见且未最小化；"
-                "如果仍停在旧画面，请切换截图方式或重新选择 OCR 窗口。"
+                "При периодическом фоновом OCR изображение захвата не обновляется. Убедитесь, что окно игры видно и не свёрнуто; "
+                "если кадр по-прежнему старый, смените способ захвата или заново выберите окно OCR."
             )
             actions = [
-                _diagnosis_action("focus_game", "切回游戏窗口"),
-                _diagnosis_action("capture_backend", "切换截图方式"),
-                _diagnosis_action("select_ocr_window", "选择游戏窗口"),
+                _diagnosis_action("focus_game", "Вернуться в окно игры"),
+                _diagnosis_action("capture_backend", "Сменить способ захвата"),
+                _diagnosis_action("select_ocr_window", "Выбрать окно игры"),
             ]
         return diagnosis(
             "warning",
-            "截图画面没有更新",
+            "Изображение захвата не обновляется",
             message,
             actions,
         )
@@ -1773,99 +1808,99 @@ def build_primary_diagnosis(local_state: dict[str, Any]) -> dict[str, Any]:
     ):
         return diagnosis(
             "warning",
-            "OCR 需要检查截图链路",
-            ocr_capture_diagnostic or "OCR 截图或识别上下文不可用，请检查窗口、截图区域和截图方式。",
+            "Требуется проверка цепочки OCR-захвата",
+            ocr_capture_diagnostic or "Контекст OCR-захвата недоступен. Проверьте окно, область захвата и способ захвата.",
             [
-                _diagnosis_action("recalibrate_ocr", "重新截图校准"),
-                _diagnosis_action("capture_backend", "切换截图方式"),
-                _diagnosis_action("debug_details", "查看调试详情"),
+                _diagnosis_action("recalibrate_ocr", "Перекалибровать захват"),
+                _diagnosis_action("capture_backend", "Сменить способ захвата"),
+                _diagnosis_action("debug_details", "Подробности отладки"),
             ],
         )
 
     if ocr_background_status.get("state") == "visible_background_readable":
         return diagnosis(
             "info",
-            "OCR 可读，自动输入等待前台",
+            "OCR читает текст, автопродвижение ожидает фокус",
             (
-                "目标游戏窗口可见且 OCR 最近可读取；当前窗口不是前台焦点，"
-                "自动推进会继续暂停以避免误输入。"
+                "Целевое окно игры видно и OCR недавно успешно читал текст; сейчас окно не в фокусе, "
+                "поэтому автопродвижение приостановлено, чтобы избежать ошибочного ввода."
             ),
             [
-                _diagnosis_action("focus_game", "切回游戏窗口"),
-                _diagnosis_action("debug_details", "查看调试详情"),
+                _diagnosis_action("focus_game", "Вернуться в окно игры"),
+                _diagnosis_action("debug_details", "Подробности отладки"),
             ],
         )
 
     if ocr_tick_block_reason == "trigger_mode_after_advance_waiting_for_input":
         return diagnosis(
             "info",
-            "OCR 正在等待游戏推进",
-            "当前为点击对白后识别模式，上一轮已完成；需要在游戏窗口内点击、滚轮向下或按推进键后才会重新采集。",
+            "OCR ожидает продвижения игры",
+            "Выбран режим распознавания после продвижения, предыдущий цикл завершён. Новый захват начнётся после клика, прокрутки вниз или нажатия клавиши продвижения в окне игры.",
             [
-                _diagnosis_action("focus_game", "切回游戏窗口"),
-                _diagnosis_action("debug_details", "查看调试详情"),
+                _diagnosis_action("focus_game", "Вернуться в окно игры"),
+                _diagnosis_action("debug_details", "Подробности отладки"),
             ],
         )
 
     if ocr_tick_block_reason == "memory_reader_recent_text":
         return diagnosis(
             "info",
-            "内存读取正在优先提供文本",
-            "自动模式检测到内存读取仍有近期文本，因此暂时不主动轮询 OCR。需要只看 OCR 时可切换文本读取模式。",
+            "Текст поступает из чтения памяти",
+            "В автоматическом режиме недавно получен новый текст из чтения памяти, поэтому активный опрос OCR временно не выполняется. Чтобы использовать только OCR, переключите режим чтения текста.",
             [
-                _diagnosis_action("debug_details", "查看调试详情"),
+                _diagnosis_action("debug_details", "Подробности отладки"),
             ],
         )
 
     if ocr_tick_block_reason:
         return diagnosis(
             "info",
-            "OCR 轮询暂未执行",
-            f"当前轮询门控原因：{ocr_tick_block_reason}。",
+            "Опрос OCR временно не выполняется",
+            f"Текущая причина блокировки цикла: {ocr_tick_block_reason}.",
             [
-                _diagnosis_action("refresh_all", "刷新全部"),
-                _diagnosis_action("debug_details", "查看调试详情"),
+                _diagnosis_action("refresh_all", "Обновить всё"),
+                _diagnosis_action("debug_details", "Подробности отладки"),
             ],
         )
 
     if stable_block_reason == "waiting_for_repeat" and candidate_age_seconds > 8.0:
         return diagnosis(
             "warning",
-            "OCR 候选台词确认过慢",
+            "Подтверждение реплики OCR занимает слишком много времени",
             (
-                f"候选台词已经等待 {candidate_age_seconds:.1f}s，"
-                "通常表示下一轮 OCR 没有及时跑起来，或两轮识别结果不稳定。"
+                f"Кандидат реплики ожидает уже {candidate_age_seconds:.1f} с. "
+                "Обычно это означает, что следующий цикл OCR не успел запуститься вовремя или результаты распознавания нестабильны."
             ),
             [
-                _diagnosis_action("line_details", "查看识别详情"),
-                _diagnosis_action("debug_details", "查看调试详情"),
+                _diagnosis_action("line_details", "Подробности распознавания"),
+                _diagnosis_action("debug_details", "Подробности отладки"),
             ],
         )
 
     if ocr_emit_block_reason == "screen_classification_skipped_dialogue":
         return diagnosis(
             "warning",
-            "OCR 画面被判定为非对白界面",
-            "截图和识别已执行，但屏幕分类判断当前画面不适合写入对白。若游戏实际在对白界面，请重新校准截图区域或收集误判样本。",
+            "Экран распознан как не диалоговый",
+            "Захват и распознавание выполнены, но анализ экрана определил, что текущий кадр не подходит для записи реплики. Если в игре отображается диалог, перекалибруйте область захвата или соберите примеры ложных срабатываний.",
             [
-                _diagnosis_action("recalibrate_ocr", "重新截图校准"),
-                _diagnosis_action("debug_details", "查看调试详情"),
+                _diagnosis_action("recalibrate_ocr", "Перекалибровать захват"),
+                _diagnosis_action("debug_details", "Подробности отладки"),
             ],
         )
 
     if ocr_emit_block_reason in {"duplicate_stable_text", "waiting_for_repeat", "no_dialogue_text"}:
         message_by_reason = {
-            "duplicate_stable_text": "截图和识别已执行，但识别结果与上一条稳定台词相同，暂不重复写入。",
-            "waiting_for_repeat": "截图和识别已执行，已看到候选文字，正在等待稳定确认。",
-            "no_dialogue_text": "截图和识别已执行，但没有得到可写入的对白文本。",
+            "duplicate_stable_text": "Захват и распознавание выполнены, но результат совпадает с предыдущей стабильной репликой — повторная запись не требуется.",
+            "waiting_for_repeat": "Захват и распознавание выполнены, получен кандидат текста — ожидается повторное подтверждение стабильности.",
+            "no_dialogue_text": "Захват и распознавание выполнены, но подходящий текст диалога не найден.",
         }
         return diagnosis(
             "info",
-            "OCR 已执行但没有新台词",
-            message_by_reason.get(ocr_emit_block_reason, f"未写入原因：{ocr_emit_block_reason}。"),
+            "OCR выполнен, но новой реплики нет",
+            message_by_reason.get(ocr_emit_block_reason, f"Текущая причина: {ocr_emit_block_reason}."),
             [
-                _diagnosis_action("line_details", "查看识别详情"),
-                _diagnosis_action("debug_details", "查看调试详情"),
+                _diagnosis_action("line_details", "Подробности распознавания"),
+                _diagnosis_action("debug_details", "Подробности отладки"),
             ],
         )
 
@@ -1884,22 +1919,22 @@ def build_primary_diagnosis(local_state: dict[str, Any]) -> dict[str, Any]:
     ):
         return diagnosis(
             "warning",
-            "没找到能识别的游戏窗口",
-            "游戏可能未启动、被最小化，或当前窗口不是游戏。请确认游戏窗口可见后刷新。",
+            "Не найдено подходящее окно игры",
+            "Возможно, игра не запущена, свёрнута или текущее окно не является игрой. Убедитесь, что окно игры видно, и обновите список.",
             [
-                _diagnosis_action("refresh_ocr_windows", "刷新窗口"),
-                _diagnosis_action("select_ocr_window", "选择游戏窗口"),
+                _diagnosis_action("refresh_ocr_windows", "Обновить окна"),
+                _diagnosis_action("select_ocr_window", "Выбрать окно игры"),
             ],
         )
 
     if detail in {"foreground_window_needs_manual_confirmation", "auto_detect_needs_manual_fallback"}:
         return diagnosis(
             "warning",
-            "需要手动选择游戏窗口",
-            "自动检测不够确定。手动选择一次可以避免识别到插件页面或其他窗口。",
+            "Нужно вручную выбрать окно игры",
+            "Автоматическое определение недостаточно уверенно. Ручной выбор поможет избежать захвата страницы плагина или другого окна.",
             [
-                _diagnosis_action("select_ocr_window", "选择游戏窗口"),
-                _diagnosis_action("refresh_ocr_windows", "刷新窗口"),
+                _diagnosis_action("select_ocr_window", "Выбрать окно игры"),
+                _diagnosis_action("refresh_ocr_windows", "Обновить окна"),
             ],
         )
 
@@ -1911,10 +1946,10 @@ def build_primary_diagnosis(local_state: dict[str, Any]) -> dict[str, Any]:
     if observed_text and normalize_text(observed_text) != normalize_text(stable_text):
         return diagnosis(
             "info",
-            "刚读到新文字",
-            "文字识别已经看到候选台词，正在确认这是不是同一句台词。",
+            "Обнаружен новый текст",
+            "Распознавание получило кандидата реплики и проверяет, не является ли это повтором той же строки.",
             [
-                _diagnosis_action("line_details", "查看识别详情"),
+                _diagnosis_action("line_details", "Подробности распознавания"),
             ],
         )
 
@@ -1922,32 +1957,32 @@ def build_primary_diagnosis(local_state: dict[str, Any]) -> dict[str, Any]:
         trigger_mode = _status_text(local_state.get("ocr_reader_trigger_mode")).lower()
         if trigger_mode == OCR_TRIGGER_MODE_AFTER_ADVANCE:
             message = (
-                "自动推进已暂停。当前为按推进后识别模式，后台期间不会持续 OCR；"
-                "切回游戏窗口后会继续，并触发 OCR 重新采集。"
+                "Автопродвижение приостановлено. Сейчас режим распознавания после продвижения: в фоне OCR не выполняется постоянно; "
+                "после возврата в окно игры работа продолжится и будет запущен повторный захват."
             )
         elif trigger_mode == OCR_TRIGGER_MODE_INTERVAL:
             message = (
-                "自动推进已暂停。当前为定时 OCR，会尝试定时后台读取；"
-                "实际效果取决于窗口可见性、非最小化状态和捕获后端。"
+                "Автопродвижение приостановлено. Сейчас режим периодического OCR: выполняется попытка фонового чтения; "
+                "результат зависит от видимости окна, его состояния (не свёрнуто) и способа захвата."
             )
         else:
-            message = "自动推进已暂停。切回游戏窗口后会继续。"
+            message = "Автопродвижение приостановлено. После возврата в окно игры работа продолжится."
         return diagnosis(
             "info",
-            "游戏不在前台",
+            "Окно игры не в фокусе",
             message,
             [
-                _diagnosis_action("focus_game", "切回游戏窗口"),
+                _diagnosis_action("focus_game", "Вернуться в окно игры"),
             ],
         )
 
     if agent_pause_kind == "read_only" or agent_user_status == "read_only":
         return diagnosis(
             "info",
-            "当前是伴读模式",
-            "会显示台词和建议，但不会自动点击。需要自动推进时请切换模式。",
+            "Активен режим только для чтения",
+            "Сейчас отображаются реплики и советы, но автоматические клики отключены. Для автопродвижения переключите режим.",
             [
-                _diagnosis_action("choice_advisor", "切换到自动推进模式"),
+                _diagnosis_action("choice_advisor", "Переключить в режим советника"),
             ],
         )
 
@@ -1961,14 +1996,14 @@ def build_primary_diagnosis(local_state: dict[str, Any]) -> dict[str, Any]:
     ):
         return diagnosis(
             "warning",
-            "OCR 识别文本过长",
+            "OCR: слишком длинный текст",
             (
-                f"当前识别到 {len(raw_ocr_text)} 字，远超正常对白长度。"
-                "截图区域可能包含了非对白内容，建议锁定正确窗口并校准对白区域。"
+                f"Распознано {len(raw_ocr_text)} симв., что значительно больше обычной длины реплики. "
+                "В область захвата, возможно, попал лишний контент. Рекомендуется заново выбрать окно игры и перекалибровать область диалога."
             ),
             [
-                _diagnosis_action("select_ocr_window", "选择游戏窗口"),
-                _diagnosis_action("recalibrate_ocr", "重新截图校准"),
+                _diagnosis_action("select_ocr_window", "Выбрать окно игры"),
+                _diagnosis_action("recalibrate_ocr", "Перекалибровать захват"),
             ],
         )
 
@@ -1986,24 +2021,24 @@ def build_primary_diagnosis(local_state: dict[str, Any]) -> dict[str, Any]:
         )
         if sa_latency > 3.0:
             message = (
-                f"最近一次 OCR 轮询耗时 {last_poll_duration:.1f}s，远超正常水平。"
-                f"画面感知模型延迟也较高（{sa_latency:.1f}s），"
-                "建议锁定窗口并校准对白区域，也可尝试降低画面感知频率或关闭全帧 OCR。"
+                f"Последний цикл OCR занял {last_poll_duration:.1f} с — это значительно дольше нормы. "
+                f"Задержка модели анализа экрана также высока ({sa_latency:.1f} с). "
+                "Рекомендуется заново выбрать окно игры и перекалибровать область диалога, а также снизить частоту анализа экрана или отключить полноэкранный OCR."
             )
         else:
             message = (
-                f"最近一次 OCR 轮询耗时 {last_poll_duration:.1f}s，远超正常水平。"
-                "通常是因为截图区域过大或截图方式不匹配，"
-                "建议锁定窗口并校准对白区域，也可尝试切换截图方式。"
+                f"Последний цикл OCR занял {last_poll_duration:.1f} с — это значительно дольше нормы. "
+                "Обычно причина в слишком большой области захвата или неподходящем способе захвата. "
+                "Рекомендуется заново выбрать окно игры, перекалибровать область диалога или сменить способ захвата."
             )
         return diagnosis(
             "warning",
-            "OCR 识别耗时过长",
+            "OCR: слишком долгое распознавание",
             message,
             [
-                _diagnosis_action("select_ocr_window", "选择游戏窗口"),
-                _diagnosis_action("recalibrate_ocr", "重新截图校准"),
-                _diagnosis_action("capture_backend", "切换截图方式"),
+                _diagnosis_action("select_ocr_window", "Выбрать окно игры"),
+                _diagnosis_action("recalibrate_ocr", "Перекалибровать захват"),
+                _diagnosis_action("capture_backend", "Сменить способ захвата"),
             ],
         )
 
@@ -2018,21 +2053,21 @@ def build_primary_diagnosis(local_state: dict[str, Any]) -> dict[str, Any]:
         )
         return diagnosis(
             "ok",
-            "正在识别台词",
-            f"当前目标：{target}。已读到台词，页面会持续刷新。" if target else "已读到台词，页面会持续刷新。",
+            "Распознавание реплик активно",
+            f"Текущая цель: {target}. Реплики распознаются, страница будет обновляться." if target else "Реплики распознаются, страница будет обновляться.",
             [
-                _diagnosis_action("refresh_all", "刷新全部"),
+                _diagnosis_action("refresh_all", "Обновить всё"),
             ],
         )
 
     summary = _status_text(local_state.get("summary"))
     return diagnosis(
         "info",
-        "等待游戏状态",
-        summary or "暂时没有足够信息判断当前卡点。请先打开游戏，或刷新窗口列表。",
+        "Ожидание состояния игры",
+        summary or "Недостаточно данных для определения состояния. Откройте игру или обновите список окон.",
         [
-            _diagnosis_action("refresh_all", "刷新全部"),
-            _diagnosis_action("select_ocr_window", "选择游戏窗口"),
+            _diagnosis_action("refresh_all", "Обновить всё"),
+            _diagnosis_action("select_ocr_window", "Выбрать окно игры"),
         ],
     )
 
@@ -2560,7 +2595,7 @@ def _build_status_payload_unchecked(
     )
     # Recompute dependency_status off the just-inspected dxcam/rapidocr
     # payloads so the diagnosis sees the same state the UI sees (avoids
-    # showing stale "缺依赖" warnings right after a successful install).
+    # showing stale "missing dependency" warnings right after a successful install).
     dependency_status_for_diagnosis = _build_dependency_status_payload(
         state=state,
         dxcam_payload=dxcam,
@@ -2605,6 +2640,14 @@ def _build_status_payload_unchecked(
         "mode": state.mode,
         "push_notifications": state.push_notifications,
         "advance_speed": getattr(state, "advance_speed", "medium"),
+        "tts_output_pipeline": str(getattr(config, "tts_output_pipeline", "agent") or "agent"),
+        "narrator": {
+            "enabled": bool(getattr(config, "narrator_enabled", True)),
+            "max_lines_per_push": int(getattr(config, "narrator_max_lines_per_push", 3) or 3),
+            "max_chars": int(getattr(config, "narrator_max_chars", 240) or 240),
+            "drop_after_seconds": float(getattr(config, "narrator_drop_after_seconds", 12.0) or 12.0),
+            "include_speaker": bool(getattr(config, "narrator_include_speaker", True)),
+        },
         "bound_game_id": state.bound_game_id,
         "available_game_ids": list(state.available_game_ids),
         "active_game_id": state.active_game_id,
@@ -2817,7 +2860,7 @@ def _build_status_payload_unchecked(
             rapidocr=rapidocr,
         ),
         # Recompute dependency_status off the just-inspected payload so the
-        # UI doesn't show "缺依赖" warnings for components that just finished
+        # UI doesn't show "missing dependency" warnings for components that just finished
         # installing (state.dependency_status is updated lazily, this is the
         # authoritative read for the same status frame).
         "dependency_status": dependency_status_for_diagnosis,
@@ -2854,7 +2897,7 @@ def _build_dependency_status_payload(
 
     # Inspection didn't run for some reason — fall back to whatever was
     # snapshotted (could be empty defaults). Preserve `inspection_failed`
-    # so a previously snapshotted "依赖检查失败" doesn't get silently
+    # so a previously snapshotted "dependency check failed" state doesn't get silently
     # dropped through this branch.
     fallback_payload: dict[str, Any] = {
         "checked_at": float(fallback_obj.get("checked_at", 0.0) or 0.0),
@@ -3046,7 +3089,7 @@ def build_ocr_context_diagnostic(local_state: dict[str, Any]) -> str:
         target_selection_detail == "memory_reader_window_minimized"
         or last_exclude_reason == "excluded_minimized_window"
     ):
-        parts.append("游戏窗口已最小化，OCR 不能截图。请恢复游戏窗口后继续。")
+        parts.append("Окно игры свёрнуто, OCR не может сделать захват. Разверните окно и продолжите.")
     if context_state:
         parts.append(f"context_state={context_state}")
     if status:
@@ -3150,23 +3193,23 @@ def build_local_scene_summary(
     if lines:
         recent_parts = []
         for item in lines[-6:]:
-            speaker = str(item.get("speaker") or "旁白").strip() or "旁白"
+            speaker = str(item.get("speaker") or "Рассказчик").strip() or "Рассказчик"
             text = str(item.get("text") or "").strip()
             if text:
                 recent_parts.append(f"{speaker}：{text}")
-        summary = f"场景 {scene_id or '(unknown)'} 的近期上下文是："
-        summary += "；".join(recent_parts) if recent_parts else "暂时只有零散台词。"
+        summary = f"Недавний контекст сцены {scene_id or '(unknown)'}: "
+        summary += "; ".join(recent_parts) if recent_parts else "пока есть только отдельные реплики."
     elif normalized_snapshot.get("text"):
         summary = (
-            f"场景 {scene_id or '(unknown)'} 目前停留在"
-            f"「{str(normalized_snapshot.get('speaker') or '旁白')}：{str(normalized_snapshot.get('text') or '')}」"
+            f"Сцена {scene_id or '(unknown)'} сейчас на"
+            f" «{str(normalized_snapshot.get('speaker') or 'Рассказчик')}: {str(normalized_snapshot.get('text') or '')}»"
         )
     else:
-        summary = f"场景 {scene_id or '(unknown)'} 暂时没有足够台词上下文。"
+        summary = f"Для сцены {scene_id or '(unknown)'} пока недостаточно контекста реплик."
     if route_id:
-        summary += f" 路线 {route_id}。"
+        summary += f" Маршрут {route_id}."
     if selected_choices:
-        summary += f" 已发生 {len(selected_choices)} 次选项确认。"
+        summary += f" Подтверждено выборов: {len(selected_choices)}."
     return summary
 
 
@@ -3228,15 +3271,15 @@ def build_explain_degraded_result(
     scene_id = str(context.get("scene_id") or "").strip()
     route_id = str(context.get("route_id") or "").strip()
     if speaker and text:
-        explanation = f"当前改用本地上下文保守说明：{speaker} 说了「{text}」。"
+        explanation = f"Пояснение по локальному контексту: {speaker} говорит: «{text}»."
     elif text:
-        explanation = f"当前改用本地上下文保守说明：这句台词是「{text}」。"
+        explanation = f"Пояснение по локальному контексту: реплика — «{text}»."
     else:
-        explanation = "当前改用本地上下文保守说明，暂时拿不到更细的解释。"
+        explanation = "Пояснение по локальному контексту: сейчас нет более подробных данных."
     if scene_id:
-        explanation += f" 场景 {scene_id}。"
+        explanation += f" Сцена {scene_id}."
     if route_id:
-        explanation += f" 路线 {route_id}。"
+        explanation += f" Маршрут {route_id}."
     return {
         "degraded": True,
         "line_id": str(context.get("line_id") or ""),
@@ -3310,3 +3353,11 @@ def mode_allows_choice_push(mode: str) -> bool:
 
 def mode_allows_agent_actuation(mode: str) -> bool:
     return mode == MODE_CHOICE_ADVISOR
+
+
+def mode_allows_scene_push(mode: str) -> bool:
+    return mode in {MODE_COMPANION, MODE_CHOICE_ADVISOR}
+
+
+def mode_allows_narration(mode: str) -> bool:
+    return mode == MODE_NARRATOR

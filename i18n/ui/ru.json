@@ -1130,5 +1130,18 @@
   "ui.first_run.action.download_rapidocr_models": "Скачать модели сейчас",
   "ui.first_run.action.show_rapidocr_models_guide": "Открыть ручную инструкцию",
   "ui.first_run.install_ocr.pending_models": "Выбранные языковые модели ({lang} + {version}) не скачаны. Нажмите «Скачать модели сейчас», чтобы получить ~{size} МБ из ModelScope.",
-  "ui.first_run.install_ocr.pending_models_manual": "Выбранные языковые модели ({lang} + {version}) не скачаны. Следуйте баннеру RapidOCR, скачайте модели из доступного источника, поместите их в целевую папку и обновите статус."
+  "ui.first_run.install_ocr.pending_models_manual": "Выбранные языковые модели ({lang} + {version}) не скачаны. Следуйте баннеру RapidOCR, скачайте модели из доступного источника, поместите их в целевую папку и обновите статус.",
+  "ui.mode.narrator": "Рассказчик",
+  "ui.mode_label.narrator": "Режим рассказчика",
+  "ui.tts.pipeline.agent": "Через агента",
+  "ui.tts.pipeline.direct": "Напрямую",
+  "ui.tts.pipeline.off": "Выкл.",
+  "ui.inspector.title": "Справка элемента",
+  "ui.inspector.hint": "Наведите курсор на элемент интерфейса, чтобы увидеть описание.",
+  "ui.inspector.label_on": "Что будет, если включить:",
+  "ui.inspector.label_off": "Что будет, если выключить / переключить:",
+  "ui.inspector.default.title": "Справка элемента",
+  "ui.inspector.default.desc": "Наведите курсор на переключатель, кнопку или поле, чтобы увидеть подробное описание.",
+  "ui.inspector.default.on": "—",
+  "ui.inspector.default.off": "—"
 }

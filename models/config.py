@@ -11,8 +11,10 @@ from .constants import (
     DEFAULT_OCR_CAPTURE_TOP_RATIO,
     DEFAULT_VISION_CLASSIFIER_MODEL_DIR,
     MODE_COMPANION,
+    MODE_NARRATOR,
     OCR_TRIGGER_MODE_INTERVAL,
     READER_MODE_AUTO,
+    TTS_PIPELINE_AGENT,
 )
 
 
@@ -36,7 +38,7 @@ class GalgameBridgeConfig:
     active_poll_interval_seconds: float = 1.0
     idle_poll_interval_seconds: float = 3.0
     stale_after_seconds: float = 15.0
-    default_mode: str = MODE_COMPANION
+    default_mode: str = MODE_NARRATOR
     push_notifications: bool = True
     scene_change_cooldown_seconds: float = 15.0
     scene_summary_repeat_guard_enabled: bool = True
@@ -44,6 +46,7 @@ class GalgameBridgeConfig:
     scene_push_time_fallback_seconds: float = 120.0
     scene_merge_total_threshold: int = 12
     auto_open_ui: bool = False
+    tts_output_pipeline: str = TTS_PIPELINE_AGENT
 
 
 @dataclass(slots=True)
@@ -94,6 +97,20 @@ class GalgameReaderConfig:
 
 
 @dataclass(slots=True)
+class GalgameNarratorConfig:
+    narrator_enabled: bool = True
+    narrator_max_lines_per_push: int = 3
+    narrator_max_chars: int = 240
+    narrator_drop_after_seconds: float = 12.0
+    narrator_dedupe_window: int = 128
+    narrator_include_speaker: bool = True
+    narrator_direct_audio_enabled: bool = False
+    narrator_tts_model: str = "gemini-2.5-flash-preview-tts"
+    narrator_tts_voice: str = "Leda"
+    narrator_tts_api_key_env: str = "GOOGLE_API_KEY"
+
+
+@dataclass(slots=True)
 class GalgameMemoryReaderConfig:
     memory_reader_enabled: bool = False
     memory_reader_textractor_path: str = ""
@@ -113,7 +130,7 @@ class GalgameOcrReaderConfig:
     ocr_reader_enabled_explicit: bool = False
     ocr_reader_backend_selection: str = "auto"
     ocr_reader_backend_selection_explicit: bool = False
-    ocr_reader_capture_backend: str = "smart"
+    ocr_reader_capture_backend: str = "dxcam"
     ocr_reader_capture_backend_explicit: bool = False
     ocr_reader_install_manifest_url: str = ""
     ocr_reader_install_target_dir: str = ""
@@ -143,8 +160,7 @@ class GalgameOcrReaderConfig:
     ocr_reader_known_screen_timeout_seconds: float = 5.0
     ocr_reader_max_unobserved_advances_before_hold: int = 3
     ocr_reader_unobserved_advance_hold_duration_seconds: float = 0.0
-    # Кэш результата OCR по хэшу кадра: если захваченный кадр не изменился,
-    # повторно используем предыдущий результат распознавания без инференса.
+    # Кэш последнего кадра OCR на случай, если захват вернул пусто.
     ocr_reader_frame_cache_enabled: bool = True
 
 
@@ -164,25 +180,13 @@ class GalgameVisionConfig:
 class GalgameRapidOcrConfig:
     rapidocr_enabled: bool = False
     rapidocr_enabled_explicit: bool = False
-    # `rapidocr_install_target_dir` survived the install-removal because
-    # ocr_reader still treats it as the runtime model cache root path
-    # (where rapidocr writes downloaded model files). Name is misleading
-    # post-refactor — TODO rename to `rapidocr_model_cache_root` in a
-    # follow-up. `rapidocr_install_manifest_url` and
-    # `rapidocr_install_timeout_seconds` are gone — they only fed the
-    # deleted runtime install machinery.
     rapidocr_install_target_dir: str = ""
     rapidocr_engine_type: str = "onnxruntime"
-    # Default to the bundled Chinese PP-OCRv4 model. Japanese games can opt
-    # back into `japan`; existing configs that explicitly set other values are
-    # preserved by the loader.
     rapidocr_lang_type: str = "ch"
     rapidocr_model_type: str = "mobile"
     rapidocr_ocr_version: str = "PP-OCRv4"
     rapidocr_auto_detect_lang: bool = True
     rapidocr_auto_detect_last_lang: str = ""
-    # Классификатор ориентации (Cls) RapidOCR: не нужен для горизонтального
-    # текста диалогов VN и экономит один инференс на каждую строку.
     rapidocr_use_cls: bool = False
 
 
@@ -192,6 +196,7 @@ class GalgameConfig:
     history: GalgameHistoryConfig
     llm: GalgameLLMConfig
     reader: GalgameReaderConfig
+    narrator: GalgameNarratorConfig
     memory_reader: GalgameMemoryReaderConfig
     ocr_reader: GalgameOcrReaderConfig
     vision: GalgameVisionConfig
@@ -205,14 +210,12 @@ class GalgameConfig:
         "default_mode": ("bridge", "default_mode"),
         "push_notifications": ("bridge", "push_notifications"),
         "scene_change_cooldown_seconds": ("bridge", "scene_change_cooldown_seconds"),
-        "scene_summary_repeat_guard_enabled": (
-            "bridge",
-            "scene_summary_repeat_guard_enabled",
-        ),
+        "scene_summary_repeat_guard_enabled": ("bridge", "scene_summary_repeat_guard_enabled"),
         "scene_push_half_threshold": ("bridge", "scene_push_half_threshold"),
         "scene_push_time_fallback_seconds": ("bridge", "scene_push_time_fallback_seconds"),
         "scene_merge_total_threshold": ("bridge", "scene_merge_total_threshold"),
         "auto_open_ui": ("bridge", "auto_open_ui"),
+        "tts_output_pipeline": ("bridge", "tts_output_pipeline"),
         "history_events_limit": ("history", "history_events_limit"),
         "history_lines_limit": ("history", "history_lines_limit"),
         "history_choices_limit": ("history", "history_choices_limit"),
@@ -240,10 +243,7 @@ class GalgameConfig:
         "context_explain_max_lines": ("llm", "context_explain_max_lines"),
         "context_window_target_tokens": ("llm", "context_window_target_tokens"),
         "context_scene_summary_mode": ("llm", "context_scene_summary_mode"),
-        "context_cumulative_llm_trigger_lines": (
-            "llm",
-            "context_cumulative_llm_trigger_lines",
-        ),
+        "context_cumulative_llm_trigger_lines": ("llm", "context_cumulative_llm_trigger_lines"),
         "context_line_importance_enabled": ("llm", "context_line_importance_enabled"),
         "context_persist_enabled": ("llm", "context_persist_enabled"),
         "context_persist_max_age_seconds": ("llm", "context_persist_max_age_seconds"),
@@ -251,140 +251,69 @@ class GalgameConfig:
         "llm_repeat_detection_enabled": ("llm", "llm_repeat_detection_enabled"),
         "llm_repeat_similarity_threshold": ("llm", "llm_repeat_similarity_threshold"),
         "reader_mode": ("reader", "reader_mode"),
+        "narrator_enabled": ("narrator", "narrator_enabled"),
+        "narrator_max_lines_per_push": ("narrator", "narrator_max_lines_per_push"),
+        "narrator_max_chars": ("narrator", "narrator_max_chars"),
+        "narrator_drop_after_seconds": ("narrator", "narrator_drop_after_seconds"),
+        "narrator_dedupe_window": ("narrator", "narrator_dedupe_window"),
+        "narrator_include_speaker": ("narrator", "narrator_include_speaker"),
+        "narrator_direct_audio_enabled": ("narrator", "narrator_direct_audio_enabled"),
+        "narrator_tts_model": ("narrator", "narrator_tts_model"),
+        "narrator_tts_voice": ("narrator", "narrator_tts_voice"),
+        "narrator_tts_api_key_env": ("narrator", "narrator_tts_api_key_env"),
         "memory_reader_enabled": ("memory_reader", "memory_reader_enabled"),
         "memory_reader_textractor_path": ("memory_reader", "memory_reader_textractor_path"),
-        "memory_reader_textractor_proxy": (
-            "memory_reader",
-            "memory_reader_textractor_proxy",
-        ),
-        "memory_reader_install_release_api_url": (
-            "memory_reader",
-            "memory_reader_install_release_api_url",
-        ),
+        "memory_reader_textractor_proxy": ("memory_reader", "memory_reader_textractor_proxy"),
+        "memory_reader_install_release_api_url": ("memory_reader", "memory_reader_install_release_api_url"),
         "memory_reader_install_target_dir": ("memory_reader", "memory_reader_install_target_dir"),
-        "memory_reader_install_timeout_seconds": (
-            "memory_reader",
-            "memory_reader_install_timeout_seconds",
-        ),
+        "memory_reader_install_timeout_seconds": ("memory_reader", "memory_reader_install_timeout_seconds"),
         "memory_reader_auto_detect": ("memory_reader", "memory_reader_auto_detect"),
         "memory_reader_hook_codes": ("memory_reader", "memory_reader_hook_codes"),
-        "memory_reader_engine_hook_codes": (
-            "memory_reader",
-            "memory_reader_engine_hook_codes",
-        ),
-        "memory_reader_poll_interval_seconds": (
-            "memory_reader",
-            "memory_reader_poll_interval_seconds",
-        ),
+        "memory_reader_engine_hook_codes": ("memory_reader", "memory_reader_engine_hook_codes"),
+        "memory_reader_poll_interval_seconds": ("memory_reader", "memory_reader_poll_interval_seconds"),
         "ocr_reader_enabled": ("ocr_reader", "ocr_reader_enabled"),
         "ocr_reader_enabled_explicit": ("ocr_reader", "ocr_reader_enabled_explicit"),
         "ocr_reader_backend_selection": ("ocr_reader", "ocr_reader_backend_selection"),
-        "ocr_reader_backend_selection_explicit": (
-            "ocr_reader",
-            "ocr_reader_backend_selection_explicit",
-        ),
+        "ocr_reader_backend_selection_explicit": ("ocr_reader", "ocr_reader_backend_selection_explicit"),
         "ocr_reader_capture_backend": ("ocr_reader", "ocr_reader_capture_backend"),
-        "ocr_reader_capture_backend_explicit": (
-            "ocr_reader",
-            "ocr_reader_capture_backend_explicit",
-        ),
+        "ocr_reader_capture_backend_explicit": ("ocr_reader", "ocr_reader_capture_backend_explicit"),
         "ocr_reader_install_manifest_url": ("ocr_reader", "ocr_reader_install_manifest_url"),
         "ocr_reader_install_target_dir": ("ocr_reader", "ocr_reader_install_target_dir"),
-        "ocr_reader_install_timeout_seconds": (
-            "ocr_reader",
-            "ocr_reader_install_timeout_seconds",
-        ),
+        "ocr_reader_install_timeout_seconds": ("ocr_reader", "ocr_reader_install_timeout_seconds"),
         "ocr_reader_poll_interval_seconds": ("ocr_reader", "ocr_reader_poll_interval_seconds"),
         "ocr_reader_trigger_mode": ("ocr_reader", "ocr_reader_trigger_mode"),
         "ocr_reader_fast_loop_enabled": ("ocr_reader", "ocr_reader_fast_loop_enabled"),
-        "ocr_reader_no_text_takeover_after_seconds": (
-            "ocr_reader",
-            "ocr_reader_no_text_takeover_after_seconds",
-        ),
-        "ocr_reader_background_scene_change_distance": (
-            "ocr_reader",
-            "ocr_reader_background_scene_change_distance",
-        ),
+        "ocr_reader_no_text_takeover_after_seconds": ("ocr_reader", "ocr_reader_no_text_takeover_after_seconds"),
+        "ocr_reader_background_scene_change_distance": ("ocr_reader", "ocr_reader_background_scene_change_distance"),
         "ocr_reader_languages": ("ocr_reader", "ocr_reader_languages"),
         "ocr_reader_left_inset_ratio": ("ocr_reader", "ocr_reader_left_inset_ratio"),
         "ocr_reader_right_inset_ratio": ("ocr_reader", "ocr_reader_right_inset_ratio"),
         "ocr_reader_top_ratio": ("ocr_reader", "ocr_reader_top_ratio"),
         "ocr_reader_bottom_inset_ratio": ("ocr_reader", "ocr_reader_bottom_inset_ratio"),
-        "ocr_reader_screen_awareness_full_frame_ocr": (
-            "ocr_reader",
-            "ocr_reader_screen_awareness_full_frame_ocr",
-        ),
-        "ocr_reader_screen_awareness_multi_region_ocr": (
-            "ocr_reader",
-            "ocr_reader_screen_awareness_multi_region_ocr",
-        ),
-        "ocr_reader_screen_awareness_visual_rules": (
-            "ocr_reader",
-            "ocr_reader_screen_awareness_visual_rules",
-        ),
-        "ocr_reader_screen_awareness_latency_mode": (
-            "ocr_reader",
-            "ocr_reader_screen_awareness_latency_mode",
-        ),
-        "ocr_reader_screen_awareness_min_interval_seconds": (
-            "ocr_reader",
-            "ocr_reader_screen_awareness_min_interval_seconds",
-        ),
-        "ocr_reader_screen_awareness_sample_collection_enabled": (
-            "ocr_reader",
-            "ocr_reader_screen_awareness_sample_collection_enabled",
-        ),
-        "ocr_reader_screen_awareness_sample_dir": (
-            "ocr_reader",
-            "ocr_reader_screen_awareness_sample_dir",
-        ),
-        "ocr_reader_screen_awareness_model_enabled": (
-            "ocr_reader",
-            "ocr_reader_screen_awareness_model_enabled",
-        ),
-        "ocr_reader_screen_awareness_model_path": (
-            "ocr_reader",
-            "ocr_reader_screen_awareness_model_path",
-        ),
-        "ocr_reader_screen_awareness_model_min_confidence": (
-            "ocr_reader",
-            "ocr_reader_screen_awareness_model_min_confidence",
-        ),
+        "ocr_reader_screen_awareness_full_frame_ocr": ("ocr_reader", "ocr_reader_screen_awareness_full_frame_ocr"),
+        "ocr_reader_screen_awareness_multi_region_ocr": ("ocr_reader", "ocr_reader_screen_awareness_multi_region_ocr"),
+        "ocr_reader_screen_awareness_visual_rules": ("ocr_reader", "ocr_reader_screen_awareness_visual_rules"),
+        "ocr_reader_screen_awareness_latency_mode": ("ocr_reader", "ocr_reader_screen_awareness_latency_mode"),
+        "ocr_reader_screen_awareness_min_interval_seconds": ("ocr_reader", "ocr_reader_screen_awareness_min_interval_seconds"),
+        "ocr_reader_screen_awareness_sample_collection_enabled": ("ocr_reader", "ocr_reader_screen_awareness_sample_collection_enabled"),
+        "ocr_reader_screen_awareness_sample_dir": ("ocr_reader", "ocr_reader_screen_awareness_sample_dir"),
+        "ocr_reader_screen_awareness_model_enabled": ("ocr_reader", "ocr_reader_screen_awareness_model_enabled"),
+        "ocr_reader_screen_awareness_model_path": ("ocr_reader", "ocr_reader_screen_awareness_model_path"),
+        "ocr_reader_screen_awareness_model_min_confidence": ("ocr_reader", "ocr_reader_screen_awareness_model_min_confidence"),
         "ocr_reader_screen_templates": ("ocr_reader", "ocr_reader_screen_templates"),
-        "ocr_reader_screen_type_transition_emit": (
-            "ocr_reader",
-            "ocr_reader_screen_type_transition_emit",
-        ),
-        "ocr_reader_known_screen_timeout_seconds": (
-            "ocr_reader",
-            "ocr_reader_known_screen_timeout_seconds",
-        ),
-        "ocr_reader_max_unobserved_advances_before_hold": (
-            "ocr_reader",
-            "ocr_reader_max_unobserved_advances_before_hold",
-        ),
-        "ocr_reader_unobserved_advance_hold_duration_seconds": (
-            "ocr_reader",
-            "ocr_reader_unobserved_advance_hold_duration_seconds",
-        ),
-        "ocr_reader_frame_cache_enabled": (
-            "ocr_reader",
-            "ocr_reader_frame_cache_enabled",
-        ),
+        "ocr_reader_screen_type_transition_emit": ("ocr_reader", "ocr_reader_screen_type_transition_emit"),
+        "ocr_reader_known_screen_timeout_seconds": ("ocr_reader", "ocr_reader_known_screen_timeout_seconds"),
+        "ocr_reader_max_unobserved_advances_before_hold": ("ocr_reader", "ocr_reader_max_unobserved_advances_before_hold"),
+        "ocr_reader_unobserved_advance_hold_duration_seconds": ("ocr_reader", "ocr_reader_unobserved_advance_hold_duration_seconds"),
+        "ocr_reader_frame_cache_enabled": ("ocr_reader", "ocr_reader_frame_cache_enabled"),
         "vision_classifier_enabled": ("vision", "vision_classifier_enabled"),
         "vision_classifier_model_dir": ("vision", "vision_classifier_model_dir"),
         "vision_classifier_model_name": ("vision", "vision_classifier_model_name"),
         "vision_classifier_threshold": ("vision", "vision_classifier_threshold"),
         "vision_classifier_tick_interval": ("vision", "vision_classifier_tick_interval"),
-        "vision_classifier_inference_timeout_ms": (
-            "vision",
-            "vision_classifier_inference_timeout_ms",
-        ),
+        "vision_classifier_inference_timeout_ms": ("vision", "vision_classifier_inference_timeout_ms"),
         "vision_classifier_input_size": ("vision", "vision_classifier_input_size"),
-        "vision_classifier_input_size_low": (
-            "vision",
-            "vision_classifier_input_size_low",
-        ),
+        "vision_classifier_input_size_low": ("vision", "vision_classifier_input_size_low"),
         "rapidocr_enabled": ("rapidocr", "rapidocr_enabled"),
         "rapidocr_enabled_explicit": ("rapidocr", "rapidocr_enabled_explicit"),
         "rapidocr_install_target_dir": ("rapidocr", "rapidocr_install_target_dir"),
@@ -404,6 +333,7 @@ class GalgameConfig:
         history: GalgameHistoryConfig | None = None,
         llm: GalgameLLMConfig | None = None,
         reader: GalgameReaderConfig | None = None,
+        narrator: GalgameNarratorConfig | None = None,
         memory_reader: GalgameMemoryReaderConfig | None = None,
         ocr_reader: GalgameOcrReaderConfig | None = None,
         vision: GalgameVisionConfig | None = None,
@@ -414,9 +344,8 @@ class GalgameConfig:
         self.history = history if history is not None else GalgameHistoryConfig()
         self.llm = llm if llm is not None else GalgameLLMConfig()
         self.reader = reader if reader is not None else GalgameReaderConfig()
-        self.memory_reader = (
-            memory_reader if memory_reader is not None else GalgameMemoryReaderConfig()
-        )
+        self.narrator = narrator if narrator is not None else GalgameNarratorConfig()
+        self.memory_reader = memory_reader if memory_reader is not None else GalgameMemoryReaderConfig()
         self.ocr_reader = ocr_reader if ocr_reader is not None else GalgameOcrReaderConfig()
         self.vision = vision if vision is not None else GalgameVisionConfig()
         self.rapidocr = rapidocr if rapidocr is not None else GalgameRapidOcrConfig()

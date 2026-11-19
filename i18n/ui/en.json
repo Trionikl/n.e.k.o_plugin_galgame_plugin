@@ -1130,5 +1130,14 @@
   "ui.first_run.action.download_rapidocr_models": "Download Models Now",
   "ui.first_run.action.show_rapidocr_models_guide": "View Manual Download Guide",
   "ui.first_run.install_ocr.pending_models": "The selected language models ({lang} + {version}) are not downloaded. Click \"Download Models Now\" to fetch ~{size} MB from ModelScope.",
-  "ui.first_run.install_ocr.pending_models_manual": "The selected language models ({lang} + {version}) are not downloaded. Follow the RapidOCR banner to download the models from an available source, place them in the target directory, then refresh status."
+  "ui.first_run.install_ocr.pending_models_manual": "The selected language models ({lang} + {version}) are not downloaded. Follow the RapidOCR banner to download the models from an available source, place them in the target directory, then refresh status.",
+  "ui.mode.narrator": "Narrator",
+  "ui.mode_label.narrator": "Narrator mode",
+  "ui.tts.pipeline.agent": "Via Agent",
+  "ui.tts.pipeline.direct": "Direct",
+  "ui.tts.pipeline.off": "Off",
+  "ui.inspector.title": "Inspector",
+  "ui.inspector.hint": "Hover a control to see details.",
+  "ui.inspector.label_on": "When enabled:",
+  "ui.inspector.label_off": "When disabled/switched:"
 }

@@ -1130,5 +1130,14 @@
   "ui.first_run.action.download_rapidocr_models": "立即下载模型",
   "ui.first_run.action.show_rapidocr_models_guide": "查看手动下载说明",
   "ui.first_run.install_ocr.pending_models": "所选语言模型 ({lang} + {version}) 未下载。点击「立即下载模型」按钮，会从 ModelScope 拉取约 {size} MB 的模型文件。",
-  "ui.first_run.install_ocr.pending_models_manual": "所选语言模型 ({lang} + {version}) 未下载。请按下方 RapidOCR 横幅说明从可用下载来源获取模型并放置到目标目录，然后刷新状态。"
+  "ui.first_run.install_ocr.pending_models_manual": "所选语言模型 ({lang} + {version}) 未下载。请按下方 RapidOCR 横幅说明从可用下载来源获取模型并放置到目标目录，然后刷新状态。",
+  "ui.mode.narrator": "旁白",
+  "ui.mode_label.narrator": "旁白模式",
+  "ui.tts.pipeline.agent": "通过 Agent",
+  "ui.tts.pipeline.direct": "直出",
+  "ui.tts.pipeline.off": "关闭",
+  "ui.inspector.title": "元素说明",
+  "ui.inspector.hint": "将鼠标悬停在界面元素上查看说明。",
+  "ui.inspector.label_on": "开启时：",
+  "ui.inspector.label_off": "关闭/切换时："
 }

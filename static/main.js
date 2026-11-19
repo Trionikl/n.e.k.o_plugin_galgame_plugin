@@ -710,9 +710,16 @@ const CONNECTION_STATE_LABELS_ZH = {
 };
 
 const MODE_LABELS_ZH = {
-  silent: '静默模式',
-  companion: '伴读模式',
-  choice_advisor: '自动推进模式',
+  silent: 'Тихий режим',
+  companion: 'Режим компаньона',
+  choice_advisor: 'Советник по выбору',
+  narrator: 'Рассказчик',
+};
+
+const TTS_PIPELINE_LABELS_ZH = {
+  agent: 'Через агента',
+  direct: 'Напрямую',
+  off: 'Выкл',
 };
 const ADVANCE_SPEED_LABELS_ZH = {
   slow: '慢',
@@ -792,6 +799,11 @@ function connectionStateLabel(key, fallback = '') {
 
 function modeLabel(key, fallback = '') {
   return uiDynamicT('ui.mode_label', key, MODE_LABELS_ZH[key] || fallback || key);
+}
+
+function ttsPipelineLabel(key, fallback = '') {
+  const normalized = String(key || '').trim().toLowerCase();
+  return uiDynamicT('ui.tts.pipeline', normalized, TTS_PIPELINE_LABELS_ZH[normalized] || fallback || normalized || 'agent');
 }
 
 function advanceSpeedLabel(key, fallback = '') {
@@ -4007,6 +4019,166 @@ async function restoreRapidOcrModelsState() {
   await restoreInstallState('rapidocr_models');
 }
 
+let selectedTtsPipeline = 'agent';
+
+function normalizeTtsPipeline(value) {
+  const v = String(value || '').trim().toLowerCase();
+  return ['agent', 'direct', 'off'].includes(v) ? v : 'agent';
+}
+
+function getSelectedTtsPipeline() {
+  const active = document.querySelector('#ttsPipelineSwitch .pipeline-btn.active');
+  if (active && active.dataset && active.dataset.pipeline) {
+    return normalizeTtsPipeline(active.dataset.pipeline);
+  }
+  return normalizeTtsPipeline(selectedTtsPipeline);
+}
+
+function updateTtsPipelineSwitchControl(pipeline, { ready = true } = {}) {
+  const normalized = normalizeTtsPipeline(pipeline);
+  selectedTtsPipeline = normalized;
+  const wrap = document.getElementById('ttsPipelineSwitch');
+  if (!wrap) return;
+  wrap.dataset.ready = ready ? 'true' : 'false';
+  document.querySelectorAll('#ttsPipelineSwitch .pipeline-btn').forEach((btn) => {
+    const on = ready && normalizeTtsPipeline(btn.dataset.pipeline) === normalized;
+    btn.classList.toggle('active', on);
+    btn.disabled = !ready;
+    btn.setAttribute('aria-disabled', ready ? 'false' : 'true');
+  });
+}
+
+async function setTtsPipeline(nextPipeline, { silentFlash = false, persist = true } = {}) {
+  const pipeline = normalizeTtsPipeline(nextPipeline);
+  const prev = normalizeTtsPipeline((latestStatus && latestStatus.tts_output_pipeline) || selectedTtsPipeline);
+  updateTtsPipelineSwitchControl(pipeline);
+  if (!persist) {
+    if (latestStatus) latestStatus.tts_output_pipeline = pipeline;
+    return;
+  }
+  try {
+    await callPlugin('galgame_set_tts_pipeline', { pipeline });
+    if (latestStatus) latestStatus.tts_output_pipeline = pipeline;
+    if (!silentFlash) {
+      setFlash(uiTf('ui.flash.tts_pipeline_saved', 'Режим озвучки: {pipeline}', { pipeline: ttsPipelineLabel(pipeline) }), 'success');
+    }
+  } catch (error) {
+    updateTtsPipelineSwitchControl(prev);
+    if (!silentFlash) setFlash(error instanceof Error ? error.message : String(error), 'error');
+    throw error;
+  }
+}
+
+const INSPECTOR_DEFAULT = {
+  titleKey: 'ui.inspector.title',
+  titleFallback: 'Справка элемента',
+  hintKey: 'ui.inspector.hint',
+  hintFallback: 'Наведите курсор на элемент, чтобы увидеть подробное описание.',
+};
+
+const INSPECTOR_DATA = [
+  { selector: '#modeSwitch .mode-btn[data-mode="narrator"], #modeSelect option[value="narrator"]', title: 'Режим «Рассказчик»', desc: 'Озвучивает/пересказывает новые реплики без автоматических действий в игре.', on: 'Плагин отправляет narration по сцене согласно выбранному TTS-конвейеру.', off: 'Переключите режим (компаньон, советник, тихий), чтобы изменить поведение.' },
+  { selector: '#modeSwitch .mode-btn[data-mode="choice_advisor"], #modeSelect option[value="choice_advisor"]', title: 'Режим «Советник по выбору»', desc: 'Помогает с вариантами выбора и сопровождает сцену с акцентом на решения.', on: 'Плагин анализирует варианты и даёт советы/подсказки по выбору.', off: 'При смене режима советы по выбору и связанная активность советника отключаются.' },
+  { selector: '#modeSwitch .mode-btn[data-mode="companion"], #modeSelect option[value="companion"]', title: 'Режим «Компаньон»', desc: 'Сопровождает чтение и даёт контекст без автокликов по вариантам.', on: 'Плагин может комментировать происходящее, но не управляет игрой.', off: 'При смене режима компаньонские подсказки перестанут отправляться.' },
+  { selector: '#modeSwitch .mode-btn[data-mode="silent"], #modeSelect option[value="silent"]', title: 'Тихий режим', desc: 'Минимум вмешательства и сообщений от агента.', on: 'Агент не будет активно подсказывать/озвучивать от себя.', off: 'Выберите другой режим, чтобы включить помощь, рассказ или советы.' },
+  { selector: '#ttsPipelineSwitch .pipeline-btn[data-pipeline="agent"]', title: 'TTS: через агента', desc: 'Текст narration подготавливается агентом/LLM перед передачей в конвейер озвучки.', on: 'Реплики проходят через агентский путь (режим диктора).', off: 'Выберите «Напрямую» или «Выкл», чтобы изменить конвейер.' },
+  { selector: '#ttsPipelineSwitch .pipeline-btn[data-pipeline="direct"]', title: 'TTS: напрямую', desc: 'Передача текста narration без LLM-фильтра диктора (ближе к исходной реплике).', on: 'Используется прямой текстовый путь narration.', off: 'Выберите «Через агента» или «Выкл».' },
+  { selector: '#ttsPipelineSwitch .pipeline-btn[data-pipeline="off"]', title: 'TTS: выкл', desc: 'Отключает TTS-конвейер рассказчика.', on: 'Новые реплики не отправляются в озвучку.', off: 'Выберите «Через агента» или «Напрямую», чтобы включить озвучку.' },
+  { selector: '#ocrReaderCaptureBackendSelect, label[for="ocrReaderCaptureBackendSelect"]', title: 'Бэкенд захвата (DXcam)', desc: 'Способ захвата окна/экрана для OCR. DXcam — быстрый вариант для Windows (Direct3D), если доступен.', on: 'При выборе DXcam используется соответствующий захват.', off: 'Другие бэкенды могут быть медленнее или менее совместимы в зависимости от игры.' },
+  { selector: '#ocrProfileAutoRecalibrateBtn', title: 'Автокалибровка области диалога', desc: 'Автоматически подбирает/обновляет профиль области захвата для OCR.', on: 'Запустится подбор/пересчёт области диалога для текущего окна.', off: 'Профиль останется прежним; область можно настроить вручную.' },
+  { selector: '#ocrWindowSelectBtn, #ocrWindowSelectLabel, #ocrWindowSelectValue, #ocrWindowAutoBtn, #ocrWindowRefreshBtn', title: 'Выбор окна для OCR', desc: 'Целевое окно игры, из которого берётся изображение для распознавания текста.', on: 'OCR будет работать по выбранному (или автоматически определённому) окну.', off: 'Неверное окно приведёт к пустому или ошибочному распознаванию.' },
+  { selector: '#memoryProcessSelectBtn, #memoryProcessSelectLabel, #memoryProcessAutoBtn, #memoryProcessRefreshBtn', title: 'Выбор процесса (Memory Reader)', desc: 'Процесс игры для чтения текста из памяти.', on: 'Чтение памяти привязывается к выбранному процессу.', off: 'Без корректного процесса Memory Reader может быть недоступен.' },
+  { selector: '#speedSwitch .speed-btn, #speedSwitch', title: 'Скорость продвижения', desc: 'Темп ожиданий/действий при автоматическом сопровождении.', on: 'Быстрее — меньше паузы между шагами; медленнее — осторожнее.', off: 'Можно выбрать более медленный темп для стабильности.' },
+];
+
+let inspectorPinned = false;
+
+function findInspectorEntry(target) {
+  if (!target || typeof target.closest !== 'function') return null;
+  for (const entry of INSPECTOR_DATA) {
+    try {
+      if (target.closest(entry.selector)) return entry;
+    } catch (_) {}
+  }
+  return null;
+}
+
+function showInspectorEntry(entry) {
+  const title = document.getElementById('inspectorTitle');
+  const hint = document.getElementById('inspectorHint');
+  const details = document.getElementById('inspectorDetails');
+  const desc = document.getElementById('inspectorDesc');
+  const on = document.getElementById('inspectorOn');
+  const off = document.getElementById('inspectorOff');
+  if (!title || !hint || !details || !desc || !on || !off) return;
+  if (!entry) {
+    title.textContent = uiT(INSPECTOR_DEFAULT.titleKey, INSPECTOR_DEFAULT.titleFallback);
+    hint.hidden = false;
+    hint.textContent = uiT(INSPECTOR_DEFAULT.hintKey, INSPECTOR_DEFAULT.hintFallback);
+    details.hidden = true;
+    desc.textContent = '';
+    on.textContent = '';
+    off.textContent = '';
+    return;
+  }
+  title.textContent = entry.title || uiT(INSPECTOR_DEFAULT.titleKey, INSPECTOR_DEFAULT.titleFallback);
+  hint.hidden = true;
+  details.hidden = false;
+  desc.textContent = entry.desc || '';
+  on.textContent = entry.on || '';
+  off.textContent = entry.off || '';
+}
+
+function initInspectorPanel() {
+  const panel = document.getElementById('inspectorPanel');
+  if (!panel) return;
+  const onHover = (e) => {
+    if (inspectorPinned) return;
+    const entry = findInspectorEntry(e.target);
+    if (entry) showInspectorEntry(entry);
+  };
+  document.addEventListener('mouseover', onHover, true);
+  document.addEventListener('focusin', onHover, true);
+  document.addEventListener('mouseout', (e) => {
+    if (inspectorPinned) return;
+    const rel = e.relatedTarget;
+    if (!rel || !findInspectorEntry(rel)) showInspectorEntry(null);
+  }, true);
+  document.addEventListener('focusout', (e) => {
+    if (inspectorPinned) return;
+    const rel = e.relatedTarget;
+    if (!rel || !findInspectorEntry(rel)) showInspectorEntry(null);
+  }, true);
+  document.addEventListener('click', (e) => {
+    const entry = findInspectorEntry(e.target);
+    if (entry) {
+      inspectorPinned = true;
+      showInspectorEntry(entry);
+      return;
+    }
+    if (!panel.contains(e.target)) {
+      inspectorPinned = false;
+      showInspectorEntry(null);
+    }
+  }, true);
+  panel.addEventListener('mouseleave', () => {
+    if (!inspectorPinned) showInspectorEntry(null);
+  });
+  showInspectorEntry(null);
+}
+
+function initTtsPipelineControls() {
+  document.querySelectorAll('#ttsPipelineSwitch .pipeline-btn').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const pipeline = normalizeTtsPipeline(btn.dataset.pipeline);
+      try {
+        await setTtsPipeline(pipeline, { silentFlash: false, persist: true });
+      } catch (_) {}
+    });
+  });
+  updateTtsPipelineSwitchControl(selectedTtsPipeline, { ready: true });
+}
+
 function updateModeSwitchControl(currentMode, { ready = true } = {}) {
   const modeSwitchEl = document.getElementById('modeSwitch');
   if (!modeSwitchEl) {
@@ -4045,7 +4217,7 @@ function updateSummaryMode(currentMode) {
     });
     return;
   }
-  summaryNode.textContent = uiTf('ui.summary.mode_part', '模式：{mode}', {
+  summaryNode.textContent = uiTf('ui.summary.mode_part', 'Режим: {mode}', {
     mode: modeLabel(currentMode, currentMode),
   });
 }
@@ -4075,6 +4247,7 @@ function renderStatus(status) {
     mode: currentMode,
   });
   updateModeSwitchControl(currentMode);
+  updateTtsPipelineSwitchControl(normalizeTtsPipeline(status.tts_output_pipeline || selectedTtsPipeline || 'agent'));
   const currentSpeed = status.advance_speed || 'medium';
   document.querySelectorAll('#speedSwitch .speed-btn').forEach((btn) => {
     btn.classList.toggle('active', btn.dataset.speed === currentSpeed);
@@ -4706,7 +4879,7 @@ function formatDataSourceZh(value) {
 
 function buildStatusSummaryText(status) {
   if (!status || typeof status !== 'object') {
-    return uiT('ui.summary.none', '无摘要');
+    return uiT('ui.summary.none', 'Нет сводки');
   }
 
   const source = String(status.active_data_source || '').trim();
@@ -4721,44 +4894,46 @@ function buildStatusSummaryText(status) {
 
   let prefix = '';
   if (source === 'ocr_reader' && sessionId) {
-    prefix = uiT('ui.summary.connected_ocr', '已通过 OCR 读取连接（降级模式）');
+    prefix = uiT('ui.summary.connected_ocr', 'Подключено через OCR (резервный режим)');
   } else if (source === 'memory_reader' && sessionId) {
-    prefix = uiT('ui.summary.connected_memory', '已通过内存读取连接（降级模式）');
+    prefix = uiT('ui.summary.connected_memory', 'Подключено через чтение памяти (резервный режим)');
   } else if (source === 'bridge_sdk' && sessionId) {
-    prefix = uiT('ui.summary.connected_bridge', '已通过 Bridge SDK 连接');
+    prefix = uiT('ui.summary.connected_bridge', 'Подключено через Bridge SDK');
   } else if (status.connection_state === 'stale') {
-    prefix = uiT('ui.summary.stale_snapshot', '当前桥接快照已过期');
+    prefix = uiT('ui.summary.stale_snapshot', 'Текущий снимок моста устарел');
   } else if (status.connection_state === 'active') {
-    prefix = uiT('ui.summary.bridge_active', '当前桥接链路运行中');
+    prefix = uiT('ui.summary.bridge_active', 'Мост работает');
   } else {
-    prefix = uiTf('ui.summary.current_source', '当前数据源：{source}', { source: formatDataSourceZh(source) });
+    prefix = uiTf('ui.summary.current_source', 'Текущий источник: {source}', { source: formatDataSourceZh(source) });
   }
 
+  const ttsPipeline = ttsPipelineLabel(status.tts_output_pipeline || selectedTtsPipeline || 'agent');
   const parts = [
-    uiTf('ui.summary.state_part', '状态：{state}', { state: connectionState }),
-    uiTf('ui.summary.mode_part', '模式：{mode}', { mode }),
+    uiTf('ui.summary.state_part', 'Состояние: {state}', { state: connectionState }),
+    uiTf('ui.summary.mode_part', 'Режим: {mode}', { mode }),
+    uiTf('ui.summary.tts_part', 'Озвучка: {pipeline}', { pipeline: ttsPipeline }),
   ];
 
   if (boundGameId) {
-    parts.push(uiTf('ui.summary.bound_part', '绑定：{gameId}', { gameId: boundGameId }));
+    parts.push(uiTf('ui.summary.bound_part', 'Привязка: {gameId}', { gameId: boundGameId }));
   }
   if (sessionId) {
-    parts.push(uiTf('ui.summary.session_part', '会话：{sessionId}', { sessionId }));
+    parts.push(uiTf('ui.summary.session_part', 'Сессия: {sessionId}', { sessionId }));
   }
   parts.push(uiTf('ui.summary.seq_part', '最新序号：{seq}', { seq: lastSeq }));
 
   if (warningMessage) {
-    parts.push(uiTf('ui.summary.warning_part', '告警：{warning}', { warning: warningMessage }));
+    parts.push(uiTf('ui.summary.warning_part', 'Предупреждение: {warning}', { warning: warningMessage }));
   }
   if (status.ocr_capture_diagnostic_required) {
-    parts.push(uiTf('ui.summary.ocr_diagnostic_part', 'OCR诊断：{diagnostic}', {
-      diagnostic: status.ocr_context_state || ocrRuntimeState(status) || uiT('ui.ocr.missing_line.capture_target_abnormal', '截图区/窗口目标可能异常'),
+    parts.push(uiTf('ui.summary.ocr_diagnostic_part', 'Диагностика OCR: {diagnostic}', {
+      diagnostic: status.ocr_context_state || ocrRuntimeState(status) || uiT('ui.ocr.missing_line.capture_target_abnormal', 'Возможна проблема с областью захвата/окном'),
     }));
   }
   if (status.agent_diagnostic_required || status.agent_reason) {
     const agentText = status.agent_diagnostic || status.agent_reason || status.agent_status || '';
     if (agentText) {
-      parts.push(uiTf('ui.summary.agent_part', 'Agent：{agent}', { agent: agentText }));
+      parts.push(uiTf('ui.summary.agent_part', 'Агент: {agent}', { agent: agentText }));
     }
   }
 
@@ -6898,6 +7073,9 @@ async function saveMode({ auto = false } = {}) {
       reader_mode: readerMode,
     });
     modeCommitted = true;
+    const ttsPipeline = getSelectedTtsPipeline();
+    await callPlugin('galgame_set_tts_pipeline', { pipeline: ttsPipeline });
+    if (latestStatus) latestStatus.tts_output_pipeline = ttsPipeline;
     await callPlugin('galgame_set_ocr_timing', {
       poll_interval_seconds: ocrPollInterval,
       trigger_mode: ocrTriggerMode,
@@ -7657,6 +7835,8 @@ async function initialize() {
     restoreTextractorInstallState(),
     restoreRapidOcrModelsState(),
   ]));
+  initTtsPipelineControls();
+  initInspectorPanel();
   startAutoRefresh();
 }
 

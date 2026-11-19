@@ -16,6 +16,7 @@ from .models import (
     STORE_RAPIDOCR_LANG_TYPE,
     STORE_RAPIDOCR_OCR_VERSION,
     STORE_READER_MODE,
+    STORE_TTS_OUTPUT_PIPELINE,
     json_copy,
 )
 from .plugin_util_helpers import _migrate_legacy_capture_backend
@@ -131,6 +132,9 @@ class GalgamePluginConfigService:
             STORE_OCR_SCREEN_TEMPLATES,
             json_copy(templates),
         )
+
+    def persist_tts_output_pipeline(self, *, pipeline: str) -> None:
+        self._plugin._persist.persist_config_override(STORE_TTS_OUTPUT_PIPELINE, pipeline)
 
     def persist_runtime_state(self, payload: dict[str, Any]) -> None:
         def _payload_int(key: str) -> int:

@@ -1347,7 +1347,7 @@ def test_status_payload_primary_diagnosis_reports_minimized_window(
 
     diagnosis = payload["primary_diagnosis"]
     assert diagnosis["severity"] == "warning"
-    assert diagnosis["title"] == "游戏窗口已最小化"
+    assert diagnosis["title"] == "Окно игры свёрнуто"
     assert [action["id"] for action in diagnosis["actions"]] == [
         "refresh_ocr_windows",
         "select_ocr_window",
@@ -1385,7 +1385,7 @@ def test_status_payload_primary_diagnosis_reports_capture_failure(
 
     diagnosis = payload["primary_diagnosis"]
     assert diagnosis["severity"] == "error"
-    assert diagnosis["title"] == "截图或文字识别失败"
+    assert diagnosis["title"] == "Ошибка захвата или распознавания текста"
     assert diagnosis["message"] == "PrintWindow timeout"
     assert {"recalibrate_ocr", "capture_backend", "debug_details"} <= {action["id"] for action in diagnosis["actions"]}
 
@@ -1414,7 +1414,7 @@ def test_status_payload_exposes_interval_background_polling_state(
     assert payload["ocr_background_polling"] is True
     assert payload["ocr_foreground_resume_pending"] is False
     assert payload["ocr_capture_backend_blocked"] is False
-    assert "后台读取" in payload["ocr_background_message"]
+    assert "фоне" in payload["ocr_background_message"]
 
 
 def test_status_payload_reports_interval_background_capture_failure_with_backend_advice(
@@ -1441,12 +1441,12 @@ def test_status_payload_reports_interval_background_capture_failure_with_backend
 
     assert payload["ocr_background_state"] == "capture_backend_blocked"
     assert payload["ocr_capture_backend_blocked"] is True
-    assert "窗口可见且未最小化" in payload["ocr_background_message"]
+    assert "видно и не свёрнуто" in payload["ocr_background_message"]
     diagnosis = payload["primary_diagnosis"]
     assert diagnosis["severity"] == "error"
-    assert diagnosis["title"] == "截图或文字识别失败"
-    assert "定时 OCR 后台读取" in diagnosis["message"]
-    assert "切换截图方式" in diagnosis["message"]
+    assert diagnosis["title"] == "Ошибка захвата или распознавания текста"
+    assert "периодический фоновый OCR" in diagnosis["message"]
+    assert "способ захвата" in diagnosis["message"]
     assert {"focus_game", "capture_backend", "select_ocr_window", "debug_details"} <= {
         action["id"] for action in diagnosis["actions"]
     }
@@ -1460,13 +1460,13 @@ def test_status_payload_primary_diagnosis_reports_poll_not_running() -> None:
                 "ocr_context_state": "poll_not_running",
             },
             "ocr_context_state": "poll_not_running",
-            "ocr_capture_diagnostic": "OCR 轮询未继续执行。",
+            "ocr_capture_diagnostic": "OCR ещё не завершил первый цикл опроса.",
         }
     )
 
     assert diagnosis["severity"] == "error"
-    assert diagnosis["title"] == "OCR 轮询没有继续运行"
-    assert diagnosis["message"] == "OCR 轮询未继续执行。"
+    assert diagnosis["title"] == "Опрос OCR не выполняется"
+    assert diagnosis["message"] == "OCR ещё не завершил первый цикл опроса."
 
 
 def test_status_payload_primary_diagnosis_reports_after_advance_waiting_gate() -> None:
@@ -1478,8 +1478,8 @@ def test_status_payload_primary_diagnosis_reports_after_advance_waiting_gate() -
     )
 
     assert diagnosis["severity"] == "info"
-    assert diagnosis["title"] == "OCR 正在等待游戏推进"
-    assert "点击对白后识别模式" in diagnosis["message"]
+    assert diagnosis["title"] == "OCR ожидает продвижения игры"
+    assert "распознавания после продвижения" in diagnosis["message"]
     assert {action["id"] for action in diagnosis["actions"]} == {"focus_game", "debug_details"}
 
 
@@ -1491,8 +1491,8 @@ def test_status_payload_primary_diagnosis_reports_ocr_emit_without_new_line() ->
     )
 
     assert diagnosis["severity"] == "info"
-    assert diagnosis["title"] == "OCR 已执行但没有新台词"
-    assert "重复写入" in diagnosis["message"]
+    assert diagnosis["title"] == "OCR выполнен, но новой реплики нет"
+    assert "повторная запись" in diagnosis["message"]
     assert {action["id"] for action in diagnosis["actions"]} == {"line_details", "debug_details"}
 
 
@@ -1528,10 +1528,10 @@ def test_status_payload_primary_diagnosis_reports_self_ui_guard_as_warning() -> 
     )
 
     assert diagnosis["severity"] == "warning"
-    assert diagnosis["title"] == "OCR 截到了插件 UI，已忽略"
+    assert diagnosis["title"] == "OCR захватил интерфейс плагина — результат проигнорирован"
     assert diagnosis["title_i18n_key"] == "ui.diag.self_ui_guard.title"
     assert diagnosis["message_i18n_key"] == "ui.diag.self_ui_guard.body"
-    assert "插件运行出错" not in diagnosis["title"]
+    assert "Ошибка работы плагина" not in diagnosis["title"]
     assert {action["id"] for action in diagnosis["actions"]} == {
         "focus_game",
         "select_ocr_window",
@@ -1577,7 +1577,7 @@ def test_status_payload_primary_diagnosis_reports_observed_pending(
 
     diagnosis = payload["primary_diagnosis"]
     assert diagnosis["severity"] == "info"
-    assert diagnosis["title"] == "刚读到新文字"
+    assert diagnosis["title"] == "Обнаружен новый текст"
     assert [action["id"] for action in diagnosis["actions"]] == ["line_details"]
 
 
@@ -1586,18 +1586,18 @@ def test_status_payload_primary_diagnosis_reports_observed_pending(
     [
         (
             "after_advance",
-            ["后台期间不会持续 OCR", "触发 OCR 重新采集"],
-            ["伴读信息仍会刷新", "会尝试定时后台读取"],
+            ["распознавания после продвижения", "повторный захват"],
+            ["фонового чтения", "периодического OCR"],
         ),
         (
             "interval",
-            ["会尝试定时后台读取", "取决于窗口可见性、非最小化状态和捕获后端"],
-            ["伴读信息仍会刷新", "后台期间不会持续 OCR"],
+            ["периодического OCR", "фонового чтения"],
+            ["повторный захват"],
         ),
         (
             "unknown",
-            ["切回游戏窗口后会继续"],
-            ["伴读信息仍会刷新", "后台读取"],
+            ["возврата в окно игры"],
+            ["повторный захват", "фонового чтения"],
         ),
     ],
 )
@@ -1615,7 +1615,7 @@ def test_status_payload_primary_diagnosis_reports_window_not_foreground_by_trigg
     )
 
     assert diagnosis["severity"] == "info"
-    assert diagnosis["title"] == "游戏不在前台"
+    assert diagnosis["title"] == "Окно игры не в фокусе"
     assert [action["id"] for action in diagnosis["actions"]] == ["focus_game"]
     for message_part in expected_message_parts:
         assert message_part in diagnosis["message"]
@@ -1638,8 +1638,8 @@ def test_primary_diagnosis_warns_when_ocr_raw_text_is_too_long() -> None:
     )
 
     assert diagnosis["severity"] == "warning"
-    assert diagnosis["title"] == "OCR 识别文本过长"
-    assert "401 字" in diagnosis["message"]
+    assert diagnosis["title"] == "OCR: слишком длинный текст"
+    assert "401 симв." in diagnosis["message"]
     assert [action["id"] for action in diagnosis["actions"]] == [
         "select_ocr_window",
         "recalibrate_ocr",
@@ -1661,7 +1661,7 @@ def test_primary_diagnosis_does_not_warn_for_long_stale_ocr_text_in_memory_mode(
     )
 
     assert diagnosis["severity"] == "ok"
-    assert diagnosis["title"] == "正在识别台词"
+    assert diagnosis["title"] == "Распознавание реплик активно"
 
 
 def test_primary_diagnosis_does_not_warn_for_long_stale_ocr_text_in_bridge_sdk_mode() -> None:
@@ -1679,7 +1679,7 @@ def test_primary_diagnosis_does_not_warn_for_long_stale_ocr_text_in_bridge_sdk_m
     )
 
     assert diagnosis["severity"] == "ok"
-    assert diagnosis["title"] == "正在识别台词"
+    assert diagnosis["title"] == "Распознавание реплик активно"
 
 
 def test_primary_diagnosis_warns_when_ocr_poll_is_too_slow() -> None:
@@ -1699,9 +1699,9 @@ def test_primary_diagnosis_warns_when_ocr_poll_is_too_slow() -> None:
     )
 
     assert diagnosis["severity"] == "warning"
-    assert diagnosis["title"] == "OCR 识别耗时过长"
-    assert f"{total_time:.1f}s" in diagnosis["message"]
-    assert "画面感知模型延迟也较高" not in diagnosis["message"]
+    assert diagnosis["title"] == "OCR: слишком долгое распознавание"
+    assert f"{total_time:.1f} с" in diagnosis["message"]
+    assert "Задержка модели анализа экрана также высока" not in diagnosis["message"]
     assert [action["id"] for action in diagnosis["actions"]] == [
         "select_ocr_window",
         "recalibrate_ocr",
@@ -1725,7 +1725,7 @@ def test_primary_diagnosis_ignores_stale_slow_ocr_poll_in_memory_mode() -> None:
     )
 
     assert diagnosis["severity"] == "ok"
-    assert diagnosis["title"] == "正在识别台词"
+    assert diagnosis["title"] == "Распознавание реплик активно"
 
 
 def test_primary_diagnosis_mentions_screen_awareness_when_slow_poll_has_sa_latency() -> None:
@@ -1747,9 +1747,9 @@ def test_primary_diagnosis_mentions_screen_awareness_when_slow_poll_has_sa_laten
     )
 
     assert diagnosis["severity"] == "warning"
-    assert diagnosis["title"] == "OCR 识别耗时过长"
-    assert f"{total_time:.1f}s" in diagnosis["message"]
-    assert f"画面感知模型延迟也较高（{sa_latency:.1f}s）" in diagnosis["message"]
+    assert diagnosis["title"] == "OCR: слишком долгое распознавание"
+    assert f"{total_time:.1f} с" in diagnosis["message"]
+    assert f"Задержка модели анализа экрана также высока ({sa_latency:.1f} с)" in diagnosis["message"]
 
 
 def test_primary_diagnosis_prefers_long_ocr_text_over_slow_poll() -> None:
@@ -1769,4 +1769,4 @@ def test_primary_diagnosis_prefers_long_ocr_text_over_slow_poll() -> None:
     )
 
     assert diagnosis["severity"] == "warning"
-    assert diagnosis["title"] == "OCR 识别文本过长"
+    assert diagnosis["title"] == "OCR: слишком длинный текст"

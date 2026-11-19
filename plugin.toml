@@ -1,7 +1,7 @@
 [plugin]
 id = "galgame_plugin"
-name = "Galgame游玩助手"
-description = "让猫娘陪伴你一起玩galgame"
+name = "Помощник для Galgame"
+description = "Помощник для чтения и сопровождения игр Galgame."
 short_description = "Monitor galgame sessions, bridge data, memory-reader fallback, and the plugin UI."
 keywords = [
     "galgame",
@@ -9,9 +9,9 @@ keywords = [
     "renpy",
     "visual novel",
     "game state",
-    "剧情",
-    "台词",
-    "选项",
+    "companion",
+    "narrator",
+    "ocr",
 ]
 version = "1.0.3"
 type = "plugin"
@@ -60,11 +60,24 @@ history_choices_limit = 50
 dedupe_window_limit = 64
 warmup_replay_bytes_limit = 65536
 warmup_replay_events_limit = 50
-default_mode = "companion"
+default_mode = "narrator"
 push_notifications = true
 scene_summary_repeat_guard_enabled = true
 auto_open_ui = true
 reader_mode = "auto"
+tts_output_pipeline = "agent"
+
+[narrator]
+enabled = true
+max_lines_per_push = 3
+max_chars = 240
+drop_after_seconds = 12.0
+dedupe_window = 128
+include_speaker = true
+direct_audio_enabled = false
+tts_model = "gemini-2.5-flash-preview-tts"
+tts_voice = "Leda"
+tts_api_key_env = "GOOGLE_API_KEY"
 
 [llm]
 llm_call_timeout_seconds = 15
@@ -129,7 +142,7 @@ renpy = []
 [ocr_reader]
 enabled = true
 backend_selection = "rapidocr"
-capture_backend = "smart"
+capture_backend = "dxcam"
 install_manifest_url = ""
 install_target_dir = ""
 install_timeout_seconds = 60
@@ -180,10 +193,10 @@ enabled = true
 
 [[plugin.ui.guide]]
 id = "quickstart"
-title = "快速开始"
+title = "Быстрый старт"
 entry = "surfaces/quickstart.tsx"
 permissions = ["state:read"]
 
 [plugin.i18n]
-default_locale = "zh-CN"
+default_locale = "ru"
 locales_dir = "i18n"

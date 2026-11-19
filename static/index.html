@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="ru">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,59 +7,67 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <title data-i18n="ui.app.title">Galgame 游玩助手</title>
+  <title data-i18n="ui.app.title">Помощник Galgame</title>
   <link rel="stylesheet" href="./style.css?v=20260508-settings-neko-console">
 </head>
 <body>
   <div class="page-shell">
 
-    <!-- ========== 阶段 A: 引导模式 ========== -->
+    <!-- ========== Этап A: онбординг ========== -->
     <div id="onboardingView" class="onboarding-view" hidden>
       <div class="onboarding-card">
         <div class="onboarding-header">
           <p class="eyebrow">N.E.K.O</p>
-          <h1 data-i18n="ui.app.title">Galgame 游玩助手</h1>
-          <p class="onboarding-subtitle" data-i18n="ui.app.subtitle">让猫娘陪你一起玩 Galgame</p>
+          <h1 data-i18n="ui.app.title">Помощник Galgame</h1>
+          <p class="onboarding-subtitle" data-i18n="ui.app.subtitle">Пусть кошкодевочка играет в Galgame вместе с вами</p>
         </div>
         <div id="onboardingSteps" class="onboarding-steps"></div>
         <div id="onboardingActions" class="onboarding-actions"></div>
-        <button class="ghost onboarding-skip" data-skip-onboarding data-i18n="ui.app.skip_onboarding">跳过引导，直接配置 -&gt;</button>
+        <button class="ghost onboarding-skip" data-skip-onboarding data-i18n="ui.app.skip_onboarding">Пропустить обучение и перейти к настройке →</button>
       </div>
     </div>
 
-    <!-- ========== 阶段 B/C: 主界面 + 高级设置 ========== -->
-    <div id="mainView">
+    <!-- ========== Этап B/C: основной интерфейс + настройки ========== -->
+    <div id="mainView" class="main-view-container">
+      <div class="main-content">
 
       <header class="hero">
         <div>
-          <h1 class="hero-title"><span class="neko-ears" aria-hidden="true">🐱</span> <span data-i18n="ui.app.title">Galgame 游玩助手</span></h1>
-          <span id="summaryText" class="summary-pill" data-i18n="ui.summary.waiting_refresh">等待首次刷新</span>
+          <h1 class="hero-title"><span class="neko-ears" aria-hidden="true">🐱</span> <span data-i18n="ui.app.title">Помощник Galgame</span></h1>
+          <span id="summaryText" class="summary-pill" data-i18n="ui.summary.waiting_refresh">Ожидание первого обновления</span>
         </div>
         <div class="hero-right">
           <div class="hero-controls">
             <div class="mode-switch" id="modeSwitch">
-              <button class="mode-btn" data-mode="silent" data-i18n="ui.mode.silent">静默</button>
-              <button class="mode-btn active" data-mode="companion" data-i18n="ui.mode.companion">伴读</button>
-              <button class="mode-btn" data-mode="choice_advisor" data-i18n="ui.mode.choice_advisor">自动推进</button>
+              <button class="mode-btn" data-mode="silent" data-i18n="ui.mode.silent">Тихий</button>
+              <button class="mode-btn" data-mode="companion" data-i18n="ui.mode.companion">Компаньон</button>
+              <button class="mode-btn" data-mode="choice_advisor" data-i18n="ui.mode.choice_advisor">Советник</button>
+              <button class="mode-btn" data-mode="narrator" data-i18n="ui.mode.narrator">Рассказчик</button>
+            </div>
+            <div class="tts-pipeline-switch" id="ttsPipelineSwitch">
+              <button class="pipeline-btn" data-pipeline="agent" data-i18n="ui.tts.pipeline.agent">Через Агента</button>
+              <button class="pipeline-btn" data-pipeline="direct" data-i18n="ui.tts.pipeline.direct">Напрямую</button>
+              <button class="pipeline-btn" data-pipeline="off" data-i18n="ui.tts.pipeline.off">Выкл</button>
             </div>
             <div class="speed-switch" id="speedSwitch">
-              <button class="speed-btn" data-speed="slow" data-i18n="ui.speed.slow">慢</button>
-              <button class="speed-btn active" data-speed="medium" data-i18n="ui.speed.medium">中等</button>
-              <button class="speed-btn" data-speed="fast" data-i18n="ui.speed.fast">快速</button>
+              <button class="speed-btn" data-speed="slow" data-i18n="ui.speed.slow">Медленно</button>
+              <button class="speed-btn active" data-speed="medium" data-i18n="ui.speed.medium">Средне</button>
+              <button class="speed-btn" data-speed="fast" data-i18n="ui.speed.fast">Быстро</button>
             </div>
             <select id="modeSelect" hidden>
-              <option value="silent" data-i18n="ui.mode.silent">静默</option>
-              <option value="companion" selected data-i18n="ui.mode.companion">伴读</option>
-              <option value="choice_advisor" data-i18n="ui.mode.choice_advisor">自动推进</option>
+              <option value="silent" data-i18n="ui.mode.silent">Тихий</option>
+              <option value="companion" selected data-i18n="ui.mode.companion">Компаньон</option>
+              <option value="choice_advisor" data-i18n="ui.mode.choice_advisor">Советник</option>
+              <option value="narrator" data-i18n="ui.mode.narrator">Рассказчик</option>
             </select>
             <select id="advanceSpeedSelect" hidden>
-              <option value="slow" data-i18n="ui.speed.slow">慢</option>
-              <option value="medium" selected data-i18n="ui.speed.medium">中等</option>
-              <option value="fast" data-i18n="ui.speed.fast">快速</option>
+              <option value="slow" data-i18n="ui.speed.slow">Медленно</option>
+              <option value="medium" selected data-i18n="ui.speed.medium">Средне</option>
+              <option value="fast" data-i18n="ui.speed.fast">Быстро</option>
             </select>
           </div>
           <div class="hero-actions">
-            <button id="refreshBtn" class="primary" data-i18n="ui.button.refresh_all">刷新全部</button>
+            <button id="refreshBtn" class="primary" data-i18n="ui.button.refresh_all">Обновить всё</button>
           </div>
         </div>
       </header>
@@ -631,15 +639,38 @@
 
       </div><!-- /advancedSettings -->
 
+      </div><!-- /.main-content -->
+
+      <aside id="inspectorPanel" class="inspector-panel">
+        <div class="inspector-header">
+          <span class="inspector-icon">💡</span>
+          <h3 id="inspectorTitle" data-i18n="ui.inspector.title">Справка элемента</h3>
+        </div>
+        <div id="inspectorContent" class="inspector-body">
+          <p id="inspectorHint" class="inspector-hint" data-i18n="ui.inspector.hint">Наведите курсор на любой переключатель, кнопку или поле, чтобы увидеть подробное описание.</p>
+          <div id="inspectorDetails" hidden>
+            <p id="inspectorDesc" class="inspector-desc"></p>
+            <div class="inspector-section">
+              <span class="inspector-label green" data-i18n="ui.inspector.label_on">Что будет, если включить:</span>
+              <p id="inspectorOn"></p>
+            </div>
+            <div class="inspector-section">
+              <span class="inspector-label red" data-i18n="ui.inspector.label_off">Что будет, если выключить / переключить:</span>
+              <p id="inspectorOff"></p>
+            </div>
+          </div>
+        </div>
+      </aside>
+
       <div id="memoryProcessModal" class="modal" hidden>
         <div class="modal-overlay"></div>
         <div class="modal-content">
           <div class="modal-header">
-            <h3 data-i18n="ui.modal.memory_process">选择 Memory Reader 进程</h3>
-            <button id="memoryProcessModalClose" class="ghost modal-close" aria-label="关闭" data-i18n-aria-label="ui.button.close">&times;</button>
+            <h3 data-i18n="ui.modal.memory_process">Выбор процесса Memory Reader</h3>
+            <button id="memoryProcessModalClose" class="ghost modal-close" aria-label="Закрыть" data-i18n-aria-label="ui.button.close">&times;</button>
           </div>
           <div class="modal-body">
-            <div id="memoryProcessList" class="stack-list scroll-region empty-state" data-i18n="ui.modal.no_process">暂无候选进程</div>
+            <div id="memoryProcessList" class="stack-list scroll-region empty-state" data-i18n="ui.modal.no_process">Нет доступных процессов</div>
           </div>
         </div>
       </div>
@@ -648,11 +679,11 @@
         <div class="modal-overlay"></div>
         <div class="modal-content">
           <div class="modal-header">
-            <h3 data-i18n="ui.modal.ocr_window">选择识别窗口</h3>
-            <button id="ocrWindowModalClose" class="ghost modal-close" aria-label="关闭" data-i18n-aria-label="ui.button.close">&times;</button>
+            <h3 data-i18n="ui.modal.ocr_window">Выбор окна OCR</h3>
+            <button id="ocrWindowModalClose" class="ghost modal-close" aria-label="Закрыть" data-i18n-aria-label="ui.button.close">&times;</button>
           </div>
           <div class="modal-body">
-            <div id="ocrWindowList" class="stack-list scroll-region empty-state" data-i18n="ui.modal.no_window">暂无候选窗口</div>
+            <div id="ocrWindowList" class="stack-list scroll-region empty-state" data-i18n="ui.modal.no_window">Нет доступных окон</div>
           </div>
         </div>
       </div>

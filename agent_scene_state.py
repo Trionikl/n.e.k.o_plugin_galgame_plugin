@@ -12,6 +12,8 @@ from .agent_shared import (
     json_copy,
     mode_allows_agent_push,
     mode_allows_choice_push,
+    mode_allows_agent_actuation,
+    mode_allows_scene_push,
     sanitize_snapshot_state,
 )
 
@@ -39,7 +41,7 @@ class AgentSceneStateMixin:
         return isinstance(snapshot, dict) and bool(snapshot)
 
     def _should_push_scene(self, shared: dict[str, Any]) -> bool:
-        return bool(shared.get("push_notifications")) and mode_allows_agent_push(
+        return bool(shared.get("push_notifications")) and mode_allows_scene_push(
             str(shared.get("mode") or "")
         )
 

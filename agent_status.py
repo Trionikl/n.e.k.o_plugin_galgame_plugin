@@ -104,21 +104,22 @@ class AgentStatusMixin:
         *,
         target_note: str,
     ) -> str:
-        base = "已暂停：游戏窗口不在前台。切回游戏窗口后自动继续。"
+        base = "Пауза: окно игры не в фокусе. Работа продолжится автоматически после возврата в игру."
         if target_note:
-            base += target_note
+            base += f" {target_note}"
         trigger_mode = self._ocr_reader_trigger_mode(shared)
         if trigger_mode == OCR_TRIGGER_MODE_AFTER_ADVANCE:
             return (
-                f"{base}当前为按推进后识别模式，后台期间不会持续 OCR；"
-                "切回后会尝试重新采集。"
+                f"{base} Сейчас режим распознавания после продвижения: в фоне OCR не выполняется постоянно; "
+                "после возврата будет запущен повторный захват."
             )
         if trigger_mode == OCR_TRIGGER_MODE_INTERVAL:
             return (
-                f"{base}当前为定时 OCR，会尝试在后台读取；"
-                "实际效果取决于窗口可见性、非最小化状态和捕获后端。"
+                f"{base} Сейчас режим периодического OCR: выполняется попытка чтения в фоне; "
+                "результат зависит от видимости окна, его состояния (не свёрнуто) и способа захвата."
             )
-        return f"{base}OCR 后台读取状态取决于触发模式和捕获后端。"
+        return f"{base} Возможность фонового OCR зависит от режима срабатывания и способа захвата."
+
 
     def _agent_pause_info(self, shared: dict[str, Any], *, status: str) -> dict[str, Any]:
         user_status = self._agent_user_status(shared, status=status)
@@ -127,12 +128,12 @@ class AgentStatusMixin:
         if user_status == "paused_by_user":
             return {
                 "agent_pause_kind": "user",
-                "agent_pause_message": "Agent 已手动待机。点击“恢复活跃”后才会继续自动操作。",
+                "agent_pause_message": "Агент переведён в ожидание вручную. Нажмите «Возобновить», чтобы продолжить автоматические действия.",
                 "agent_can_resume_by_button": True,
                 "agent_can_resume_by_focus": False,
             }
         if user_status == "paused_window_not_foreground":
-            target_note = f"当前目标：{target}。" if target else ""
+            target_note = f"Целевое окно: {target}." if target else ""
             return {
                 "agent_pause_kind": "window_not_foreground",
                 "agent_pause_message": self._ocr_window_not_foreground_pause_message(
@@ -148,23 +149,23 @@ class AgentStatusMixin:
                 return {
                     "agent_pause_kind": "screen_safety",
                     "agent_pause_message": (
-                        "Automatic screen recovery is paused because local input or "
-                        f"computer_use is unavailable: {recovery_diagnostic}"
+                        "Автопродвижение приостановлено: автоматическое восстановление недоступно, "
+                        f"так как локальный ввод или computer_use недоступен: {recovery_diagnostic}"
                     ),
                     "agent_can_resume_by_button": False,
                     "agent_can_resume_by_focus": False,
                 }
             return {
                 "agent_pause_kind": "screen_safety",
-                "agent_pause_message": "已暂停自动推进：当前像小游戏或非 VN 操作画面，避免盲目输入。",
+                "agent_pause_message": "Автопродвижение приостановлено: похоже на мини-игру или не-VN экран, чтобы избежать ошибочных действий.",
                 "agent_can_resume_by_button": False,
                 "agent_can_resume_by_focus": False,
             }
         if user_status == "ocr_unavailable":
-            diagnostic = self._ocr_capture_diagnostic or "OCR 截图、窗口目标或后端不可用。"
+            diagnostic = self._ocr_capture_diagnostic or "Захват OCR, целевое окно или бэкенд недоступны."
             return {
                 "agent_pause_kind": "ocr_unavailable",
-                "agent_pause_message": f"已暂停自动推进：{diagnostic}",
+                "agent_pause_message": f"Автопродвижение приостановлено: {diagnostic}",
                 "agent_can_resume_by_button": False,
                 "agent_can_resume_by_focus": False,
             }
@@ -173,15 +174,15 @@ class AgentStatusMixin:
                 return {
                     "agent_pause_kind": "read_only",
                     "agent_pause_message": (
-                        "自动推进已开启，正在等待游戏会话、OCR 台词或目标窗口进入可操作状态。"
+                        "Автопродвижение включено: ожидание игровой сессии, реплики OCR или готовности целевого окна."
                     ),
                     "agent_can_resume_by_button": False,
                     "agent_can_resume_by_focus": False,
                 }
-            mode_label = "伴读/静默模式" if mode in {"silent", "companion"} else "只读模式"
+            mode_label = "режим компаньона/тихий режим" if mode in {"silent", "companion"} else "режим только чтения"
             return {
                 "agent_pause_kind": "read_only",
-                "agent_pause_message": f"当前为{mode_label}，不会自动点击。需要自动推进时请切到自动推进模式。",
+                "agent_pause_message": f"Сейчас активен {mode_label}, автоматические клики отключены. Для автопродвижения переключитесь в режим советника.",
                 "agent_can_resume_by_button": False,
                 "agent_can_resume_by_focus": False,
             }
@@ -191,6 +192,7 @@ class AgentStatusMixin:
             "agent_can_resume_by_button": False,
             "agent_can_resume_by_focus": False,
         }
+
 
     @staticmethod
     def _target_window_label(shared: dict[str, Any]) -> str:

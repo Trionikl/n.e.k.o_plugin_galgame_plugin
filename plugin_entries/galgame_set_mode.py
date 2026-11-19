@@ -25,8 +25,11 @@ from ._common import (
 class _GalgameSetModeMixin:
     @plugin_entry(
         id="galgame_set_mode",
-        name=tr("entries.galgame_set_mode.name", default='设置 galgame 模式'),
-        description=tr("entries.galgame_set_mode.description", default='设置 silent / companion / choice_advisor 模式，并可选更新通知开关。'),
+        name=tr("entries.galgame_set_mode.name", default="Режим Galgame"),
+        description=tr(
+            "entries.galgame_set_mode.description",
+            default="Установить режим silent / companion / choice_advisor / narrator и сохранить настройки.",
+        ),
         input_schema={
             "type": "object",
             "properties": {
@@ -227,7 +230,7 @@ class _GalgameSetModeMixin:
             self.request_ocr_after_advance_capture(reason="mode_change_to_read_only")
         self._start_background_bridge_poll()
 
-        # 进入 choice_advisor 时默认启用 OCR fast loop；离开时仅关闭自动开启的。
+        # При входе в choice_advisor автоматически включаем OCR fast loop; при выходе отключаем только авто-включённый.
         if mode == MODE_CHOICE_ADVISOR and old_mode != MODE_CHOICE_ADVISOR:
             if not self._ocr_fast_loop_should_run():
                 if self._cfg is not None:

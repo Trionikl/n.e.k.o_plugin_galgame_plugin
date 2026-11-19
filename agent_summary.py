@@ -2292,6 +2292,12 @@ class AgentSummaryMixin:
 
         if not freshness_check():
             return False
+        await self._maybe_narrate_lines(
+            shared,
+            new_stable_lines,
+            scene_id=scene_id,
+            route_id=route_id,
+        )
         submitted = await self._push_agent_message(
             shared,
             kind="scene_delta",
@@ -2939,7 +2945,7 @@ class AgentSummaryMixin:
                 # scene_delta does not consume the cumulative bridge payload.
                 # Keeping it out of the task also avoids copying reader-private
                 # binary transport state through the JSON-only copy helper.
-                shared={},
+                shared=shared,
                 session_id=session_id,
                 scene_id=scene_id,
                 route_id=route_id,

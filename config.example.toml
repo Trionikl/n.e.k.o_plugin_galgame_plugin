@@ -14,7 +14,7 @@ history_choices_limit = 50
 dedupe_window_limit = 64
 warmup_replay_bytes_limit = 65536
 warmup_replay_events_limit = 50
-default_mode = "companion"
+default_mode = "narrator"
 push_notifications = true
 scene_summary_repeat_guard_enabled = true
 auto_open_ui = true
@@ -83,7 +83,7 @@ renpy = []
 [ocr_reader]
 enabled = true
 backend_selection = "rapidocr"
-capture_backend = "smart"
+capture_backend = "dxcam"
 install_manifest_url = ""
 install_target_dir = ""
 install_timeout_seconds = 60

@@ -6,6 +6,7 @@ from .agent_consult import AgentConsultMixin
 from .agent_context import AgentContextMixin
 from .agent_diagnostics import AgentDiagnosticsMixin
 from .agent_lifecycle import AgentLifecycleMixin
+from .agent_narrator import GalgameNarratorMixin
 from .agent_observation import AgentObservationMixin
 from .agent_ocr_actuation import AgentOcrActuationMixin
 from .agent_prompt import AgentPromptMixin
@@ -35,6 +36,7 @@ from .agent_thinking import AgentThinkingMixin
 
 class GameLLMAgent(
     AgentLifecycleMixin,
+    GalgameNarratorMixin,
     AgentActuationMixin,
     AgentOcrActuationMixin,
     AgentChoicePlanningMixin,

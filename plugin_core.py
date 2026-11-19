@@ -165,6 +165,7 @@ from .plugin_entries.galgame_set_ocr_screen_templates import _GalgameSetOcrScree
 from .plugin_entries.galgame_set_ocr_timing import _GalgameSetOcrTimingMixin
 from .plugin_entries.galgame_set_ocr_window_target import _GalgameSetOcrWindowTargetMixin
 from .plugin_entries.galgame_set_rapidocr_lang import _GalgameSetRapidocrLangMixin
+from .plugin_entries.galgame_set_tts_pipeline import _GalgameSetTtsPipelineMixin
 from .plugin_entries.galgame_suggest_choice import _GalgameSuggestChoiceMixin
 from .plugin_entries.galgame_summarize_scene import _GalgameSummarizeSceneMixin
 from .plugin_entries.galgame_train_ocr_screen_awareness_model import _GalgameTrainOcrScreenAwarenessModelMixin
@@ -297,6 +298,7 @@ class GalgamePlugin(
     _GalgameSetOcrTimingMixin,
     _GalgameSetOcrWindowTargetMixin,
     _GalgameSetRapidocrLangMixin,
+    _GalgameSetTtsPipelineMixin,
     _GalgameSuggestChoiceMixin,
     _GalgameSummarizeSceneMixin,
     _GalgameTrainOcrScreenAwarenessModelMixin,
@@ -2846,6 +2848,12 @@ class GalgamePlugin(
         value = overrides.get(STORE_RAPIDOCR_AUTO_DETECT_LAST_LANG)
         if value is not None and value in {"ch", "japan", "korean", "en"}:
             self._cfg.rapidocr.rapidocr_auto_detect_last_lang = value
+
+        value = overrides.get(STORE_TTS_OUTPUT_PIPELINE)
+        if value is not None:
+            normalized = str(value).strip().lower()
+            if normalized in TTS_OUTPUT_PIPELINES:
+                self._cfg.tts_output_pipeline = normalized
 
     def _on_rapidocr_auto_lang_changed(self, lang_type: str) -> None:
         if self._cfg is None:
