@@ -15,6 +15,7 @@ from ..models import (
     _RAPIDOCR_OCR_VERSIONS,
     ADVANCE_SPEED_MEDIUM,
     ADVANCE_SPEEDS,
+    MODE_COMPANION,
     MODES,
     OCR_CAPTURE_PROFILE_RATIO_KEYS,
     OCR_CAPTURE_PROFILE_STAGE_DEFAULT,
@@ -52,6 +53,8 @@ from ..models import (
     STORE_READER_MODE,
     STORE_SESSION_ID,
     STORE_TUTORIAL_PROGRESS,
+    STORE_TTS_OUTPUT_PIPELINE,
+    TTS_OUTPUT_PIPELINES,
     build_ocr_capture_profile_bucket_key,
     compute_ocr_window_aspect_ratio,
     json_copy,
@@ -221,6 +224,7 @@ class GalgameStore:
         raw_rapidocr_auto = self._read(STORE_RAPIDOCR_AUTO_DETECT_LANG, None)
         raw_rapidocr_last_lang = self._read(STORE_RAPIDOCR_AUTO_DETECT_LAST_LANG, None)
         raw_rapidocr_ocr_version = self._read(STORE_RAPIDOCR_OCR_VERSION, None)
+        raw_tts_pipeline = self._read(STORE_TTS_OUTPUT_PIPELINE, None)
         rapidocr_lang = (
             raw_rapidocr_lang.strip().lower()
             if isinstance(raw_rapidocr_lang, str)
@@ -232,6 +236,11 @@ class GalgameStore:
             else ""
         )
         rapidocr_ocr_version = normalize_rapidocr_ocr_version(raw_rapidocr_ocr_version)
+        tts_pipeline = (
+            str(raw_tts_pipeline).strip().lower()
+            if isinstance(raw_tts_pipeline, str)
+            else ""
+        )
 
         return {
             STORE_OCR_BACKEND_SELECTION: (
@@ -281,6 +290,11 @@ class GalgameStore:
             STORE_RAPIDOCR_OCR_VERSION: (
                 rapidocr_ocr_version
                 if rapidocr_ocr_version in _RAPIDOCR_OCR_VERSIONS
+                else None
+            ),
+            STORE_TTS_OUTPUT_PIPELINE: (
+                tts_pipeline
+                if tts_pipeline in TTS_OUTPUT_PIPELINES
                 else None
             ),
         }
@@ -613,7 +627,7 @@ class GalgameStore:
             return {}, warnings
         return normalized, warnings
 
-    def load(self) -> tuple[dict[str, Any], list[str]]:
+    def load(self, *, default_mode: str | None = None) -> tuple[dict[str, Any], list[str]]:
         warnings: list[str] = []
         with self._locked_store():
             self._load_values(force=True, locked=True)
@@ -628,7 +642,12 @@ class GalgameStore:
             return values.get(key, default)
 
         raw_mode = read(STORE_MODE, "")
-        mode = raw_mode if isinstance(raw_mode, str) and raw_mode in MODES else "companion"
+        mode_fallback = (
+            default_mode
+            if isinstance(default_mode, str) and default_mode in MODES
+            else MODE_COMPANION
+        )
+        mode = raw_mode if isinstance(raw_mode, str) and raw_mode in MODES else mode_fallback
         if raw_mode not in ("", mode):
             warnings.append(f"invalid store mode dropped: {raw_mode!r}")
         raw_advance_speed = read(STORE_ADVANCE_SPEED, "")

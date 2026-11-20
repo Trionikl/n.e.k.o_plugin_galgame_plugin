@@ -105,12 +105,12 @@ function getInstallUIConfig() {
       url: TEXTRACTOR_INSTALL_URL,
       storageKey: `${PLUGIN_ID}:textractor_install_task_id`,
       domPrefix: 'textractor',
-      actionText: uiT('ui.install.textractor.action', '一键安装 Textractor'),
-      retryText: uiT('ui.install.textractor.retry', '重试安装 Textractor'),
-      runningText: uiT('ui.install.running', '后台安装中...'),
-      queuedFlash: uiT('ui.install.textractor.queued', '已创建后台安装任务，接下来会通过 HTTPS 下载 Textractor，并通过 SSE 推送实时进度。'),
-      successFlash: uiT('ui.install.textractor.success', 'Textractor 安装完成'),
-      failureFlash: uiT('ui.install.textractor.failure', 'Textractor 安装失败'),
+      actionText: uiT('ui.install.textractor.action', 'Установить Textractor'),
+      retryText: uiT('ui.install.textractor.retry', 'Повторить установку Textractor'),
+      runningText: uiT('ui.install.running', 'Установка в фоне...'),
+      queuedFlash: uiT('ui.install.textractor.queued', 'Фоновая задача установки создана. Textractor будет загружен по HTTPS, прогресс придет через SSE.'),
+      successFlash: uiT('ui.install.textractor.success', 'Textractor установлен'),
+      failureFlash: uiT('ui.install.textractor.failure', 'Не удалось установить Textractor'),
     },
     rapidocr_models: {
       kind: 'rapidocr_models',
@@ -129,12 +129,12 @@ function getInstallUIConfig() {
       // sending the POST.
       domPrefix: 'rapidocr',
       buttonId: 'rapidocrModelsDownloadBtn',
-      actionText: uiT('ui.install.rapidocr.download_models.action', '立即下载模型'),
-      retryText: uiT('ui.install.rapidocr.download_models.retry', '重试下载模型'),
-      runningText: uiT('ui.install.rapidocr.download_models.running', '后台下载模型中...'),
-      queuedFlash: uiT('ui.install.rapidocr.download_models.queued', '已创建模型下载任务，接下来会从 ModelScope 拉取缺失模型文件，并通过 SSE 推送实时进度。'),
-      successFlash: uiT('ui.install.rapidocr.download_models.success', 'RapidOCR 模型下载完成'),
-      failureFlash: uiT('ui.install.rapidocr.download_models.failure', 'RapidOCR 模型下载失败'),
+      actionText: uiT('ui.install.rapidocr.download_models.action', 'Скачать модели сейчас'),
+      retryText: uiT('ui.install.rapidocr.download_models.retry', 'Повторить скачивание моделей'),
+      runningText: uiT('ui.install.rapidocr.download_models.running', 'Скачивание моделей в фоне...'),
+      queuedFlash: uiT('ui.install.rapidocr.download_models.queued', 'Создана задача скачивания моделей. Файлы будут загружаться из ModelScope, прогресс — через SSE.'),
+      successFlash: uiT('ui.install.rapidocr.download_models.success', 'Модели RapidOCR скачаны'),
+      failureFlash: uiT('ui.install.rapidocr.download_models.failure', 'Не удалось скачать модели RapidOCR'),
     },
   };
 }
@@ -208,11 +208,11 @@ function applyPipelineCollapsed(on) {
   const button = document.getElementById('ocrPipelineCollapseToggle');
   if (button) {
     button.textContent = collapsed
-      ? uiT('ui.button.expand', '展开')
-      : uiT('ui.button.collapse', '隐藏');
+      ? uiT('ui.button.expand', 'Развернуть')
+      : uiT('ui.button.collapse', 'Скрыть');
     button.title = collapsed
-      ? uiT('ui.ocr.pipeline.expand_title', '展开 OCR 链路步骤')
-      : uiT('ui.ocr.pipeline.collapse_title', '隐藏 OCR 链路步骤');
+      ? uiT('ui.ocr.pipeline.expand_title', 'Развернуть шаги OCR-цепочки')
+      : uiT('ui.ocr.pipeline.collapse_title', 'Скрыть шаги OCR-цепочки');
     button.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
   }
   storageSet(PIPELINE_COLLAPSED_KEY, collapsed ? '1' : '0');
@@ -234,11 +234,11 @@ function applyCurrentLineCollapsed(on) {
   const button = document.getElementById('currentLineCollapseToggle');
   if (button) {
     button.textContent = collapsed
-      ? uiT('ui.button.expand', '展开')
-      : uiT('ui.button.collapse', '隐藏');
+      ? uiT('ui.button.expand', 'Развернуть')
+      : uiT('ui.button.collapse', 'Скрыть');
     button.title = collapsed
-      ? uiT('ui.current_line.expand_title', '展开当前台词内容')
-      : uiT('ui.current_line.collapse_title', '隐藏当前台词内容');
+      ? uiT('ui.current_line.expand_title', 'Развернуть текущую реплику')
+      : uiT('ui.current_line.collapse_title', 'Скрыть текущую реплику');
     button.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
   }
   storageSet(CL_COLLAPSED_KEY, collapsed ? '1' : '0');
@@ -303,11 +303,11 @@ function applyOcrWindowCollapsed(on) {
   const button = document.getElementById('ocrWindowCollapseToggle');
   if (button) {
     button.textContent = collapsed
-      ? uiT('ui.button.expand', '展开')
-      : uiT('ui.button.collapse', '隐藏');
+      ? uiT('ui.button.expand', 'Развернуть')
+      : uiT('ui.button.collapse', 'Скрыть');
     button.title = collapsed
-      ? uiT('ui.ocr.window.expand_title', '展开窗口选择内容')
-      : uiT('ui.ocr.window.collapse_title', '隐藏窗口选择内容');
+      ? uiT('ui.ocr.window.expand_title', 'Развернуть выбор окна')
+      : uiT('ui.ocr.window.collapse_title', 'Скрыть выбор окна');
     button.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
   }
 
@@ -341,11 +341,11 @@ function applyPluginWindowCollapsed(on) {
   const button = document.getElementById('pluginWindowCollapseToggle');
   if (button) {
     button.textContent = collapsed
-      ? uiT('ui.button.expand', '展开')
-      : uiT('ui.button.collapse', '隐藏');
+      ? uiT('ui.button.expand', 'Развернуть')
+      : uiT('ui.button.collapse', 'Скрыть');
     button.title = collapsed
-      ? uiT('ui.plugin_window.expand_title', '展开插件窗口')
-      : uiT('ui.plugin_window.collapse_title', '隐藏插件窗口');
+      ? uiT('ui.plugin_window.expand_title', 'Развернуть окно плагина')
+      : uiT('ui.plugin_window.collapse_title', 'Свернуть окно плагина');
     button.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
   }
   storageSet(PLUGIN_WINDOW_COLLAPSED_KEY, collapsed ? '1' : '0');
@@ -399,8 +399,8 @@ function applyPluginSettingsCollapsed(on) {
   const button = document.getElementById('pluginSettingsCollapseToggle');
   if (button) {
     button.textContent = collapsed
-      ? uiT('ui.button.expand', '展开')
-      : uiT('ui.button.collapse', '隐藏');
+      ? uiT('ui.button.expand', 'Развернуть')
+      : uiT('ui.button.collapse', 'Скрыть');
     button.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
   }
   storageSet(PLUGIN_SETTINGS_COLLAPSED_KEY, collapsed ? '1' : '0');
@@ -423,15 +423,15 @@ const DEFAULT_CAPTURE_PROFILE = {
 const AIHONG_PROCESS_NAMES = new Set(['thelamentinggeese.exe']);
 const SENREN_BANKA_PROCESS_NAMES = new Set(['senrenbanka.exe', 'senrenbanka']);
 const OCR_PROFILE_STAGE_LABELS_ZH = {
-  default: '通用区域',
-  dialogue_stage: '对白区',
-  menu_stage: '菜单区',
-  title_stage: '标题/主菜单',
-  save_load_stage: '存读档',
-  config_stage: '设置',
-  transition_stage: '转场',
-  gallery_stage: '回想/鉴赏',
-  minigame_stage: '小游戏',
+  default: 'Общая область',
+  dialogue_stage: 'Область диалога',
+  menu_stage: 'Область меню',
+  title_stage: 'Заголовок/главное меню',
+  save_load_stage: 'Сохранение/загрузка',
+  config_stage: 'Настройки',
+  transition_stage: 'Переход',
+  gallery_stage: 'Галерея',
+  minigame_stage: 'Мини-игра',
   game_over_stage: 'Game Over',
 };
 const OCR_PROFILE_STAGE_I18N_KEYS = {
@@ -447,19 +447,19 @@ const OCR_PROFILE_STAGE_I18N_KEYS = {
   game_over_stage: 'ui.stage.game_over',
 };
 const OCR_CAPTURE_SAVE_SCOPE_LABELS_ZH = {
-  window_bucket: '当前窗口分辨率',
-  process_fallback: '进程通用回退',
+  window_bucket: 'Текущее разрешение окна',
+  process_fallback: 'Общий резерв для процесса',
 };
 const OCR_CAPTURE_SAVE_SCOPE_I18N_KEYS = {
   window_bucket: 'ui.capture_profile.save_scope.window_bucket',
   process_fallback: 'ui.capture_profile.save_scope.process_fallback',
 };
 const OCR_CAPTURE_MATCH_SOURCE_LABELS_ZH = {
-  bucket_exact: '当前窗口精确命中',
-  bucket_aspect_nearest: '相近宽高比回退',
-  process_fallback: '进程通用回退',
-  builtin_preset: '内建预设',
-  config_default: '插件默认配置',
+  bucket_exact: 'Точное совпадение текущего окна',
+  bucket_aspect_nearest: 'Резерв по ближайшему соотношению сторон',
+  process_fallback: 'Резерв процесса',
+  builtin_preset: 'Встроенный пресет',
+  config_default: 'Конфигурация плагина по умолчанию',
 };
 const OCR_CAPTURE_MATCH_SOURCE_I18N_KEYS = {
   bucket_exact: 'ui.capture_profile.match_source.bucket_exact',
@@ -508,211 +508,299 @@ const OCR_WINDOW_REFRESH_TTL_MS = 3000;
 const MEMORY_PROCESS_REFRESH_TTL_MS = 3000;
 const CHARACTER_PROFILE_REFRESH_TTL_MS = 3000;
 const FIELD_LABELS_ZH = {
-  connection_state: '连接状态',
-  active_data_source: '当前数据源',
-  reader_mode: '文本读取模式',
-  mode: '模式',
-  push_notifications: '推送通知',
-  advance_speed: '推进速度',
-  bound_game_id: '绑定游戏 ID',
-  active_session_id: '当前会话 ID',
-  last_seq: '最新序号',
-  stream_reset_pending: '等待重置流',
-  available_game_ids: '可用游戏 ID',
-  performance_cpu_percent: '插件 CPU',
-  performance_memory_mb: '插件内存',
-  performance_memory_percent: '插件内存占比',
-  performance_thread_count: '插件线程数',
-  performance_process: '插件进程',
-  performance_detail: '性能指标状态',
-  ocr_reader_enabled: 'OCR Reader 已启用',
-  ocr_reader_status: 'OCR Reader 状态',
-  ocr_reader_detail: 'OCR Reader 详情',
-  ocr_reader_target: 'OCR Reader 目标',
-  ocr_poll_interval_seconds: 'OCR 识别间隔',
-  ocr_trigger_mode: 'OCR 触发方式',
-  ocr_trigger_mode_effective: 'OCR 实际触发方式',
-  ocr_reader_fast_loop_enabled: 'OCR Fast Loop 已启用',
-  ocr_fast_loop_running: 'OCR Fast Loop 运行中',
-  ocr_fast_loop_inflight_seconds: 'OCR Fast Loop 本轮耗时',
-  ocr_fast_loop_last_duration_seconds: 'OCR Fast Loop 上轮耗时',
-  ocr_fast_loop_iteration_count: 'OCR Fast Loop 轮次',
-  ocr_poll_latency_sample_count: 'OCR poll 样本数',
+  connection_state: 'Состояние подключения',
+  active_data_source: 'Активный источник данных',
+  reader_mode: 'Режим чтения текста',
+  mode: 'Режим',
+  push_notifications: 'Push-уведомления',
+  advance_speed: 'Скорость продвижения',
+  bound_game_id: 'Привязанный ID игры',
+  active_session_id: 'Текущий ID сессии',
+  last_seq: 'Последний номер',
+  stream_reset_pending: 'Ожидание сброса потока',
+  available_game_ids: 'Доступные ID игр',
+  performance_cpu_percent: 'CPU плагина',
+  performance_memory_mb: 'Память плагина',
+  performance_memory_percent: 'Доля памяти плагина',
+  performance_thread_count: 'Потоки плагина',
+  performance_process: 'Процесс плагина',
+  performance_detail: 'Статус метрик производительности',
+  ocr_reader_enabled: 'OCR Reader включен',
+  ocr_reader_status: 'Статус OCR Reader',
+  ocr_reader_detail: 'Детали OCR Reader',
+  ocr_reader_target: 'Цель OCR Reader',
+  ocr_poll_interval_seconds: 'Интервал OCR',
+  ocr_trigger_mode: 'Режим запуска OCR',
+  ocr_trigger_mode_effective: 'Фактический запуск OCR',
+  ocr_reader_fast_loop_enabled: 'OCR Fast Loop включен',
+  ocr_fast_loop_running: 'OCR Fast Loop выполняется',
+  ocr_fast_loop_inflight_seconds: 'OCR Fast Loop текущая длительность',
+  ocr_fast_loop_last_duration_seconds: 'OCR Fast Loop последняя длительность',
+  ocr_fast_loop_iteration_count: 'Итерации OCR Fast Loop',
+  ocr_poll_latency_sample_count: 'Сэмплы OCR poll',
   ocr_poll_duration_p50_seconds: 'OCR poll P50',
   ocr_poll_duration_p95_seconds: 'OCR poll P95',
-  bridge_poll_latency_sample_count: 'Bridge poll 样本数',
+  bridge_poll_latency_sample_count: 'Сэмплы Bridge poll',
   bridge_poll_duration_p50_seconds: 'Bridge poll P50',
   bridge_poll_duration_p95_seconds: 'Bridge poll P95',
-  ocr_auto_degrade_reason: 'OCR 自动降级原因',
-  ocr_auto_degrade_at: 'OCR 自动降级时间',
-  ocr_auto_degrade_count: 'OCR 自动降级次数',
-  candidate_age_seconds: '候选台词等待',
-  stable_confirm_wait_seconds: '稳定确认等待',
-  ocr_reader_allowed: 'OCR Reader 允许轮询',
-  ocr_reader_allowed_block_reason: 'OCR Reader 禁用原因',
-  target_window_visible: '目标窗口可见',
-  target_window_minimized: '目标窗口最小化',
-  ocr_window_capture_eligible: 'OCR 窗口可采集',
-  ocr_window_capture_available: 'OCR 窗口采集可用',
-  ocr_window_capture_block_reason: 'OCR 窗口采集阻塞原因',
-  input_target_foreground: '输入目标在前台',
-  input_target_block_reason: '输入目标阻塞原因',
-  ocr_reader_manager_available: 'OCR Reader 管理器可用',
-  ocr_runtime_status: 'OCR Runtime 状态',
-  ocr_tick_allowed: 'OCR 本轮执行',
-  ocr_tick_gate_allowed: 'OCR 轮询门控',
-  ocr_tick_skipped_reason: 'OCR 执行跳过原因',
-  ocr_tick_entered: 'OCR Tick 已进入',
-  ocr_tick_lock_acquired: 'OCR Tick 锁已获取',
-  ocr_tick_block_reason: 'OCR 本轮未执行原因',
-  ocr_emit_block_reason: 'OCR 未写入原因',
-  ocr_fast_loop_delegated: 'OCR Fast Loop 接管',
-  ocr_waiting_for_advance: 'OCR 等待游戏推进',
-  ocr_waiting_for_advance_reason: 'OCR 等待推进原因',
-  pending_ocr_advance_capture: '等待推进采集',
-  pending_manual_foreground_ocr_capture: '等待前台推进采集',
-  pending_ocr_delay_remaining: '推进采集延迟剩余',
-  pending_ocr_advance_capture_age_seconds: '推进采集等待时长',
-  pending_ocr_advance_reason: '推进采集来源',
-  pending_ocr_advance_clear_reason: '推进采集清理原因',
-  ocr_bootstrap_capture_needed: 'OCR 启动采集需要',
-  after_advance_screen_refresh_tick_needed: '推进后画面刷新需要',
-  companion_after_advance_ocr_refresh_tick_needed: '陪伴模式推进后 OCR 刷新需要',
-  foreground_refresh_attempted: '前台状态已刷新',
-  foreground_refresh_skipped_reason: '前台刷新跳过原因',
-  ocr_last_tick_decision_at: 'OCR 最近轮询决策',
-  display_source_not_ocr_reason: '非 OCR 展示原因',
-  ocr_backend_selection: 'OCR 后端选择',
-  ocr_capture_backend_selection: '截图后端选择',
-  ocr_background_state: 'OCR 后台状态',
-  ocr_background_message: 'OCR 后台说明',
-  ocr_background_polling: 'OCR 后台轮询',
-  ocr_foreground_resume_pending: 'OCR 等待前台恢复',
-  ocr_capture_backend_blocked: 'OCR 截图后端受阻',
-  ocr_screen_awareness_latency_mode: '画面感知延迟模式',
-  ocr_screen_awareness_min_interval_seconds: '画面感知最小间隔',
-  ocr_backend_kind: 'OCR 后端类型',
-  ocr_backend_detail: 'OCR 后端详情',
-  rapidocr_enabled: 'RapidOCR 已启用',
-  rapidocr_installed: 'RapidOCR 已安装',
-  rapidocr_detail: 'RapidOCR 详情',
-  dxcam_installed: 'DXcam 已安装',
-  dxcam_detail: 'DXcam 详情',
-  memory_reader_enabled: 'Memory Reader 已启用',
-  memory_reader_status: 'Memory Reader 状态',
-  memory_reader_detail: 'Memory Reader 详情',
-  memory_reader_process: 'Memory Reader 进程',
-  textractor_installed: 'Textractor 已安装',
-  textractor_detail: 'Textractor 详情',
-  last_error: '最近错误',
-  status: '状态',
-  detail: '详情',
-  process_name: '进程名',
-  pid: '进程 ID',
-  window_title: '窗口标题',
-  width: '窗口宽度',
-  height: '窗口高度',
-  aspect_ratio: '窗口宽高比',
-  game_id: '游戏 ID',
-  session_id: '会话 ID',
-  last_event_ts: '最近事件时间',
-  last_text_seq: '最近 Memory 文本序号',
-  last_text_ts: '最近 Memory 文本时间',
-  last_text_recent: 'Memory 文本近期有效',
-  last_text_age_seconds: 'Memory 文本停更秒数',
-  capture_stage: '截图阶段',
-  capture_profile: '截图配置',
-  capture_profile_match_source: '截图配置来源',
-  capture_profile_bucket_key: '截图配置桶',
-  capture_backend_kind: '截图后端',
-  capture_backend_detail: '截图后端详情',
-  last_capture_image_hash: '最近截图 Hash',
-  consecutive_same_capture_frames: '连续相同截图',
-  stale_capture_backend: '截图源未更新',
-  last_rejected_ocr_text: '最近拒绝 OCR 文本',
-  last_rejected_ocr_reason: '最近拒绝原因',
-  last_rejected_ocr_at: '最近拒绝时间',
-  last_rejected_capture_backend: '拒绝截图后端',
-  screen_awareness_last_skip_reason: '画面感知跳过原因',
-  screen_awareness_last_region_count: '画面感知区域数',
-  screen_awareness_last_capture_duration_seconds: '画面感知截图耗时',
-  screen_awareness_last_ocr_duration_seconds: '画面感知 OCR 耗时',
-  backend_kind: '后端类型',
-  backend_detail: '后端详情',
-  backend_path: '后端路径',
-  backend_model: '后端模型',
-  languages: '语言',
-  takeover_reason: '接管原因',
-  target_selection_mode: '目标选择模式',
-  target_selection_detail: '目标选择详情',
-  effective_window_key: '生效窗口键',
-  effective_window_title: '生效窗口标题',
-  effective_process_name: '生效进程名',
-  foreground_refresh_at: '前台刷新时间',
-  foreground_refresh_detail: '前台刷新详情',
-  foreground_hwnd: '当前前台 hwnd',
-  target_hwnd: '目标 hwnd',
-  last_poll_started_at: '最近 OCR poll 开始',
-  last_poll_completed_at: '最近 OCR poll 完成',
-  last_poll_duration_seconds: '最近 OCR poll 耗时',
-  last_poll_emitted_event: '最近 OCR poll 产生事件',
-  last_tick_skipped: '最近 tick 被跳过',
-  last_tick_skip_reason: 'tick 跳过原因',
-  pending_visual_scene_count: '待提交场景变化',
-  last_auto_recalibrate_attempts: '自动校准 OCR 次数',
-  last_auto_recalibrate_duration_seconds: '自动校准耗时',
-  last_auto_recalibrate_limited: '自动校准达到限制',
-  last_auto_recalibrate_error: '自动校准错误',
-  last_capture_total_duration_seconds: '最近 OCR 总耗时',
-  last_capture_frame_duration_seconds: '截图耗时',
-  last_capture_background_duration_seconds: '背景 Hash 耗时',
-  last_capture_image_hash_duration_seconds: '截图 Hash 耗时',
-  last_ocr_extract_duration_seconds: 'OCR 推理耗时',
-  last_backend_plan_duration_seconds: '后端选择耗时',
-  last_window_scan_duration_seconds: '窗口扫描耗时',
-  last_capture_background_hash_skipped: '已跳过背景 Hash',
-  candidate_count: '候选窗口数',
-  excluded_candidate_count: '排除窗口数',
-  last_exclude_reason: '最近排除原因',
-  speaker: '说话人',
-  text: '文本',
-  scene_id: '场景 ID',
-  line_id: '台词 ID',
-  route_id: '路线 ID',
-  is_menu_open: '菜单是否打开',
-  snapshot_ts: '快照时间',
-  stale: '是否过期',
-  result: '结果',
-  agent_user_status: 'Agent 用户状态',
-  agent_pause_kind: 'Agent 暂停类型',
-  agent_pause_message: 'Agent 暂停说明',
-  agent_can_resume_by_button: '可用按钮恢复',
-  agent_can_resume_by_focus: '可由窗口聚焦恢复',
-  inbound_queue_size: '入站队列',
-  outbound_queue_size: '出站队列',
-  last_interruption: '最近打断',
-  last_outbound_message: '最近出站消息',
-  recent_pushes: '最近推送数',
-  activity: '活动',
-  reason: '原因',
-  input_source: '输入源',
-  scene_stage: '场景阶段',
-  push_policy: '推送策略',
-  actionable: '可操作',
-  standby_requested: '已请求待机',
-  memory_counts: '记忆计数',
-};
+  ocr_auto_degrade_reason: 'Причина автопонижения OCR',
+  ocr_auto_degrade_at: 'Время автопонижения OCR',
+  ocr_auto_degrade_count: 'Число автопонижений OCR',
+  candidate_age_seconds: 'Ожидание кандидата реплики',
+  stable_confirm_wait_seconds: 'Ожидание стабильного подтверждения',
+  ocr_reader_allowed: 'OCR Reader разрешен',
+  ocr_reader_allowed_block_reason: 'Причина блокировки OCR Reader',
+  target_window_visible: 'Целевое окно видно',
+  target_window_minimized: 'Целевое окно свернуто',
+  ocr_window_capture_eligible: 'Окно OCR пригодно для захвата',
+  ocr_window_capture_available: 'Захват окна OCR доступен',
+  ocr_window_capture_block_reason: 'Причина блокировки захвата OCR-окна',
+  input_target_foreground: 'Цель ввода на переднем плане',
+  input_target_block_reason: 'Причина блокировки цели ввода',
+  ocr_reader_manager_available: 'Менеджер OCR Reader доступен',
+  ocr_runtime_status: 'Статус OCR Runtime',
+  ocr_tick_allowed: 'OCR Tick разрешен',
+  ocr_tick_gate_allowed: 'Шлюз OCR Tick',
+  ocr_tick_skipped_reason: 'Причина пропуска OCR Tick',
+  ocr_tick_entered: 'OCR Tick вошел',
+  ocr_tick_lock_acquired: 'Блокировка OCR Tick получена',
+  ocr_tick_block_reason: 'Причина блокировки OCR Tick',
+  ocr_emit_block_reason: 'Причина блокировки записи OCR',
+  ocr_fast_loop_delegated: 'OCR Fast Loop делегирован',
+  ocr_waiting_for_advance: 'OCR ждет продвижения игры',
+  ocr_waiting_for_advance_reason: 'Причина ожидания продвижения',
+  pending_ocr_advance_capture: 'Ожидает захвата после продвижения',
+  pending_manual_foreground_ocr_capture: 'Ожидает захвата переднего плана',
+  pending_ocr_delay_remaining: 'Остаток задержки захвата',
+  pending_ocr_advance_capture_age_seconds: 'Время ожидания захвата',
+  pending_ocr_advance_reason: 'Источник захвата после продвижения',
+  pending_ocr_advance_clear_reason: 'Причина очистки захвата после продвижения',
+  ocr_bootstrap_capture_needed: 'Нужен стартовый захват OCR',
+  after_advance_screen_refresh_tick_needed: 'Нужно обновление экрана после продвижения',
+  companion_after_advance_ocr_refresh_tick_needed: 'Нужно OCR-обновление после продвижения в режиме сопровождения',
+  foreground_refresh_attempted: 'Передний план обновлен',
+  foreground_refresh_skipped_reason: 'Причина пропуска обновления',
+  ocr_last_tick_decision_at: 'Последнее решение OCR Tick',
+  display_source_not_ocr_reason: 'Причина отображения не из OCR',
+  ocr_backend_selection: 'Выбор OCR-бэкенда',
+  ocr_capture_backend_selection: 'Выбор бэкенда захвата',
+  ocr_background_state: 'Фоновое состояние OCR',
+  ocr_background_message: 'Фоновое сообщение OCR',
+  ocr_background_polling: 'Фоновый опрос OCR',
+  ocr_foreground_resume_pending: 'OCR ожидает возврата на передний план',
+  ocr_capture_backend_blocked: 'Бэкенд захвата OCR заблокирован',
+  ocr_screen_awareness_latency_mode: 'Режим задержки распознавания экрана',
+  ocr_screen_awareness_min_interval_seconds: 'Минимальный интервал распознавания экрана',
+  ocr_backend_kind: 'Тип OCR-бэкенда',
+  ocr_backend_detail: 'Детали OCR-бэкенда',
+  rapidocr_enabled: 'RapidOCR включен',
+  rapidocr_installed: 'RapidOCR установлен',
+  rapidocr_detail: 'Детали RapidOCR',
+  dxcam_installed: 'DXcam установлен',
+  dxcam_detail: 'Детали DXcam',
+  memory_reader_enabled: 'Memory Reader включен',
+  memory_reader_status: 'Статус Memory Reader',
+  memory_reader_detail: 'Детали Memory Reader',
+  memory_reader_process: 'Процесс Memory Reader',
+  textractor_installed: 'Textractor установлен',
+  textractor_detail: 'Детали Textractor',
+  last_error: 'Последняя ошибка',
+  status: 'Статус',
+  detail: 'Детали',
+  process_name: 'Имя процесса',
+  pid: 'ID процесса',
+  window_title: 'Заголовок окна',
+  width: 'Ширина окна',
+  height: 'Высота окна',
+  aspect_ratio: 'Соотношение сторон окна',
+  game_id: 'ID игры',
+  session_id: 'ID сессии',
+  last_event_ts: 'Время последнего события',
+  last_text_seq: 'Последний номер текста Memory',
+  last_text_ts: 'Время последнего текста Memory',
+  last_text_recent: 'Недавний текст Memory действителен',
+  last_text_age_seconds: 'Секунды простоя текста Memory',
+  capture_stage: 'Стадия захвата',
+  capture_profile: 'Профиль захвата',
+  capture_profile_match_source: 'Источник профиля захвата',
+  capture_profile_bucket_key: 'Бакет профиля захвата',
+  capture_backend_kind: 'Бэкенд захвата',
+  capture_backend_detail: 'Детали бэкенда захвата',
+  last_capture_image_hash: 'Последний Hash захвата',
+  consecutive_same_capture_frames: 'Подряд одинаковых захватов',
+  stale_capture_backend: 'Источник захвата не обновляется',
+  last_rejected_ocr_text: 'Последний отклоненный OCR-текст',
+  last_rejected_ocr_reason: 'Последняя причина отклонения',
+  last_rejected_ocr_at: 'Время последнего отклонения',
+  last_rejected_capture_backend: 'Отклоненный бэкенд захвата',
+  screen_awareness_last_skip_reason: 'Причина пропуска распознавания экрана',
+  screen_awareness_last_region_count: 'Число областей распознавания экрана',
+  screen_awareness_last_capture_duration_seconds: 'Длительность захвата распознавания экрана',
+  screen_awareness_last_ocr_duration_seconds: 'Длительность OCR распознавания экрана',
+  backend_kind: 'Тип бэкенда',
+  backend_detail: 'Детали бэкенда',
+  backend_path: 'Путь бэкенда',
+  backend_model: 'Модель бэкенда',
+  languages: 'Языки',
+  takeover_reason: 'Причина перехвата',
+  target_selection_mode: 'Режим выбора цели',
+  target_selection_detail: 'Детали выбора цели',
+  effective_window_key: 'Активный ключ окна',
+  effective_window_title: 'Активный заголовок окна',
+  effective_process_name: 'Активное имя процесса',
+  foreground_refresh_at: 'Время обновления переднего плана',
+  foreground_refresh_detail: 'Детали обновления переднего плана',
+  foreground_hwnd: 'Текущий hwnd переднего плана',
+  target_hwnd: 'Целевой hwnd',
+  last_poll_started_at: 'Последний OCR poll начат',
+  last_poll_completed_at: 'Последний OCR poll завершен',
+  last_poll_duration_seconds: 'Длительность последнего OCR poll',
+  last_poll_emitted_event: 'Последний OCR poll создал событие',
+  last_tick_skipped: 'Последний tick пропущен',
+  last_tick_skip_reason: 'Причина пропуска tick',
+  pending_visual_scene_count: 'Ожидающие изменения визуальной сцены',
+  last_auto_recalibrate_attempts: 'Попытки автокалибровки OCR',
+  last_auto_recalibrate_duration_seconds: 'Длительность автокалибровки',
+  last_auto_recalibrate_limited: 'Автокалибровка ограничена',
+  last_auto_recalibrate_error: 'Ошибка автокалибровки',
+  last_capture_total_duration_seconds: 'Последняя общая длительность OCR',
+  last_capture_frame_duration_seconds: 'Длительность захвата',
+  last_capture_background_duration_seconds: 'Длительность фонового Hash',
+  last_capture_image_hash_duration_seconds: 'Длительность Hash захвата',
+  last_ocr_extract_duration_seconds: 'Длительность OCR-инференса',
+  last_backend_plan_duration_seconds: 'Длительность выбора бэкенда',
+  last_window_scan_duration_seconds: 'Длительность сканирования окон',
+  last_capture_background_hash_skipped: 'Фоновый Hash пропущен',
+  candidate_count: 'Число окон-кандидатов',
+  excluded_candidate_count: 'Число исключенных окон',
+  last_exclude_reason: 'Последняя причина исключения',
+  speaker: 'Говорящий',
+  text: 'Текст',
+  scene_id: 'ID сцены',
+  line_id: 'ID реплики',
+  route_id: 'ID маршрута',
+  is_menu_open: 'Меню открыто',
+  snapshot_ts: 'Время снимка',
+  stale: 'Устарело',
+  result: 'Результат',
+  agent_user_status: 'Пользовательский статус Agent',
+  agent_pause_kind: 'Тип паузы Agent',
+  agent_pause_message: 'Сообщение паузы Agent',
+  agent_can_resume_by_button: 'Можно возобновить кнопкой',
+  agent_can_resume_by_focus: 'Можно возобновить фокусом',
+  inbound_queue_size: 'Входная очередь',
+  outbound_queue_size: 'Исходящая очередь',
+  last_interruption: 'Последнее прерывание',
+  last_outbound_message: 'Последнее исходящее сообщение',
+  recent_pushes: 'Недавние push-события',
+  activity: 'Активность',
+  reason: 'Причина',
+  input_source: 'Источник ввода',
+  scene_stage: 'Стадия сцены',
+  push_policy: 'Политика push',
+  actionable: 'Доступно действие',
+  standby_requested: 'Запрошен режим ожидания',
+  memory_counts: 'Счетчики памяти',
+
+  agent_activity: 'Активность Agent',
+  agent_diagnostic: 'Диагностика Agent',
+  agent_reason: 'Причина Agent',
+  agent_status: 'Статус Agent',
+  bridge_tick_auto_running: 'Bridge tick авто-режим активен',
+  bridge_tick_last_error: 'Последняя ошибка Bridge tick',
+  capture_profile_auto_apply_enabled: 'Автоприменение профиля включено',
+  capture_profile_last_rollback_reason: 'Причина последнего отката профиля',
+  capture_profile_pending_rollback: 'Ожидающий откат профиля',
+  character_fixed_name: 'Зафиксированное имя персонажа',
+  character_mode: 'Режим персонажа',
+  character_profile_count: 'Число профилей персонажей',
+  consecutive_no_text_polls: 'Подряд опросов без текста',
+  diagnostic: 'Диагностика',
+  foreground_advance_consumed_seq: 'Принятый seq foreground-прокрутки',
+  foreground_advance_last_delta: 'Последний дельта foreground-прокрутки',
+  foreground_advance_last_kind: 'Последний тип foreground-прокрутки',
+  foreground_advance_last_match_reason: 'Причина последнего совпадения прокрутки',
+  foreground_advance_last_matched: 'Последнее совпадение прокрутки',
+  foreground_advance_last_seq: 'Последний seq foreground-прокрутки',
+  foreground_advance_monitor_running: 'Монитор foreground-прокрутки активен',
+  last_agent_tick_age_seconds: 'Возраст последнего тика Agent, с',
+  last_capture_attempt_at: 'Время последней попытки снимка',
+  last_capture_completed_at: 'Время завершения последнего снимка',
+  last_capture_error: 'Последняя ошибка снимка',
+  last_capture_profile: 'Последний профиль снимка',
+  last_capture_stage: 'Последняя стадия снимка',
+  last_delivered_summary_key: 'Ключ последней отправленной сводки',
+  last_delivered_summary_scene_id: 'Сцена последней сводки',
+  last_delivered_summary_seq: 'seq последней сводки',
+  last_observed_at: 'Время последнего наблюдения',
+  last_observed_line: 'Последняя наблюдаемая реплика',
+  last_ocr_advance_capture_reason: 'Причина последнего сбора прокрутки',
+  last_raw_ocr_text: 'Последний сырой OCR-текст',
+  last_session_transition_fields: 'Поля последнего перехода сессии',
+  last_session_transition_reason: 'Причина последнего перехода сессии',
+  last_session_transition_type: 'Тип последнего перехода сессии',
+  last_stable_line: 'Последняя стабильная реплика',
+  llm_vision_enabled: 'Vision-режим LLM включен',
+  llm_vision_max_image_px: 'Макс. размер изображения Vision, px',
+  memory_reader_detection_reason: 'Причина определения Memory Reader',
+  memory_reader_hook_code_count: 'Число хук-кодов Memory Reader',
+  memory_reader_hook_code_detail: 'Детали хук-кодов Memory Reader',
+  memory_reader_target_selection_detail: 'Детали выбора цели Memory Reader',
+  ocr_capture_diagnostic: 'Диагностика OCR-снимка',
+  ocr_capture_diagnostic_required: 'Требуется диагностика OCR-снимка',
+  ocr_screen_awareness_full_frame_ocr: 'Полнокадровый OCR',
+  ocr_screen_awareness_multi_region_ocr: 'Многорегионный OCR',
+  ocr_screen_awareness_visual_rules: 'Визуальные правила распознавания',
+  pending_ocr_advance_captures: 'Ожидающие сборки прокрутки',
+  pending_summary_task_count: 'Число ожидающих задач сводки',
+  pending_summary_tasks: 'Ожидающие задачи сводки',
+  recommended_capture_profile: 'Рекомендованный профиль снимка',
+  recommended_capture_profile_confidence: 'Уверенность рекомендации профиля',
+  recommended_capture_profile_manual_present: 'Наличие ручной рекомендации',
+  recommended_capture_profile_process_name: 'Процесс рекомендации профиля',
+  recommended_capture_profile_reason: 'Причина рекомендации профиля',
+  recommended_capture_profile_save_scope: 'Область сохранения рекомендации',
+  recommended_capture_profile_stage: 'Стадия рекомендации профиля',
+  scene_summary_line_interval: 'Интервал строк сводки',
+  scene_summary_lines_since_push: 'Строк с последней сводки',
+  scene_summary_lines_until_push: 'Строк до следующей сводки',
+  screen_awareness_model_detail: 'Детали модели распознавания',
+  screen_awareness_model_last_confidence: 'Последняя уверенность модели',
+  screen_awareness_model_last_stage: 'Последняя стадия модели',
+  screen_awareness_sample_count: 'Число образцов распознавания',
+  screen_classify_keywords: 'Ключевые слова классификации',
+  screen_classify_layout: 'Разметка классификации',
+  screen_classify_reason: 'Причина классификации',
+  screen_text_sources: 'Источники текста на экране',
+  stability: 'Стабильность',
+  summary_last_drop: 'Последний отброс сводки',
+  summary_last_retry_reason: 'Причина последней повторной сводки',
+  summary_last_scheduled: 'Последнее расписание сводки',
+  summary_last_skip: 'Последний пропуск сводки',
+  summary_last_task_cancelled: 'Отмена последней задачи сводки',
+  summary_last_task_exception: 'Исключение последней задачи сводки',
+  summary_last_task_restored_schedule: 'Восстановленное расписание задачи',
+  summary_last_task_returned_false: 'Последняя задача вернула false',
+  summary_peek_session_transition: 'Превью перехода сессии',
+  summary_scene_states: 'Состояния сцен сводки',
+  summary_thresholds: 'Пороги сводки',
+  vision_snapshot_available: 'Снимок Vision доступен',
+  vision_snapshot_byte_size: 'Размер снимка Vision, байт',
+  vision_snapshot_captured_at: 'Время снимка Vision',
+  vision_snapshot_expires_at: 'Истечение снимка Vision',
+  vision_snapshot_size: 'Размер снимка Vision',
+  vision_snapshot_source: 'Источник снимка Vision',};
 
 const CONNECTION_STATE_LABELS_ZH = {
-  active: '运行中',
-  idle: '空闲',
-  stale: '已过期',
+  active: 'Активно',
+  idle: 'Ожидание',
+  stale: 'Устарело',
 };
 
 const MODE_LABELS_ZH = {
-  silent: 'Тихий режим',
-  companion: 'Режим компаньона',
-  choice_advisor: 'Советник по выбору',
+  silent: 'Тихий',
+  companion: 'Сопровождение',
+  choice_advisor: 'Автопродвижение',
   narrator: 'Рассказчик',
 };
 
@@ -722,48 +810,48 @@ const TTS_PIPELINE_LABELS_ZH = {
   off: 'Выкл',
 };
 const ADVANCE_SPEED_LABELS_ZH = {
-  slow: '慢',
-  medium: '中等',
-  fast: '快速',
+  slow: 'Медленно',
+  medium: 'Средне',
+  fast: 'Быстро',
 };
 
 const AGENT_USER_STATUS_LABELS_ZH = {
-  running: '运行中',
-  read_only: '只读伴读',
-  paused_by_user: '用户待机',
-  paused_window_not_foreground: '游戏窗口未前台',
-  screen_safety_pause: '安全暂停',
-  ocr_unavailable: 'OCR 不可用',
-  waiting_choice: '等待/处理选项',
-  acting: '正在操作',
-  error: '错误',
+  running: 'Выполняется',
+  read_only: 'Режим чтения',
+  paused_by_user: 'Ожидание пользователя',
+  paused_window_not_foreground: 'Окно игры не на переднем плане',
+  screen_safety_pause: 'Безопасная пауза',
+  ocr_unavailable: 'OCR недоступен',
+  waiting_choice: 'Ожидание/обработка выбора',
+  acting: 'Выполняется действие',
+  error: 'Ошибка',
 };
 
 const DATA_SOURCE_LABELS_ZH = {
   bridge_sdk: 'Bridge SDK',
-  ocr_reader: 'OCR 读取',
-  memory_reader: '内存读取',
+  ocr_reader: 'OCR Reader',
+  memory_reader: 'Memory Reader',
 };
 
 const READER_MODE_LABELS_ZH = {
-  auto: '自动（内存有新文本优先，停更后 OCR 接管）',
-  memory_reader: '内存读取',
+  auto: 'Авто (сначала текст из памяти, затем OCR после остановки)',
+  memory_reader: 'Memory Reader',
   ocr_reader: 'OCR',
 };
 
 const ACTION_LABELS_ZH = {
-  refresh_all: '刷新全部',
-  debug_details: '查看调试详情',
-  refresh_ocr_windows: '刷新窗口',
-  select_ocr_window: '选择游戏窗口',
-  focus_game: '切回游戏窗口',
-  capture_backend: '切换截图方式',
-  recalibrate_ocr: '重新截图校准',
-  line_details: '查看识别详情',
-  choice_advisor: '切换到自动推进模式',
-  install_dxcam: '查看 DXcam 状态',
-  refresh_status: '刷新状态',
-  start_recognition: '开始自动识别',
+  refresh_all: 'Обновить все',
+  debug_details: 'Показать отладку',
+  refresh_ocr_windows: 'Обновить окна',
+  select_ocr_window: 'Выбрать окно игры',
+  focus_game: 'Вернуться к окну игры',
+  capture_backend: 'Сменить бэкенд захвата',
+  recalibrate_ocr: 'Перекалибровать OCR',
+  line_details: 'Показать детали распознавания',
+  choice_advisor: 'Переключить на автопродвижение',
+  install_dxcam: 'Установить DXcam',
+  refresh_status: 'Обновить статус',
+  start_recognition: 'Начать авто распознавание',
 };
 
 function mapLabel(i18nKeys, labels, key, fallback = '') {
@@ -817,7 +905,7 @@ function dataSourceLabel(key, fallback = '') {
 function captureBackendLabel(key, fallback = '') {
   const normalized = textValue(key).toLowerCase();
   const labels = {
-    auto: uiT('ui.capture_backend.auto', '自动'),
+    auto: uiT('ui.capture_backend.auto', 'Авто'),
     smart: uiT('ui.capture_backend.smart', 'Smart'),
     dxcam: uiT('ui.capture_backend.dxcam', 'DXcam'),
     mss: uiT('ui.capture_backend.mss', 'MSS'),
@@ -825,7 +913,7 @@ function captureBackendLabel(key, fallback = '') {
     pyautogui: uiT('ui.capture_backend.pyautogui', 'PyAutoGUI'),
     printwindow: uiT('ui.capture_backend.printwindow', 'PrintWindow'),
   };
-  return labels[normalized] || fallback || key || uiT('ui.status.unknown', '未知');
+  return labels[normalized] || fallback || key || uiT('ui.status.unknown', 'Неизвестно');
 }
 
 function requiresDxcamBackend(key) {
@@ -848,7 +936,7 @@ function diagnosisAction(id, fallback = '') {
   return { id, label: primaryActionLabel(id, fallback || id) };
 }
 
-let latestAgentReply = uiT('ui.agent.no_interaction', '暂无交互');
+let latestAgentReply = uiT('ui.agent.no_interaction', 'Нет взаимодействий');
 let latestAgentStatus = null;
 let latestStatus = null;
 let latestSnapshotData = null;
@@ -1061,13 +1149,13 @@ async function createRun(entryId, args = {}) {
   });
 
   if (!createResp.ok) {
-    throw new Error(uiTf('ui.error.run_create_failed', '创建任务失败: HTTP {status}', { status: createResp.status }));
+    throw new Error(uiTf('ui.error.run_create_failed', 'Не удалось создать задачу: HTTP {status}', { status: createResp.status }));
   }
 
   const createData = await createResp.json();
   const runId = createData.run_id || createData.id;
   if (!runId) {
-    throw new Error(uiT('ui.error.run_id_missing', '未获取到 run_id'));
+    throw new Error(uiT('ui.error.run_id_missing', 'run_id не получен'));
   }
   return runId;
 }
@@ -1082,7 +1170,7 @@ async function exportRunResult(runId) {
   const resultItem = items.find((item) => item.type === 'json' && item.json) || items[0];
   const pluginResponse = resultItem ? (resultItem.json || {}) : {};
   if (pluginResponse.success === false || pluginResponse.error) {
-    throw new Error(pluginResponse.error?.message || pluginResponse.message || uiT('ui.error.plugin_call_failed', '插件调用失败'));
+    throw new Error(pluginResponse.error?.message || pluginResponse.message || uiT('ui.error.plugin_call_failed', 'Вызов плагина не удался'));
   }
   return pluginResponse.data || {};
 }
@@ -1113,7 +1201,7 @@ async function callPlugin(entryId, args = {}, { timeoutMs } = {}) {
     }
   }
 
-  throw new Error(uiT('ui.error.plugin_call_timeout', '插件调用超时'));
+  throw new Error(uiT('ui.error.plugin_call_timeout', 'Вызов плагина истек по времени'));
 }
 
 async function safeCall(entryId, args = {}, fallback = {}) {
@@ -1172,11 +1260,11 @@ function updateSettingsDirtyHint(message = '') {
   }
   if (settingsSaveInFlight) {
     hint.hidden = false;
-    hint.textContent = message || uiT('ui.settings.saving_hint', '正在保存...');
+    hint.textContent = message || uiT('ui.settings.saving_hint', 'Сохранение...');
     return;
   }
   hint.hidden = !settingsDirty;
-  hint.textContent = message || uiT('ui.settings.dirty', '有未保存设置');
+  hint.textContent = message || uiT('ui.settings.dirty', 'Есть несохраненные настройки');
 }
 
 function hasMissingRapidOcrModelFiles(rapidocr = {}) {
@@ -1253,20 +1341,20 @@ function getCurrentLineTexts(status = {}) {
 
 function formatStableBlockReason(reason) {
   const mapping = {
-    waiting_for_repeat: uiT('ui.reason.stable.waiting_for_repeat', '刚读到新文字，正在确认是不是同一句台词'),
-    duplicate_stable_text: uiT('ui.reason.stable.duplicate_stable_text', '这句台词已经显示过'),
-    duplicate_raw_text: uiT('ui.reason.stable.duplicate_raw_text', '识别结果和上一轮相同，暂不重复写入'),
-    duplicate_observed_text: uiT('ui.reason.stable.duplicate_observed_text', '候选台词和上一轮相同，正在等待变化'),
-    duplicate_candidate_text: uiT('ui.reason.stable.duplicate_candidate_text', '候选台词和上一轮相同，正在等待变化'),
-    empty_text: uiT('ui.reason.stable.empty_text', '文字识别暂时没有读到有效文本'),
-    no_text: uiT('ui.reason.stable.no_text', '文字识别暂时没有读到有效文本'),
-    no_valid_text: uiT('ui.reason.stable.no_valid_text', '文字识别暂时没有读到有效文本'),
-    low_confidence: uiT('ui.reason.stable.low_confidence', '文字识别置信度较低，暂不写入台词'),
-    overlay_text: uiT('ui.reason.stable.overlay_text', '识别结果像系统界面文字，暂不写入台词'),
-    game_overlay_text: uiT('ui.reason.stable.game_overlay_text', '识别结果像游戏菜单或系统界面，暂不写入台词'),
-    waiting_for_change: uiT('ui.reason.stable.waiting_for_change', '画面文字没有变化，正在等待新台词'),
-    waiting_for_new_text: uiT('ui.reason.stable.waiting_for_new_text', '正在等待新台词出现'),
-    capture_failed: uiT('ui.reason.stable.capture_failed', '截图或识别失败，暂时不能确认台词'),
+    waiting_for_repeat: uiT('ui.reason.stable.waiting_for_repeat', 'Обнаружен новый текст; проверяется, та же ли это реплика'),
+    duplicate_stable_text: uiT('ui.reason.stable.duplicate_stable_text', 'Эта реплика уже отображалась'),
+    duplicate_raw_text: uiT('ui.reason.stable.duplicate_raw_text', 'Результат распознавания совпадает с предыдущим проходом, поэтому повторно не записывается'),
+    duplicate_observed_text: uiT('ui.reason.stable.duplicate_observed_text', 'Реплика-кандидат совпадает с предыдущим проходом и ожидает изменения'),
+    duplicate_candidate_text: uiT('ui.reason.stable.duplicate_candidate_text', 'Реплика-кандидат совпадает с предыдущим проходом и ожидает изменения'),
+    empty_text: uiT('ui.reason.stable.empty_text', 'Распознавание текста пока не прочитало допустимый текст'),
+    no_text: uiT('ui.reason.stable.no_text', 'Распознавание текста пока не прочитало допустимый текст'),
+    no_valid_text: uiT('ui.reason.stable.no_valid_text', 'Распознавание текста пока не прочитало допустимый текст'),
+    low_confidence: uiT('ui.reason.stable.low_confidence', 'Уверенность распознавания низкая, поэтому реплика пока не записывается'),
+    overlay_text: uiT('ui.reason.stable.overlay_text', 'Результат распознавания похож на системный UI, поэтому пока не записывается'),
+    game_overlay_text: uiT('ui.reason.stable.game_overlay_text', 'Результат распознавания похож на меню игры или системный UI, поэтому пока не записывается'),
+    waiting_for_change: uiT('ui.reason.stable.waiting_for_change', 'Текст на экране не изменился; ожидание новой реплики'),
+    waiting_for_new_text: uiT('ui.reason.stable.waiting_for_new_text', 'Ожидание появления новой реплики'),
+    capture_failed: uiT('ui.reason.stable.capture_failed', 'Захват или распознавание не удалось, поэтому реплику нельзя подтвердить'),
   };
   const normalized = textValue(reason);
   return uiDynamicT('ui.reason.stable', normalized, mapping[normalized] || normalized);
@@ -1274,29 +1362,29 @@ function formatStableBlockReason(reason) {
 
 function formatOcrTickBlockReason(reason) {
   const mapping = {
-    ocr_reader_unavailable: uiT('ui.reason.tick.ocr_reader_unavailable', 'OCR Reader 尚不可用'),
-    ocr_reader_not_allowed: uiT('ui.reason.tick.ocr_reader_not_allowed', '当前读取模式不允许 OCR'),
-    reader_mode_memory_only: uiT('ui.reason.tick.reader_mode_memory_only', '当前为仅内存读取模式'),
-    memory_reader_recent_text: uiT('ui.reason.tick.memory_reader_recent_text', '内存读取已有近期文本，暂不轮询 OCR'),
-    memory_reader_default_unavailable: uiT('ui.reason.tick.memory_reader_default_unavailable', '默认内存读取目标尚不可用，未主动切到 OCR'),
-    waiting_pending_advance_delay: uiT('ui.reason.tick.waiting_pending_advance_delay', '等待推进后的延迟采集窗口'),
-    trigger_mode_after_advance_waiting_for_input: uiT('ui.reason.tick.trigger_mode_after_advance_waiting_for_input', '点击对白后识别模式正在等待游戏推进'),
-    trigger_mode_after_advance_waiting_for_refresh: uiT('ui.reason.tick.trigger_mode_after_advance_waiting_for_refresh', '点击对白后识别模式正在等待刷新条件'),
-    tick_gate_closed: uiT('ui.reason.tick.tick_gate_closed', 'OCR 轮询门控未打开'),
-    plugin_config_missing: uiT('ui.reason.tick.plugin_config_missing', '插件配置尚未就绪'),
-    ocr_reader_manager_missing: uiT('ui.reason.tick.ocr_reader_manager_missing', 'OCR Reader 管理器尚未就绪'),
-    ocr_fast_loop_started: uiT('ui.reason.tick.ocr_fast_loop_started', 'OCR Fast Loop 已接管本轮采集'),
-    ocr_tick_lock_busy: uiT('ui.reason.tick.ocr_tick_lock_busy', '上一轮 OCR tick 仍在执行'),
-    tick_gate_timeout: uiT('ui.reason.tick.tick_gate_timeout', '推进采集等待门控超时，已清理'),
-    trigger_mode_not_after_advance: uiT('ui.reason.tick.trigger_mode_not_after_advance', '当前不是点击对白后识别模式'),
-    refresh_method_missing: uiT('ui.reason.tick.refresh_method_missing', '前台刷新方法不可用'),
-    refresh_failed: uiT('ui.reason.tick.refresh_failed', '前台刷新失败'),
-    target_missing: uiT('ui.reason.tick.target_missing', '目标游戏窗口不存在'),
-    target_minimized: uiT('ui.reason.tick.target_minimized', '目标游戏窗口已最小化'),
-    target_not_visible: uiT('ui.reason.tick.target_not_visible', '目标游戏窗口不可见'),
-    target_not_foreground: uiT('ui.reason.tick.target_not_foreground', '目标游戏窗口不是前台焦点'),
-    capture_failed: uiT('ui.reason.tick.capture_failed', '截图或文字识别失败'),
-    stale_capture_backend: uiT('ui.reason.tick.stale_capture_backend', '截图画面没有更新'),
+    ocr_reader_unavailable: uiT('ui.reason.tick.ocr_reader_unavailable', 'OCR Reader пока недоступен'),
+    ocr_reader_not_allowed: uiT('ui.reason.tick.ocr_reader_not_allowed', 'Текущий режим чтения не разрешает OCR'),
+    reader_mode_memory_only: uiT('ui.reason.tick.reader_mode_memory_only', 'Текущий режим — только чтение памяти'),
+    memory_reader_recent_text: uiT('ui.reason.tick.memory_reader_recent_text', 'Memory Reader имеет недавний текст, поэтому OCR пока не опрашивается'),
+    memory_reader_default_unavailable: uiT('ui.reason.tick.memory_reader_default_unavailable', 'Цель Memory Reader по умолчанию пока недоступна, поэтому OCR не был выбран активно'),
+    waiting_pending_advance_delay: uiT('ui.reason.tick.waiting_pending_advance_delay', 'Ожидание задержанного окна захвата после продвижения'),
+    trigger_mode_after_advance_waiting_for_input: uiT('ui.reason.tick.trigger_mode_after_advance_waiting_for_input', 'Режим распознавания после клика ожидает продвижения игры'),
+    trigger_mode_after_advance_waiting_for_refresh: uiT('ui.reason.tick.trigger_mode_after_advance_waiting_for_refresh', 'Режим распознавания после клика ожидает условий обновления'),
+    tick_gate_closed: uiT('ui.reason.tick.tick_gate_closed', 'Шлюз OCR-опроса закрыт'),
+    plugin_config_missing: uiT('ui.reason.tick.plugin_config_missing', 'Конфигурация плагина пока не готова'),
+    ocr_reader_manager_missing: uiT('ui.reason.tick.ocr_reader_manager_missing', 'Менеджер OCR Reader пока не готов'),
+    ocr_fast_loop_started: uiT('ui.reason.tick.ocr_fast_loop_started', 'OCR Fast Loop взял на себя этот проход захвата'),
+    ocr_tick_lock_busy: uiT('ui.reason.tick.ocr_tick_lock_busy', 'Предыдущий OCR tick еще выполняется'),
+    tick_gate_timeout: uiT('ui.reason.tick.tick_gate_timeout', 'Шлюз захвата после продвижения истек и был очищен'),
+    trigger_mode_not_after_advance: uiT('ui.reason.tick.trigger_mode_not_after_advance', 'Текущий режим триггера не является распознаванием после клика'),
+    refresh_method_missing: uiT('ui.reason.tick.refresh_method_missing', 'Метод обновления переднего плана недоступен'),
+    refresh_failed: uiT('ui.reason.tick.refresh_failed', 'Обновление переднего плана не удалось'),
+    target_missing: uiT('ui.reason.tick.target_missing', 'Целевое окно игры не существует'),
+    target_minimized: uiT('ui.reason.tick.target_minimized', 'Целевое окно игры свернуто'),
+    target_not_visible: uiT('ui.reason.tick.target_not_visible', 'Целевое окно игры не видно'),
+    target_not_foreground: uiT('ui.reason.tick.target_not_foreground', 'Целевое окно игры не на переднем плане'),
+    capture_failed: uiT('ui.reason.tick.capture_failed', 'Захват или распознавание текста не удалось'),
+    stale_capture_backend: uiT('ui.reason.tick.stale_capture_backend', 'Изображение захвата не обновляется'),
   };
   const normalized = textValue(reason);
   return uiDynamicT('ui.reason.tick', normalized, mapping[normalized] || normalized);
@@ -1304,10 +1392,10 @@ function formatOcrTickBlockReason(reason) {
 
 function formatOcrEmitBlockReason(reason) {
   const mapping = {
-    capture_failed: uiT('ui.reason.emit.capture_failed', '截图或文字识别失败'),
-    stale_capture_backend: uiT('ui.reason.emit.stale_capture_backend', '截图画面没有更新'),
-    screen_classification_skipped_dialogue: uiT('ui.reason.emit.screen_classification_skipped_dialogue', '画面被判定为非对白界面'),
-    no_dialogue_text: uiT('ui.reason.emit.no_dialogue_text', '没有可写入的对白文本'),
+    capture_failed: uiT('ui.reason.emit.capture_failed', 'Захват или распознавание текста не удалось'),
+    stale_capture_backend: uiT('ui.reason.emit.stale_capture_backend', 'Изображение захвата не обновляется'),
+    screen_classification_skipped_dialogue: uiT('ui.reason.emit.screen_classification_skipped_dialogue', 'Экран классифицирован как не диалоговый'),
+    no_dialogue_text: uiT('ui.reason.emit.no_dialogue_text', 'Нет диалогового текста для записи'),
     ...{
       waiting_for_repeat: formatStableBlockReason('waiting_for_repeat'),
       duplicate_stable_text: formatStableBlockReason('duplicate_stable_text'),
@@ -1330,13 +1418,13 @@ function formatOcrEmitBlockReason(reason) {
 
 function formatOcrBackgroundState(state) {
   const mapping = {
-    background_polling: uiT('ui.ocr.background_state.background_polling', '后台轮询中'),
-    foreground_resume_pending: uiT('ui.ocr.background_state.foreground_resume_pending', '等待前台恢复'),
-    visible_background_readable: uiT('ui.ocr.background_state.visible_background_readable', '可见后台可读'),
-    capture_backend_blocked: uiT('ui.ocr.background_state.capture_backend_blocked', '截图后端受阻'),
-    target_unavailable: uiT('ui.ocr.background_state.target_unavailable', '目标窗口不可用'),
-    foreground_active: uiT('ui.ocr.background_state.foreground_active', '前台可采集'),
-    idle: uiT('ui.ocr.background_state.idle', '未激活'),
+    background_polling: uiT('ui.ocr.background_state.background_polling', 'Фоновый опрос'),
+    foreground_resume_pending: uiT('ui.ocr.background_state.foreground_resume_pending', 'Ожидание возврата на передний план'),
+    visible_background_readable: uiT('ui.ocr.background_state.visible_background_readable', 'Видимый фон доступен для чтения'),
+    capture_backend_blocked: uiT('ui.ocr.background_state.capture_backend_blocked', 'Бэкенд захвата заблокирован'),
+    target_unavailable: uiT('ui.ocr.background_state.target_unavailable', 'Целевое окно недоступно'),
+    foreground_active: uiT('ui.ocr.background_state.foreground_active', 'Захват переднего плана доступен'),
+    idle: uiT('ui.ocr.background_state.idle', 'Неактивно'),
   };
   const normalized = textValue(state);
   return uiDynamicT('ui.ocr.background_state', normalized, mapping[normalized] || normalized);
@@ -1373,7 +1461,7 @@ function normalizePrimaryDiagnosis(diagnosis) {
     : [];
   return {
     severity: ['ok', 'info', 'warning', 'error'].includes(severity) ? severity : 'info',
-    title: title || uiT('ui.diag.default_title', '运行诊断'),
+    title: title || uiT('ui.diag.default_title', 'Диагностика выполнения'),
     body,
     actions,
   };
@@ -1421,8 +1509,8 @@ function buildPrimaryDiagnosis(status = {}) {
   if (connectionState === 'plugin_not_started') {
     return diagnose({
       severity: 'info',
-      title: uiT('ui.diag.plugin_not_started.title', '插件尚未启动'),
-      body: uiT('ui.diag.plugin_not_started.body', '请在插件管理页面点击"启动"按钮，启动完成后数据会自动刷新。'),
+      title: uiT('ui.diag.plugin_not_started.title', 'Плагин не запущен'),
+      body: uiT('ui.diag.plugin_not_started.body', 'Нажмите "Запустить" на странице управления плагином. После запуска данные обновятся автоматически.'),
       actions: [
         diagnosisAction('refresh_all'),
       ],
@@ -1432,8 +1520,8 @@ function buildPrimaryDiagnosis(status = {}) {
   if (lastError) {
     return diagnose({
       severity: 'error',
-      title: uiT('ui.diag.plugin_error.title', '插件运行出错'),
-      body: uiTf('ui.diag.plugin_error.body', '{error}。可以先刷新状态；如果仍然出现，请查看调试详情。', { error: lastError }),
+      title: uiT('ui.diag.plugin_error.title', 'Ошибка выполнения плагина'),
+      body: uiTf('ui.diag.plugin_error.body', '{error}. Сначала обновите статус; если ошибка повторится, откройте детали отладки.', { error: lastError }),
       actions: [
         diagnosisAction('refresh_all'),
         diagnosisAction('debug_details'),
@@ -1444,8 +1532,8 @@ function buildPrimaryDiagnosis(status = {}) {
   if (detail === 'memory_reader_window_minimized' || lastExcludeReason === 'excluded_minimized_window') {
     return diagnose({
       severity: 'warning',
-      title: uiT('ui.diag.window_minimized.title', '游戏窗口最小化了'),
-      body: uiT('ui.diag.window_minimized.body', '检测到游戏，但窗口最小化，文字识别不能截图。请恢复游戏窗口后继续。'),
+      title: uiT('ui.diag.window_minimized.title', 'Окно игры свернуто'),
+      body: uiT('ui.diag.window_minimized.body', 'Игра обнаружена, но окно свернуто, поэтому OCR не может сделать снимок. Разверните окно игры и продолжите.'),
       actions: [
         diagnosisAction('refresh_ocr_windows'),
         diagnosisAction('select_ocr_window'),
@@ -1454,12 +1542,12 @@ function buildPrimaryDiagnosis(status = {}) {
   }
 
   if (contextState === 'capture_failed' || lastCaptureError) {
-    const captureFailure = lastCaptureError || uiT('ui.diag.capture_failed.default_error', '截图或识别后端返回错误，新台词不会更新。');
+    const captureFailure = lastCaptureError || uiT('ui.diag.capture_failed.default_error', 'Бэкенд захвата или распознавания вернул ошибку, новые реплики не будут обновляться.');
     return diagnose({
       severity: 'error',
-      title: uiT('ui.diag.capture_failed.title', '截图或文字识别失败'),
+      title: uiT('ui.diag.capture_failed.title', 'Не удалось сделать снимок или распознать текст'),
       body: intervalBackgroundBlocked
-        ? uiTf('ui.diag.capture_failed.interval_body', '{error}当前为定时 OCR 后台读取，请确认窗口可见且未最小化；如果仍失败，切换截图方式或重新选择 OCR 窗口。', { error: captureFailure })
+        ? uiTf('ui.diag.capture_failed.interval_body', '{error} Сейчас используется фоновое OCR по интервалу. Убедитесь, что окно видно и не свернуто; если ошибка сохранится, смените способ захвата или заново выберите окно OCR.', { error: captureFailure })
         : captureFailure,
       actions: intervalBackgroundBlocked
         ? [
@@ -1479,10 +1567,10 @@ function buildPrimaryDiagnosis(status = {}) {
   if (runtime.stale_capture_backend) {
     return diagnose({
       severity: 'warning',
-      title: uiT('ui.diag.stale_capture.title', '截图画面没有更新'),
+      title: uiT('ui.diag.stale_capture.title', 'Снимок не обновляется'),
       body: intervalBackgroundBlocked
-        ? uiT('ui.diag.stale_capture.interval_body', '定时 OCR 后台读取时截图画面没有更新。请确认游戏窗口可见且未最小化；如果仍停在旧画面，请切换截图方式或重新选择 OCR 窗口。')
-        : uiT('ui.diag.stale_capture.body', '当前截图源可能停在旧画面。请切回游戏窗口，或切换截图方式后再试。'),
+        ? uiT('ui.diag.stale_capture.interval_body', 'При фоновом OCR по интервалу снимок не обновляется. Убедитесь, что окно игры видно и не свернуто; если кадр все еще старый, смените способ захвата или заново выберите окно OCR.')
+        : uiT('ui.diag.stale_capture.body', 'Текущий источник захвата мог застрять на старом кадре. Вернитесь в окно игры или смените способ захвата и попробуйте снова.'),
       actions: intervalBackgroundBlocked
         ? [
           diagnosisAction('focus_game'),
@@ -1500,8 +1588,8 @@ function buildPrimaryDiagnosis(status = {}) {
   if (tickBlockReason === 'trigger_mode_after_advance_waiting_for_input') {
     return diagnose({
       severity: 'info',
-      title: uiT('ui.diag.waiting_advance.title', 'OCR 正在等待游戏推进'),
-      body: uiT('ui.diag.waiting_advance.body', '当前为点击对白后识别模式，上一轮已经完成；点击、滚轮向下或按推进键后才会重新采集。'),
+      title: uiT('ui.diag.waiting_advance.title', 'OCR ждет продвижения игры'),
+      body: uiT('ui.diag.waiting_advance.body', 'Включен режим распознавания после клика по диалогу, предыдущий проход завершен. Новый захват начнется после клика, прокрутки вниз или клавиши продвижения.'),
       actions: [
         diagnosisAction('focus_game'),
         diagnosisAction('debug_details'),
@@ -1512,8 +1600,8 @@ function buildPrimaryDiagnosis(status = {}) {
   if (tickBlockReason === 'memory_reader_recent_text') {
     return diagnose({
       severity: 'info',
-      title: uiT('ui.diag.memory_priority.title', '内存读取正在优先提供文本'),
-      body: uiT('ui.diag.memory_priority.body', '自动模式检测到内存读取仍有近期文本，因此暂时不主动轮询 OCR。'),
+      title: uiT('ui.diag.memory_priority.title', 'Memory Reader сейчас дает текст первым'),
+      body: uiT('ui.diag.memory_priority.body', 'В авто режиме найден свежий текст Memory Reader, поэтому OCR пока не опрашивается активно.'),
       actions: [
         diagnosisAction('debug_details'),
       ],
@@ -1523,7 +1611,7 @@ function buildPrimaryDiagnosis(status = {}) {
   if (tickBlockReason) {
     return diagnose({
       severity: 'info',
-      title: uiT('ui.diag.ocr_tick_blocked.title', 'OCR 轮询暂未执行'),
+      title: uiT('ui.diag.ocr_tick_blocked.title', 'OCR polling еще не выполнялся'),
       body: formatOcrTickBlockReason(tickBlockReason),
       actions: [
         diagnosisAction('refresh_all'),
@@ -1535,8 +1623,8 @@ function buildPrimaryDiagnosis(status = {}) {
   if (emitBlockReason === 'screen_classification_skipped_dialogue') {
     return diagnose({
       severity: 'warning',
-      title: uiT('ui.diag.non_dialogue.title', 'OCR 画面被判定为非对白界面'),
-      body: uiT('ui.diag.non_dialogue.body', '截图和识别已执行，但屏幕分类判断当前画面不适合写入对白。'),
+      title: uiT('ui.diag.non_dialogue.title', 'OCR определил экран как не диалоговый'),
+      body: uiT('ui.diag.non_dialogue.body', 'Снимок и распознавание выполнены, но классификация экрана считает текущий экран неподходящим для записи диалога.'),
       actions: [
         diagnosisAction('recalibrate_ocr'),
         diagnosisAction('debug_details'),
@@ -1547,7 +1635,7 @@ function buildPrimaryDiagnosis(status = {}) {
   if (['duplicate_stable_text', 'waiting_for_repeat', 'no_dialogue_text'].includes(emitBlockReason)) {
     return diagnose({
       severity: 'info',
-      title: uiT('ui.diag.no_new_line.title', 'OCR 已执行但没有新台词'),
+      title: uiT('ui.diag.no_new_line.title', 'OCR выполнен, но новой реплики нет'),
       body: formatOcrEmitBlockReason(emitBlockReason),
       actions: [
         diagnosisAction('line_details'),
@@ -1562,8 +1650,8 @@ function buildPrimaryDiagnosis(status = {}) {
   ) {
     return diagnose({
       severity: 'warning',
-      title: uiT('ui.diag.no_window.title', '没找到能识别的游戏窗口'),
-      body: uiT('ui.diag.no_window.body', '游戏可能未启动、被最小化，或当前窗口不是游戏。请确认游戏窗口可见后刷新。'),
+      title: uiT('ui.diag.no_window.title', 'Не найдено распознаваемое окно игры'),
+      body: uiT('ui.diag.no_window.body', 'Игра может быть не запущена, свернута, или текущее окно не является игрой. Убедитесь, что окно игры видно, и обновите.'),
       actions: [
         diagnosisAction('refresh_ocr_windows'),
         diagnosisAction('select_ocr_window'),
@@ -1574,8 +1662,8 @@ function buildPrimaryDiagnosis(status = {}) {
   if (detail === 'foreground_window_needs_manual_confirmation' || detail === 'auto_detect_needs_manual_fallback') {
     return diagnose({
       severity: 'warning',
-      title: uiT('ui.diag.manual_window.title', '需要手动选择游戏窗口'),
-      body: uiT('ui.diag.manual_window.body', '自动检测不够确定。手动选择一次可以避免识别到插件页面或其他窗口。'),
+      title: uiT('ui.diag.manual_window.title', 'Нужно вручную выбрать окно игры'),
+      body: uiT('ui.diag.manual_window.body', 'Автоопределение недостаточно уверенно. Однократный ручной выбор поможет не распознавать страницу плагина или другое окно.'),
       actions: [
         diagnosisAction('select_ocr_window'),
         diagnosisAction('refresh_ocr_windows'),
@@ -1590,10 +1678,9 @@ function buildPrimaryDiagnosis(status = {}) {
   ) {
     return diagnose({
       severity: 'warning',
-      title: uiT('ui.diag.ocr_text_too_long.title', 'OCR 识别文本过长'),
+      title: uiT('ui.diag.ocr_text_too_long.title', 'Текст OCR слишком длинный'),
       body: uiTf(
-        'ui.diag.ocr_text_too_long.body',
-        '当前识别到 {length} 字，远超正常对白长度。截图区域可能包含了非对白内容，建议锁定正确窗口并校准对白区域。',
+        'ui.diag.ocr_text_too_long.body', 'Сейчас распознано {length} символов, что намного больше обычной реплики. Возможно, область захвата включает не диалоговый текст. Закрепите правильное окно и откалибруйте область диалога.',
         { length: String(rawText.length) },
       ),
       actions: [
@@ -1611,12 +1698,11 @@ function buildPrimaryDiagnosis(status = {}) {
   ) {
     const saLatency = Number(runtime.screen_awareness_model_last_latency_seconds || 0);
     if (saLatency > 3.0) {
-      const body = uiTf('ui.diag.ocr_poll_too_slow.body_with_sa',
-        '最近一次 OCR 轮询耗时 {seconds}s，远超正常水平。画面感知模型延迟也较高（{saLatency}s），建议锁定窗口并校准对白区域，也可尝试降低画面感知频率或关闭全帧 OCR。',
+      const body = uiTf('ui.diag.ocr_poll_too_slow.body_with_sa', 'Последний опрос OCR занял {seconds}s, что намного дольше нормы. Задержка модели анализа экрана тоже высокая ({saLatency}s). Закрепите окно, откалибруйте область диалога или уменьшите частоту анализа экрана / отключите OCR полного кадра.',
         { seconds: lastPollDuration.toFixed(1), saLatency: saLatency.toFixed(1) });
       return diagnose({
         severity: 'warning',
-        title: uiT('ui.diag.ocr_poll_too_slow.title', 'OCR 识别耗时过长'),
+        title: uiT('ui.diag.ocr_poll_too_slow.title', 'OCR распознает слишком медленно'),
         body,
         actions: [
           diagnosisAction('select_ocr_window'),
@@ -1627,10 +1713,9 @@ function buildPrimaryDiagnosis(status = {}) {
     }
     return diagnose({
       severity: 'warning',
-      title: uiT('ui.diag.ocr_poll_too_slow.title', 'OCR 识别耗时过长'),
+      title: uiT('ui.diag.ocr_poll_too_slow.title', 'OCR распознает слишком медленно'),
       body: uiTf(
-        'ui.diag.ocr_poll_too_slow.body',
-        '最近一次 OCR 轮询耗时 {seconds}s，远超正常水平。通常是因为截图区域过大或截图方式不匹配，建议锁定窗口并校准对白区域，也可尝试切换截图方式。',
+        'ui.diag.ocr_poll_too_slow.body', 'Последний опрос OCR занял {seconds}s, что намного дольше нормы. Обычно причина в слишком большой области захвата или неподходящем способе захвата. Закрепите окно, откалибруйте область диалога или попробуйте другой способ захвата.',
         { seconds: lastPollDuration.toFixed(1) },
       ),
       actions: [
@@ -1644,8 +1729,8 @@ function buildPrimaryDiagnosis(status = {}) {
   if (observedKey && observedKey !== stableKey) {
     return diagnose({
       severity: 'info',
-      title: uiT('ui.diag.observed_new.title', '刚读到新文字'),
-      body: uiT('ui.diag.observed_new.body', '文字识别已经看到候选台词，正在确认这是不是同一句台词。'),
+      title: uiT('ui.diag.observed_new.title', 'Обнаружен новый текст'),
+      body: uiT('ui.diag.observed_new.body', 'Распознавание увидело кандидатную реплику и проверяет, та же ли это строка.'),
       actions: [
         diagnosisAction('line_details'),
       ],
@@ -1655,8 +1740,8 @@ function buildPrimaryDiagnosis(status = {}) {
   if (agentPauseKind === 'window_not_foreground' || agentUserStatus === 'paused_window_not_foreground') {
     return diagnose({
       severity: 'info',
-      title: uiT('ui.diag.not_foreground.title', '游戏不在前台'),
-      body: uiT('ui.diag.not_foreground.body', '自动推进已暂停。切回游戏窗口后会继续，伴读信息仍会刷新。'),
+      title: uiT('ui.diag.not_foreground.title', 'Игра не на переднем плане'),
+      body: uiT('ui.diag.not_foreground.body', 'Автопродвижение приостановлено. После возврата в окно игры оно продолжится, а информация сопровождения продолжит обновляться.'),
       actions: [
         diagnosisAction('focus_game'),
       ],
@@ -1666,8 +1751,8 @@ function buildPrimaryDiagnosis(status = {}) {
   if (agentPauseKind === 'read_only' || agentUserStatus === 'read_only') {
     return diagnose({
       severity: 'info',
-      title: uiT('ui.diag.read_only.title', '当前是伴读模式'),
-      body: uiT('ui.diag.read_only.body', '会显示台词和建议，但不会自动点击。需要自动推进时请切换模式。'),
+      title: uiT('ui.diag.read_only.title', 'Сейчас режим сопровождения'),
+      body: uiT('ui.diag.read_only.body', 'Реплики и предложения отображаются, но автоматических кликов не будет. Для автопродвижения переключите режим.'),
       actions: [
         diagnosisAction('choice_advisor'),
       ],
@@ -1678,10 +1763,10 @@ function buildPrimaryDiagnosis(status = {}) {
     const target = formatOcrTargetForUser(status);
     return diagnose({
       severity: 'ok',
-      title: uiT('ui.diag.recognizing.title', '正在识别台词'),
+      title: uiT('ui.diag.recognizing.title', 'Распознавание реплик'),
       body: target
-        ? uiTf('ui.diag.recognizing.body_with_target', '当前目标：{target}。已读到台词，页面会持续刷新。', { target })
-        : uiT('ui.diag.recognizing.body', '已读到台词，页面会持续刷新。'),
+        ? uiTf('ui.diag.recognizing.body_with_target', 'Текущая цель: {target}. Реплика прочитана, страница будет продолжать обновляться.', { target })
+        : uiT('ui.diag.recognizing.body', 'Реплика прочитана, страница будет продолжать обновляться.'),
       actions: [
         diagnosisAction('refresh_all'),
       ],
@@ -1690,8 +1775,8 @@ function buildPrimaryDiagnosis(status = {}) {
 
   return diagnose({
     severity: 'info',
-    title: uiT('ui.diag.waiting_game.title', '等待游戏状态'),
-    body: status.summary || uiT('ui.diag.waiting_game.body', '暂时没有足够信息判断当前卡点。请先打开游戏，或刷新窗口列表。'),
+    title: uiT('ui.diag.waiting_game.title', 'Ожидание статуса игры'),
+    body: status.summary || uiT('ui.diag.waiting_game.body', 'Пока недостаточно информации, чтобы определить блокер. Сначала откройте игру или обновите список окон.'),
     actions: [
       diagnosisAction('refresh_all'),
       diagnosisAction('select_ocr_window'),
@@ -1710,7 +1795,7 @@ function renderPrimaryDiagnosis(status = {}) {
   const body = document.getElementById('primaryDiagnosisBody');
   const actions = document.getElementById('primaryDiagnosisActions');
   node.className = `primary-diagnosis ${diagnosis.severity || 'info'}`;
-  kicker.textContent = uiT('ui.diag.kicker', '运行诊断');
+  kicker.textContent = uiT('ui.diag.kicker', 'Диагностика');
   title.textContent = diagnosis.title;
   body.textContent = diagnosis.body;
   syncActionButtons(actions, (diagnosis.actions || []).map((action, index) => `
@@ -1755,31 +1840,31 @@ function buildFirstRunStepsLegacy(status = {}) {
   return [
     {
       done: hasGame,
-      title: uiT('ui.first_run.start_game.title', '启动或恢复游戏'),
+      title: uiT('ui.first_run.start_game.title', 'Запустить или восстановить игру'),
       body: hasGame
-        ? uiT('ui.first_run.start_game.done', '已发现游戏状态。')
-        : uiT('ui.first_run.start_game.pending', '打开游戏，并停在有文字的画面。'),
+        ? uiT('ui.first_run.start_game.done', 'Статус игры обнаружен.')
+        : uiT('ui.first_run.start_game.pending', 'Откройте игру и остановитесь на экране с текстом.'),
     },
     {
       done: hasWindow,
-      title: uiT('ui.first_run.refresh_window.title', '刷新窗口'),
+      title: uiT('ui.first_run.refresh_window.title', 'Обновить окна'),
       body: hasWindow
-        ? uiT('ui.first_run.refresh_window.done', '已找到可检查的窗口。')
-        : uiT('ui.first_run.refresh_window.pending', '回到插件页，点击“刷新窗口”。'),
+        ? uiT('ui.first_run.refresh_window.done', 'Найдено окно для проверки.')
+        : uiT('ui.first_run.refresh_window.pending', 'Вернитесь на страницу плагина и нажмите "Обновить окна".'),
     },
     {
       done: hasConfirmedWindow,
-      title: uiT('ui.first_run.select_window.title', '选择游戏窗口'),
+      title: uiT('ui.first_run.select_window.title', 'Выбрать окно игры'),
       body: hasConfirmedWindow
-        ? uiT('ui.first_run.select_window.done', '已确认识别窗口。')
-        : uiT('ui.first_run.select_window.pending', '如果没有自动选中，请手动选择游戏窗口。'),
+        ? uiT('ui.first_run.select_window.done', 'Окно распознавания подтверждено.')
+        : uiT('ui.first_run.select_window.pending', 'Если окно не выбрано автоматически, выберите окно игры вручную.'),
     },
     {
       done: hasLine,
-      title: uiT('ui.first_run.recognize.title', '开始识别'),
+      title: uiT('ui.first_run.recognize.title', 'Начать распознавание'),
       body: hasLine
-        ? uiT('ui.first_run.recognize.done', '已读到台词。')
-        : uiT('ui.first_run.recognize.pending', '开始自动识别，或在游戏中推进到下一句台词。'),
+        ? uiT('ui.first_run.recognize.done', 'Реплика прочитана.')
+        : uiT('ui.first_run.recognize.pending', 'Начните автоматическое распознавание или продвиньтесь к следующей реплике в игре.'),
     },
   ];
 }
@@ -1811,7 +1896,7 @@ function renderFirstRunGuideLegacy(status = {}) {
   const firstIncompleteIndex = steps.findIndex((step) => !step.done);
   stepsNode.innerHTML = steps.map((step, index) => {
     const stateClass = step.done ? 'done' : (index === firstIncompleteIndex ? 'active' : 'pending');
-    const marker = step.done ? uiT('ui.first_run.done_marker', '完成') : String(index + 1);
+    const marker = step.done ? uiT('ui.first_run.done_marker', 'Готово') : String(index + 1);
     return `
       <article class="first-run-step ${stateClass}">
         <span class="first-run-step-marker">${escapeHtml(marker)}</span>
@@ -1916,8 +2001,7 @@ function buildFirstRunSteps(status = {}) {
     if (ocrInstallAction === 'download_rapidocr_models') {
       const sizeMb = (Number(rapidocr.missing_model_total_size || 0) / (1024 * 1024)).toFixed(1);
       body = uiTf(
-        'ui.first_run.install_ocr.pending_models',
-        '所选语言模型 ({lang} + {version}) 未下载。点击「立即下载模型」按钮，会从 ModelScope 拉取约 {size} MB 的模型文件。',
+        'ui.first_run.install_ocr.pending_models', 'Выбранные языковые модели ({lang} + {version}) не скачаны. Нажмите «Скачать модели сейчас», чтобы получить ~{size} МБ из ModelScope.',
         {
           lang: rapidocr.lang_type || 'ch',
           version: rapidocr.ocr_version || 'PP-OCRv4',
@@ -1929,21 +2013,20 @@ function buildFirstRunSteps(status = {}) {
       // user at the manual recovery path (the RapidOCR banner has the source
       // URL + cache directory + manual-fallback hint already visible).
       body = uiTf(
-        'ui.first_run.install_ocr.pending_models_manual',
-        '所选语言模型 ({lang} + {version}) 未下载。当前环境不能自动下载，请按下方 RapidOCR 横幅说明手动放置模型后再刷新状态。',
+        'ui.first_run.install_ocr.pending_models_manual', 'Выбранные языковые модели ({lang} + {version}) не скачаны. Следуйте баннеру RapidOCR, скачайте модели из доступного источника, поместите их в целевую папку и обновите статус.',
         {
           lang: rapidocr.lang_type || 'ch',
           version: rapidocr.ocr_version || 'PP-OCRv4',
         },
       );
     } else {
-      body = uiT('ui.first_run.install_ocr.pending', '前往"依赖安装"面板检查 RapidOCR 状态。');
+      body = uiT('ui.first_run.install_ocr.pending', 'RapidOCR недоступен. Используйте упакованную сборку или из исходников выполните `uv sync --group galgame` и перезапустите.');
     }
     steps.push({
       key: 'install_ocr',
       done: false,
       installAction: ocrInstallAction,
-      title: uiT('ui.first_run.install_ocr.title', 'OCR 模型'),
+      title: uiT('ui.first_run.install_ocr.title', 'Модели OCR'),
       body,
     });
   }
@@ -1951,8 +2034,8 @@ function buildFirstRunSteps(status = {}) {
     steps.push({
       key: 'install_capture',
       done: false,
-      title: uiT('ui.first_run.install_capture.title', '安装截图依赖'),
-      body: uiT('ui.first_run.install_capture.pending', '前往“依赖安装”面板一键安装 DXcam。'),
+      title: uiT('ui.first_run.install_capture.title', 'Установка инструмента захвата'),
+      body: uiT('ui.first_run.install_capture.pending', 'Перейдите в панель «Установка зависимостей» и установите DXcam.'),
       installAction: dxcamRequired && !dxcam.installed ? 'install_dxcam' : null,
     });
   }
@@ -1961,26 +2044,26 @@ function buildFirstRunSteps(status = {}) {
     {
       key: 'start_game',
       done: hasGame,
-      title: uiT('ui.first_run.start_game.title', '启动或恢复游戏'),
+      title: uiT('ui.first_run.start_game.title', 'Запустить или восстановить игру'),
       body: hasGame
-        ? uiT('ui.first_run.start_game.done', '已发现游戏状态。')
-        : uiT('ui.first_run.start_game.pending', '打开游戏，并停在有文字的画面。'),
+        ? uiT('ui.first_run.start_game.done', 'Статус игры обнаружен.')
+        : uiT('ui.first_run.start_game.pending', 'Откройте игру и остановитесь на экране с текстом.'),
     },
     {
       key: 'refresh_window',
       done: hasWindow,
-      title: uiT('ui.first_run.refresh_window.title', '刷新窗口'),
+      title: uiT('ui.first_run.refresh_window.title', 'Обновить окна'),
       body: hasWindow
-        ? uiT('ui.first_run.refresh_window.done', '已找到可检查的窗口。')
-        : uiT('ui.first_run.refresh_window.pending', '回到插件页，点击“刷新窗口”。'),
+        ? uiT('ui.first_run.refresh_window.done', 'Найдено окно для проверки.')
+        : uiT('ui.first_run.refresh_window.pending', 'Вернитесь на страницу плагина и нажмите "Обновить окна".'),
     },
     {
       key: 'select_window',
       done: hasConfirmedWindow,
-      title: uiT('ui.first_run.select_window.title', '选择游戏窗口'),
+      title: uiT('ui.first_run.select_window.title', 'Выбрать окно игры'),
       body: hasConfirmedWindow
-        ? uiT('ui.first_run.select_window.done', '已确认识别窗口。')
-        : uiT('ui.first_run.select_window.pending', '如果没有自动选中，请手动选择游戏窗口。'),
+        ? uiT('ui.first_run.select_window.done', 'Окно распознавания подтверждено.')
+        : uiT('ui.first_run.select_window.pending', 'Если окно не выбрано автоматически, выберите окно игры вручную.'),
     },
   );
 
@@ -1988,18 +2071,18 @@ function buildFirstRunSteps(status = {}) {
     steps.push({
       key: 'calibrate',
       done: false,
-      title: uiT('ui.first_run.calibrate.title', '校准截图区域'),
-      body: uiT('ui.first_run.calibrate.pending', '打开“高级设置”，在 OCR 截图校准中设置裁剪区域。'),
+      title: uiT('ui.first_run.calibrate.title', 'Калибровка области захвата'),
+      body: uiT('ui.first_run.calibrate.pending', 'Откройте «Расширенные настройки» и задайте область обрезки в калибровке захвата OCR.'),
     });
   }
 
   steps.push({
     key: 'recognize',
     done: hasLine,
-    title: uiT('ui.first_run.recognize.title', '开始识别'),
+    title: uiT('ui.first_run.recognize.title', 'Начать распознавание'),
     body: hasLine
-      ? uiT('ui.first_run.recognize.done', '已读到台词。')
-      : uiT('ui.first_run.recognize.pending', '开始自动识别，或在游戏中推进到下一句台词。'),
+      ? uiT('ui.first_run.recognize.done', 'Реплика прочитана.')
+      : uiT('ui.first_run.recognize.pending', 'Начните автоматическое распознавание или продвиньтесь к следующей реплике в игре.'),
   });
 
   return steps;
@@ -2016,8 +2099,8 @@ function buildFirstRunActions(steps, firstIncompleteIndex) {
     const installAction = firstIncomplete.installAction;
     if (installAction) {
       const actionLabel = installAction === 'download_rapidocr_models'
-        ? uiT('ui.first_run.action.download_rapidocr_models', '立即下载模型')
-        : uiT('ui.first_run.action.show_rapidocr_models_guide', '查看手动下载说明');
+        ? uiT('ui.first_run.action.download_rapidocr_models', 'Скачать модели сейчас')
+        : uiT('ui.first_run.action.show_rapidocr_models_guide', 'Открыть ручную инструкцию');
       actions.push(`<button class="primary" data-first-run-action="${escapeHtml(installAction)}">${escapeHtml(actionLabel)}</button>`);
     }
     actions.push(`<button class="secondary" data-first-run-action="refresh_all">${escapeHtml(uiT('ui.first_run.action.refresh_all', primaryActionLabel('refresh_status')))}</button>`);
@@ -2025,7 +2108,7 @@ function buildFirstRunActions(steps, firstIncompleteIndex) {
     if (firstIncomplete.installAction === 'install_dxcam') {
       const actionLabel = hasInstallFlow('dxcam')
         ? uiT('ui.first_run.action.install_dxcam', primaryActionLabel('install_dxcam'))
-        : '查看 DXcam 修复说明';
+        : uiT('ui.first_run.action.show_dxcam_fix_guide', 'Открыть инструкцию по исправлению DXcam');
       actions.push(`<button class="primary" data-first-run-action="install_dxcam">${escapeHtml(actionLabel)}</button>`);
     }
     actions.push(`<button class="secondary" data-first-run-action="refresh_all">${escapeHtml(uiT('ui.first_run.action.refresh_all', primaryActionLabel('refresh_status')))}</button>`);
@@ -2125,7 +2208,7 @@ function renderFirstRunGuide(status = {}) {
   }
   const html = steps.map((step, index) => {
     const stateClass = step.done ? 'done' : (index === firstIncompleteIndex ? 'active' : 'pending');
-    const marker = step.done ? uiT('ui.first_run.done_marker', '完成') : String(index + 1);
+    const marker = step.done ? uiT('ui.first_run.done_marker', 'Готово') : String(index + 1);
     return `
       <article class="first-run-step ${stateClass}">
         <span class="first-run-step-marker">${escapeHtml(marker)}</span>
@@ -2171,43 +2254,43 @@ function renderCurrentLineOverview(status = {}) {
   node.classList.toggle('waiting', !rawText && !observedText && !displayStable);
   statusChip.className = 'status-chip';
   if (hasMismatch) {
-    title.textContent = uiT('ui.current_line.new_text_title', '刚读到新文字');
-    statusChip.textContent = uiT('ui.current_line.confirming_status', '确认中');
+    title.textContent = uiT('ui.current_line.new_text_title', 'New text observed');
+    statusChip.textContent = uiT('ui.current_line.confirming_status', 'Подтверждение');
     statusChip.classList.add('warning');
     hint.textContent = blockReason || (repeatCount
-      ? uiTf('ui.current_line.confirming_repeat_hint', '正在确认这是不是同一句台词，已连续看到 {count} 次。', { count: repeatCount })
-      : uiT('ui.current_line.confirming_hint', '正在确认这是不是同一句台词。'));
+      ? uiTf('ui.current_line.confirming_repeat_hint', 'Проверяется, та же ли это реплика; подряд обнаружено {count} раз.', { count: repeatCount })
+      : uiT('ui.current_line.confirming_hint', 'Проверяется, та же ли это реплика.'));
   } else if (displayStable) {
-    title.textContent = uiT('ui.current_line.confirmed_title', '已确认当前台词');
-    statusChip.textContent = uiT('ui.current_line.confirmed_status', '已确认');
+    title.textContent = uiT('ui.current_line.confirmed_title', 'Текущая реплика подтверждена');
+    statusChip.textContent = uiT('ui.current_line.confirmed_status', 'Подтверждено');
     statusChip.classList.add('active');
-    hint.textContent = uiT('ui.current_line.confirmed_hint', '这句台词已经进入正式上下文，后续建议会以它为基础更新。');
+    hint.textContent = uiT('ui.current_line.confirmed_hint', 'Эта реплика вошла в официальный контекст; дальнейшие подсказки будут обновляться на ее основе.');
   } else if (rawText || observedText) {
-    title.textContent = uiT('ui.current_line.filtering_title', '正在筛选识别结果');
-    statusChip.textContent = uiT('ui.current_line.filtering_status', '筛选中');
+    title.textContent = uiT('ui.current_line.filtering_title', 'Фильтрация результата распознавания');
+    statusChip.textContent = uiT('ui.current_line.filtering_status', 'Фильтрация');
     statusChip.classList.add('warning');
-    hint.textContent = blockReason || uiT('ui.current_line.filtering_hint', '文字识别已有结果，但还没有写入正式台词。');
+    hint.textContent = blockReason || uiT('ui.current_line.filtering_hint', 'Результат распознавания текста есть, но он еще не записан как официальная реплика.');
   } else {
-    title.textContent = uiT('ui.current_line.waiting_result', '等待识别结果');
-    statusChip.textContent = uiT('ui.current_line.waiting_refresh', '等待刷新');
+    title.textContent = uiT('ui.current_line.waiting_result', 'Ожидание результата распознавания');
+    statusChip.textContent = uiT('ui.current_line.waiting_refresh', 'Ожидание обновления');
     hint.textContent = buildOcrMissingLineDiagnostic(status);
   }
 
   const rows = [
     {
-      label: uiT('ui.current_line.raw_ocr_label', '最新 OCR 原文'),
+      label: uiT('ui.current_line.raw_ocr_label', 'Последний raw OCR'),
       value: rawText,
-      empty: uiT('ui.current_line.no_raw_ocr', '还没有 OCR 原文'),
+      empty: uiT('ui.current_line.no_raw_ocr', 'raw OCR пока нет'),
     },
     {
-      label: uiT('ui.current_line.observed_label', '刚读到的候选台词'),
+      label: uiT('ui.current_line.observed_label', 'Новая наблюдаемая реплика-кандидат'),
       value: observedText,
-      empty: uiT('ui.current_line.no_observed', '还没有候选台词'),
+      empty: uiT('ui.current_line.no_observed', 'Реплики-кандидата пока нет'),
     },
     {
-      label: uiT('ui.current_line.stable_label', '已确认台词'),
+      label: uiT('ui.current_line.stable_label', 'Подтвержденная реплика'),
       value: displayStable,
-      empty: uiT('ui.current_line.no_stable', '还没有已确认台词'),
+      empty: uiT('ui.current_line.no_stable', 'Подтвержденной реплики пока нет'),
     },
   ];
 
@@ -2252,10 +2335,10 @@ function renderCurrentLineOverview(status = {}) {
 
 function pipelineStateLabel(state) {
   const mapping = {
-    ok: uiT('ui.pipeline_state.ok', '正常'),
-    info: uiT('ui.pipeline_state.info', '等待'),
-    warning: uiT('ui.pipeline_state.warning', '注意'),
-    error: uiT('ui.pipeline_state.error', '异常'),
+    ok: uiT('ui.pipeline_state.ok', 'Норма'),
+    info: uiT('ui.pipeline_state.info', 'Ожидание'),
+    warning: uiT('ui.pipeline_state.warning', 'Внимание'),
+    error: uiT('ui.pipeline_state.error', 'Ошибка'),
   };
   return uiDynamicT('ui.pipeline_state', state, mapping[state] || mapping.info);
 }
@@ -2284,42 +2367,42 @@ function buildOcrPipelineSteps(status = {}) {
   let windowStep = {
     key: 'window',
     state: 'info',
-    title: uiT('ui.pipeline.window.waiting_title', '等待游戏窗口'),
-    body: uiT('ui.pipeline.window.waiting_body', '等待目标窗口进入可识别状态。'),
+    title: uiT('ui.pipeline.window.waiting_title', 'Ожидание окна игры'),
+    body: uiT('ui.pipeline.window.waiting_body', 'Ожидание, пока целевое окно станет распознаваемым.'),
     meta: detail ? formatOcrWindowSelectionDetail(detail) : '',
   };
   if (detail === 'memory_reader_window_minimized' || lastExcludeReason === 'excluded_minimized_window') {
     windowStep = {
       key: 'window',
       state: 'warning',
-      title: uiT('ui.pipeline.window.minimized_title', '游戏窗口最小化'),
-      body: uiT('ui.pipeline.window.needs_attention_body', '窗口阶段需要处理。'),
+      title: uiT('ui.pipeline.window.minimized_title', 'Окно игры свернуто'),
+      body: uiT('ui.pipeline.window.needs_attention_body', 'Стадия окна требует внимания.'),
       meta: formatOcrWindowReason(lastExcludeReason || 'excluded_minimized_window'),
     };
   } else if (textValue(runtime.effective_window_key)) {
     windowStep = {
       key: 'window',
       state: 'ok',
-      title: uiT('ui.pipeline.window.confirmed_title', '已确认游戏窗口'),
-      body: uiT('ui.pipeline.window.ok_body', '窗口阶段正常。'),
+      title: uiT('ui.pipeline.window.confirmed_title', 'Окно игры подтверждено'),
+      body: uiT('ui.pipeline.window.ok_body', 'Стадия окна в норме.'),
       meta: runtime.target_is_foreground
-        ? uiT('ui.pipeline.window.foreground_meta', '前台窗口')
-        : uiT('ui.pipeline.window.not_foreground_meta', '非前台窗口'),
+        ? uiT('ui.pipeline.window.foreground_meta', 'Окно на переднем плане')
+        : uiT('ui.pipeline.window.not_foreground_meta', 'Окно не на переднем плане'),
     };
   } else if (Number(runtime.candidate_count || 0) > 0) {
     windowStep = {
       key: 'window',
       state: 'info',
-      title: uiT('ui.pipeline.window.candidate_title', '发现候选窗口'),
-      body: uiT('ui.pipeline.window.waiting_confirm_body', '窗口阶段等待确认。'),
-      meta: uiT('ui.pipeline.window.manual_if_needed_meta', '需要时可手动选择'),
+      title: uiT('ui.pipeline.window.candidate_title', 'Найдено окно-кандидат'),
+      body: uiT('ui.pipeline.window.waiting_confirm_body', 'Стадия окна ожидает подтверждения.'),
+      meta: uiT('ui.pipeline.window.manual_if_needed_meta', 'При необходимости выберите вручную'),
     };
   } else if (detail === 'no_eligible_window' || Object.prototype.hasOwnProperty.call(runtime, 'candidate_count')) {
     windowStep = {
       key: 'window',
       state: 'warning',
-      title: uiT('ui.pipeline.window.none_title', '没有可识别窗口'),
-      body: uiT('ui.pipeline.window.needs_attention_body', '窗口阶段需要处理。'),
+      title: uiT('ui.pipeline.window.none_title', 'Нет распознаваемого окна'),
+      body: uiT('ui.pipeline.window.needs_attention_body', 'Стадия окна требует внимания.'),
       meta: formatOcrWindowSelectionDetail(detail),
     };
   }
@@ -2327,32 +2410,32 @@ function buildOcrPipelineSteps(status = {}) {
   let captureStep = {
     key: 'capture',
     state: 'info',
-    title: uiT('ui.pipeline.capture.waiting_title', '等待截图'),
-    body: uiT('ui.pipeline.capture.waiting_body', '截图阶段等待窗口确认。'),
+    title: uiT('ui.pipeline.capture.waiting_title', 'Ожидание захвата'),
+    body: uiT('ui.pipeline.capture.waiting_body', 'Стадия захвата ожидает подтверждения окна.'),
     meta: captureBackend,
   };
   if (contextState === 'capture_failed' || lastCaptureError) {
     captureStep = {
       key: 'capture',
       state: 'error',
-      title: uiT('ui.pipeline.capture.failed_title', '截图失败'),
-      body: uiT('ui.pipeline.stage_error_body', '阶段异常，处理入口在运行诊断。'),
+      title: uiT('ui.pipeline.capture.failed_title', 'Захват не удался'),
+      body: uiT('ui.pipeline.stage_error_body', 'На стадии есть ошибка; используйте диагностику выполнения для действий.'),
       meta: captureBackend,
     };
   } else if (runtime.stale_capture_backend) {
     captureStep = {
       key: 'capture',
       state: 'warning',
-      title: uiT('ui.pipeline.capture.stale_title', '截图画面未更新'),
-      body: uiT('ui.pipeline.capture.needs_attention_body', '截图阶段需要处理。'),
-      meta: `${captureBackend}${runtime.consecutive_same_capture_frames ? ` | ${uiTf('ui.pipeline.capture.same_frames_meta', '连续 {count} 帧相同', { count: runtime.consecutive_same_capture_frames })}` : ''}`,
+      title: uiT('ui.pipeline.capture.stale_title', 'Изображение захвата не обновляется'),
+      body: uiT('ui.pipeline.capture.needs_attention_body', 'Стадия захвата требует внимания.'),
+      meta: `${captureBackend}${runtime.consecutive_same_capture_frames ? ` | ${uiTf('ui.pipeline.capture.same_frames_meta', '{count} одинаковых кадров подряд', { count: runtime.consecutive_same_capture_frames })}` : ''}`,
     };
   } else if (runtime.last_capture_completed_at || runtime.last_capture_image_hash || runtime.capture_backend_kind) {
     captureStep = {
       key: 'capture',
       state: 'ok',
-      title: uiT('ui.pipeline.capture.available_title', '截图后端可用'),
-      body: uiT('ui.pipeline.capture.ok_body', '截图阶段正常。'),
+      title: uiT('ui.pipeline.capture.available_title', 'Бэкенд захвата доступен'),
+      body: uiT('ui.pipeline.capture.ok_body', 'Стадия захвата в норме.'),
       meta: captureBackend,
     };
   }
@@ -2360,16 +2443,16 @@ function buildOcrPipelineSteps(status = {}) {
   let ocrStep = {
     key: 'ocr',
     state: 'info',
-    title: uiT('ui.pipeline.ocr.waiting_title', '等待文字识别'),
-    body: uiT('ui.pipeline.ocr.waiting_body', '识别阶段等待截图输入。'),
+    title: uiT('ui.pipeline.ocr.waiting_title', 'Ожидание распознавания текста'),
+    body: uiT('ui.pipeline.ocr.waiting_body', 'Стадия распознавания ожидает входной захват.'),
     meta: ocrBackend,
   };
   if (!status.ocr_reader_enabled) {
     ocrStep = {
       key: 'ocr',
       state: 'warning',
-      title: uiT('ui.pipeline.ocr.disabled_title', 'OCR Reader 未启用'),
-      body: uiT('ui.pipeline.ocr.disabled_body', '识别阶段未启用。'),
+      title: uiT('ui.pipeline.ocr.disabled_title', 'OCR Reader отключен'),
+      body: uiT('ui.pipeline.ocr.disabled_body', 'Стадия распознавания отключена.'),
       meta: ocrBackend,
     };
   } else if (tickBlockReason) {
@@ -2378,48 +2461,48 @@ function buildOcrPipelineSteps(status = {}) {
       state: ['ocr_reader_unavailable', 'ocr_reader_not_allowed', 'reader_mode_memory_only'].includes(tickBlockReason)
         ? 'warning'
         : 'info',
-      title: uiT('ui.pipeline.ocr.tick_blocked_title', 'OCR 轮询暂未执行'),
-      body: formattedTickBlockReason || uiT('ui.pipeline.ocr.tick_waiting_body', '轮询阶段等待条件满足。'),
+      title: uiT('ui.pipeline.ocr.tick_blocked_title', 'OCR-опрос еще не выполнялся'),
+      body: formattedTickBlockReason || uiT('ui.pipeline.ocr.tick_waiting_body', 'Стадия опроса ожидает выполнения условий.'),
       meta: ocrBackend,
     };
   } else if (runtime.backend_detail === 'backend_unavailable' || runtime.detail === 'backend_unavailable') {
     ocrStep = {
       key: 'ocr',
       state: 'error',
-      title: uiT('ui.pipeline.ocr.backend_unavailable_title', 'OCR 后端不可用'),
-      body: uiT('ui.pipeline.ocr.error_body', '识别阶段异常，处理入口在运行诊断。'),
+      title: uiT('ui.pipeline.ocr.backend_unavailable_title', 'OCR-бэкенд недоступен'),
+      body: uiT('ui.pipeline.ocr.error_body', 'На стадии распознавания есть ошибка; используйте диагностику выполнения для действий.'),
       meta: ocrBackend,
     };
   } else if (runtime.detail === 'self_ui_guard_blocked' || lastRejectedReason) {
     ocrStep = {
       key: 'ocr',
       state: 'warning',
-      title: uiT('ui.pipeline.ocr.rejected_title', 'OCR 已拒绝非游戏文本'),
-      body: uiT('ui.pipeline.ocr.no_write_body', '识别阶段已执行但没有写入新台词。'),
+      title: uiT('ui.pipeline.ocr.rejected_title', 'OCR отклонил неигровой текст'),
+      body: uiT('ui.pipeline.ocr.no_write_body', 'Распознавание выполнено, но новая реплика не записана.'),
       meta: lastRejectedReason || ocrBackend,
     };
   } else if (emitBlockReason) {
     ocrStep = {
       key: 'ocr',
       state: emitBlockReason === 'screen_classification_skipped_dialogue' ? 'warning' : 'info',
-      title: uiT('ui.pipeline.ocr.executed_title', 'OCR 已执行'),
-      body: formattedEmitBlockReason || uiT('ui.pipeline.ocr.executed_no_write_body', '识别已执行但没有写入新台词。'),
+      title: uiT('ui.pipeline.ocr.executed_title', 'OCR выполнен'),
+      body: formattedEmitBlockReason || uiT('ui.pipeline.ocr.executed_no_write_body', 'Распознавание выполнено, но новая реплика не записана.'),
       meta: ocrBackend,
     };
   } else if (runtime.backend_kind || rawText || observedText || displayStable) {
     ocrStep = {
       key: 'ocr',
       state: 'ok',
-      title: uiT('ui.pipeline.ocr.available_title', '文字识别可用'),
-      body: uiT('ui.pipeline.ocr.ok_body', '识别阶段正常。'),
+      title: uiT('ui.pipeline.ocr.available_title', 'Распознавание текста доступно'),
+      body: uiT('ui.pipeline.ocr.ok_body', 'Стадия распознавания в норме.'),
       meta: ocrBackend,
     };
   } else if (!rapidocr.installed) {
     ocrStep = {
       key: 'ocr',
       state: 'warning',
-      title: uiT('ui.pipeline.ocr.missing_components_title', 'OCR 组件可能缺失'),
-      body: uiT('ui.pipeline.ocr.needs_attention_body', '识别阶段需要处理。'),
+      title: uiT('ui.pipeline.ocr.missing_components_title', 'Компоненты OCR могут отсутствовать'),
+      body: uiT('ui.pipeline.ocr.needs_attention_body', 'Стадия распознавания требует внимания.'),
       meta: ocrBackend,
     };
   }
@@ -2429,24 +2512,24 @@ function buildOcrPipelineSteps(status = {}) {
       key: 'observed',
       state: hasObservedMismatch ? 'warning' : 'ok',
       title: hasObservedMismatch
-        ? uiT('ui.pipeline.observed.confirming_title', '候选台词确认中')
-        : uiT('ui.pipeline.observed.read_title', '已读到候选台词'),
+        ? uiT('ui.pipeline.observed.confirming_title', 'Подтверждение реплики-кандидата')
+        : uiT('ui.pipeline.observed.read_title', 'Реплика-кандидат прочитана'),
       body: hasObservedMismatch
-        ? uiT('ui.pipeline.observed.confirming_body', '候选台词等待稳定确认。')
-        : uiT('ui.pipeline.observed.ok_body', '候选台词读取正常。'),
+        ? uiT('ui.pipeline.observed.confirming_body', 'Реплика-кандидат ожидает стабильного подтверждения.')
+        : uiT('ui.pipeline.observed.ok_body', 'Чтение реплики-кандидата в норме.'),
       meta: hasObservedMismatch
-        ? (formattedEmitBlockReason || blockReason || uiT('ui.pipeline.observed.waiting_stable_meta', '等待稳定确认'))
-        : uiT('ui.pipeline.observed.same_as_stable_meta', '候选与已确认台词一致'),
+        ? (formattedEmitBlockReason || blockReason || uiT('ui.pipeline.observed.waiting_stable_meta', 'Ожидание стабильного подтверждения'))
+        : uiT('ui.pipeline.observed.same_as_stable_meta', 'Кандидат совпадает с подтвержденной репликой'),
     }
     : {
       key: 'observed',
       state: rawText ? 'info' : 'warning',
       title: rawText
-        ? uiT('ui.pipeline.observed.filtering_raw_title', '正在筛选 OCR 原文')
-        : uiT('ui.pipeline.observed.no_candidate_title', '还没有候选台词'),
+        ? uiT('ui.pipeline.observed.filtering_raw_title', 'Фильтрация raw OCR')
+        : uiT('ui.pipeline.observed.no_candidate_title', 'Реплики-кандидата пока нет'),
       body: rawText
-        ? uiT('ui.pipeline.observed.filtering_body', '候选阶段正在筛选。')
-        : uiT('ui.pipeline.observed.waiting_text_body', '候选阶段等待有效文字。'),
+        ? uiT('ui.pipeline.observed.filtering_body', 'Стадия кандидата выполняет фильтрацию.')
+        : uiT('ui.pipeline.observed.waiting_text_body', 'Стадия кандидата ожидает допустимый текст.'),
       meta: formattedEmitBlockReason || blockReason || formattedTickBlockReason || '',
     };
 
@@ -2454,67 +2537,67 @@ function buildOcrPipelineSteps(status = {}) {
     ? {
       key: 'stable',
       state: 'ok',
-      title: uiT('ui.pipeline.stable.confirmed_title', '已确认台词'),
-      body: uiT('ui.pipeline.stable.ok_body', '确认阶段正常。'),
+      title: uiT('ui.pipeline.stable.confirmed_title', 'Подтвержденная реплика'),
+      body: uiT('ui.pipeline.stable.ok_body', 'Стадия подтверждения в норме.'),
       meta: status.effective_current_line?.source || runtime.last_stable_line?.source || '',
     }
     : {
       key: 'stable',
       state: observedText ? 'warning' : 'info',
       title: observedText
-        ? uiT('ui.pipeline.stable.waiting_title', '等待稳定确认')
-        : uiT('ui.pipeline.stable.no_stable_title', '还没有已确认台词'),
+        ? uiT('ui.pipeline.stable.waiting_title', 'Ожидание стабильного подтверждения')
+        : uiT('ui.pipeline.stable.no_stable_title', 'Подтвержденной реплики пока нет'),
       body: observedText
-        ? uiT('ui.pipeline.stable.waiting_body', '确认阶段等待稳定。')
-        : uiT('ui.pipeline.stable.waiting_candidate_body', '确认阶段等待候选台词。'),
+        ? uiT('ui.pipeline.stable.waiting_body', 'Стадия подтверждения ожидает стабильности.')
+        : uiT('ui.pipeline.stable.waiting_candidate_body', 'Стадия подтверждения ожидает реплику-кандидат.'),
       meta: formattedEmitBlockReason || blockReason || formattedTickBlockReason || '',
     };
 
   let agentStep = {
     key: 'agent',
     state: 'info',
-    title: uiT('ui.pipeline.agent.waiting_title', '等待 Agent 状态'),
-    body: uiT('ui.pipeline.agent.waiting_body', 'Agent 会根据模式决定是否自动推进。'),
+    title: uiT('ui.pipeline.agent.waiting_title', 'Ожидание статуса Agent'),
+    body: uiT('ui.pipeline.agent.waiting_body', 'Agent решает, выполнять ли автопродвижение, исходя из режима.'),
     meta: status.mode || '',
   };
   if (status.agent_user_status === 'error') {
     agentStep = {
       key: 'agent',
       state: 'error',
-      title: uiT('ui.pipeline.agent.error_title', 'Agent 异常'),
-      body: status.agent_reason || status.agent_diagnostic || uiT('ui.pipeline.agent.error_body', 'Agent 返回错误状态。'),
+      title: uiT('ui.pipeline.agent.error_title', 'Ошибка Agent'),
+      body: status.agent_reason || status.agent_diagnostic || uiT('ui.pipeline.agent.error_body', 'Agent вернул статус ошибки.'),
       meta: status.agent_pause_kind || '',
     };
   } else if (status.agent_pause_kind === 'window_not_foreground' || status.agent_user_status === 'paused_window_not_foreground') {
     agentStep = {
       key: 'agent',
       state: 'warning',
-      title: uiT('ui.pipeline.agent.not_foreground_title', '游戏不在前台'),
-      body: status.agent_pause_message || uiT('ui.pipeline.agent.not_foreground_body', '自动推进已暂停，切回游戏后继续。'),
+      title: uiT('ui.pipeline.agent.not_foreground_title', 'Игра не на переднем плане'),
+      body: status.agent_pause_message || uiT('ui.pipeline.agent.not_foreground_body', 'Автопродвижение приостановлено. Вернитесь в игру для продолжения.'),
       meta: agentUserStatusLabel(status.agent_user_status, status.agent_user_status || ''),
     };
   } else if (status.agent_pause_kind === 'screen_safety' || status.agent_user_status === 'screen_safety_pause') {
     agentStep = {
       key: 'agent',
       state: 'warning',
-      title: uiT('ui.pipeline.agent.safety_pause_title', '安全暂停'),
-      body: status.agent_pause_message || uiT('ui.pipeline.agent.safety_pause_body', '当前画面不适合自动推进。'),
+      title: uiT('ui.pipeline.agent.safety_pause_title', 'Безопасная пауза'),
+      body: status.agent_pause_message || uiT('ui.pipeline.agent.safety_pause_body', 'Текущий экран не подходит для автопродвижения.'),
       meta: agentUserStatusLabel(status.agent_user_status, status.agent_user_status || ''),
     };
   } else if (status.agent_pause_kind === 'read_only' || status.agent_user_status === 'read_only') {
     agentStep = {
       key: 'agent',
       state: 'info',
-      title: uiT('ui.pipeline.agent.read_only_title', '伴读模式'),
-      body: uiT('ui.pipeline.agent.read_only_body', '会显示台词和建议，但不会自动点击。'),
+      title: uiT('ui.pipeline.agent.read_only_title', 'Режим сопровождения'),
+      body: uiT('ui.pipeline.agent.read_only_body', 'Реплики и подсказки показываются, но автоматические клики отключены.'),
       meta: agentUserStatusLabel(status.agent_user_status, ''),
     };
   } else if (status.agent_user_status || status.agent_status) {
     agentStep = {
       key: 'agent',
       state: 'ok',
-      title: uiT('ui.pipeline.agent.ok_title', 'Agent 状态正常'),
-      body: status.agent_activity || status.agent_reason || uiT('ui.pipeline.agent.ok_body', '按当前模式运行。'),
+      title: uiT('ui.pipeline.agent.ok_title', 'Статус Agent в норме'),
+      body: status.agent_activity || status.agent_reason || uiT('ui.pipeline.agent.ok_body', 'Работает в текущем режиме.'),
       meta: agentUserStatusLabel(status.agent_user_status, status.agent_user_status || status.agent_status || ''),
     };
   }
@@ -2539,12 +2622,12 @@ function renderOcrPipelinePanel(status = {}) {
         : 'info';
   summaryNode.className = `status-chip ${worstState === 'ok' ? 'active' : worstState}`;
   summaryNode.textContent = worstState === 'ok'
-    ? uiT('ui.ocr.pipeline.summary_ok', '链路正常')
+    ? uiT('ui.ocr.pipeline.summary_ok', 'Цепочка в норме')
     : worstState === 'error'
-      ? uiT('ui.ocr.pipeline.summary_error', '链路异常')
+      ? uiT('ui.ocr.pipeline.summary_error', 'Ошибка цепочки')
       : worstState === 'warning'
-        ? uiT('ui.ocr.pipeline.summary_warning', '需要处理')
-        : uiT('ui.ocr.pipeline.summary_waiting', '等待状态');
+        ? uiT('ui.ocr.pipeline.summary_warning', 'Требуется внимание')
+        : uiT('ui.ocr.pipeline.summary_waiting', 'Ожидание статуса');
   stepsNode.innerHTML = steps.map((step) => `
     <article class="ocr-pipeline-step ${escapeHtml(step.state)}">
       <span class="ocr-pipeline-dot">${escapeHtml(pipelineStateLabel(step.state))}</span>
@@ -2564,21 +2647,21 @@ function installTaskDisplayState(kind) {
   if (state?.inProgress) {
     return {
       state: 'running',
-      labelText: uiT('ui.install.summary.installing', '安装中'),
+      labelText: uiT('ui.install.summary.installing', 'Установка'),
       needsAttention: true,
     };
   }
   if (task.status === 'failed') {
     return {
       state: 'failed',
-      labelText: uiT('ui.install.summary.failed', '安装失败'),
+      labelText: uiT('ui.install.summary.failed', 'Установка не удалась'),
       needsAttention: true,
     };
   }
   if (task.status === 'completed') {
     return {
       state: 'installed',
-      labelText: uiT('ui.install.summary.installed', '已安装'),
+      labelText: uiT('ui.install.summary.installed', 'Установлено'),
       needsAttention: false,
     };
   }
@@ -2600,13 +2683,13 @@ function dependencySummaryItem(kind, status = {}) {
       const displayTaskState = kind === 'rapidocr' && taskState.state === 'running'
         ? {
             ...taskState,
-            labelText: uiT('ui.install.rapidocr.download_models.running', '后台下载模型中...'),
+            labelText: uiT('ui.install.rapidocr.download_models.running', 'Скачивание моделей в фоне...'),
             needsAttention: false,
           }
         : kind === 'rapidocr' && taskState.state === 'failed' && shouldOfferRapidOcrModelsDownload(rapidocr)
           ? {
               ...taskState,
-              labelText: uiT('ui.install.rapidocr.download_models.retry', '重试下载模型'),
+              labelText: uiT('ui.install.rapidocr.download_models.retry', 'Повторить скачивание моделей'),
               needsAttention: true,
             }
           : taskState;
@@ -2622,15 +2705,15 @@ function dependencySummaryItem(kind, status = {}) {
     const rapidocr = status.rapidocr || {};
     const rapidocrModelsMissing = hasMissingRapidOcrModelFiles(rapidocr);
     if (!rapidocr.install_supported) {
-      return { kind, label: 'RapidOCR', state: 'optional', labelText: uiT('ui.install.summary.platform_unsupported', '平台不支持'), needsAttention: false };
+      return { kind, label: 'RapidOCR', state: 'optional', labelText: uiT('ui.install.summary.platform_unsupported', 'Не поддерживается'), needsAttention: false };
     }
     if (rapidocrModelsMissing) {
-      return { kind, label: 'RapidOCR', state: 'warning', labelText: uiT('ui.install.summary.models_missing', '模型缺失'), needsAttention: true };
+      return { kind, label: 'RapidOCR', state: 'warning', labelText: uiT('ui.install.summary.models_missing', 'Нет моделей'), needsAttention: true };
     }
     if (isRapidOcrUsable(rapidocr)) {
-      return { kind, label: 'RapidOCR', state: 'installed', labelText: uiT('ui.install.summary.ready', '已就绪'), needsAttention: false };
+      return { kind, label: 'RapidOCR', state: 'installed', labelText: uiT('ui.install.summary.ready', 'Готово'), needsAttention: false };
     }
-    return { kind, label: 'RapidOCR', state: 'missing', labelText: uiT('ui.install.summary.not_found', '未检测到'), needsAttention: true };
+    return { kind, label: 'RapidOCR', state: 'missing', labelText: uiT('ui.install.summary.not_found', 'Не найдено'), needsAttention: true };
   }
 
   if (kind === 'dxcam') {
@@ -2641,20 +2724,20 @@ function dependencySummaryItem(kind, status = {}) {
     const activeBackendLabel = activeCaptureBackend
       ? captureBackendLabel(activeCaptureBackend)
       : captureBackendLabel(selectedCaptureBackend);
-    const label = uiT('ui.install.summary.capture_backend', '截图后端');
+    const label = uiT('ui.install.summary.capture_backend', 'Бэкенд захвата');
     if (!dxcam.install_supported) {
       return { kind, label, state: 'optional', labelText: activeBackendLabel, needsAttention: false };
     }
     if (activeCaptureBackend) {
       return { kind, label, state: 'installed', labelText: activeBackendLabel, needsAttention: false };
     }
-    return { kind, label, state: 'warning', labelText: uiT('ui.install.capture_backend.waiting_active', '等待下一次 OCR 截图确认'), needsAttention: true };
+    return { kind, label, state: 'warning', labelText: uiT('ui.install.capture_backend.waiting_active', 'Ожидание следующего OCR-захвата для подтверждения'), needsAttention: true };
   }
 
   const textractor = status.textractor || {};
   return textractor.installed
-    ? { kind, label: 'Textractor', state: 'installed', labelText: uiT('ui.install.summary.installed', '已安装'), needsAttention: false }
-    : { kind, label: 'Textractor', state: 'optional', labelText: uiT('ui.install.summary.missing_optional', '未安装（可选）'), needsAttention: false };
+    ? { kind, label: 'Textractor', state: 'installed', labelText: uiT('ui.install.summary.installed', 'Установлено'), needsAttention: false }
+    : { kind, label: 'Textractor', state: 'optional', labelText: uiT('ui.install.summary.missing_optional', 'Не установлено (необязательно)'), needsAttention: false };
 }
 
 function renderInstallCompactSummary(status = {}) {
@@ -2676,7 +2759,7 @@ function renderInstallCompactSummary(status = {}) {
   `;
   summary.innerHTML = [
     renderGroup('OCR', ocrItems),
-    renderGroup(uiT('ui.install.summary.memory_group', '内存'), memoryItems),
+    renderGroup(uiT('ui.install.summary.memory_group', 'Память'), memoryItems),
   ].join('');
 }
 
@@ -2704,16 +2787,16 @@ function syncAgentResumeButton(status = {}) {
   const pauseKind = status.agent_pause_kind || '';
   button.disabled = false;
   if (status.agent_can_resume_by_button || userStatus === 'paused_by_user') {
-    button.textContent = uiT('ui.button.standby_off', '恢复活跃');
+    button.textContent = uiT('ui.button.standby_off', 'Возобновить');
     button.dataset.resumeAction = 'standby';
   } else if (pauseKind === 'window_not_foreground' || userStatus === 'paused_window_not_foreground') {
-    button.textContent = uiT('ui.agent.resume.focus_game', '请切回游戏窗口');
+    button.textContent = uiT('ui.agent.resume.focus_game', 'Вернуться к окну игры');
     button.dataset.resumeAction = 'focus';
   } else if (pauseKind === 'read_only' || userStatus === 'read_only') {
-    button.textContent = uiT('ui.agent.resume.read_only', '只读模式');
+    button.textContent = uiT('ui.agent.resume.read_only', 'Режим только чтения');
     button.dataset.resumeAction = 'read_only';
   } else {
-    button.textContent = uiT('ui.button.standby_off', '恢复活跃');
+    button.textContent = uiT('ui.button.standby_off', 'Возобновить');
     button.dataset.resumeAction = 'noop';
   }
 }
@@ -2753,28 +2836,28 @@ function renderAgentUserNotice(status = {}) {
   const target = document.getElementById('agentUserNoticeTarget');
   const userStatus = status.agent_user_status || '';
   const pauseKind = status.agent_pause_kind || 'none';
-  const label = agentUserStatusLabel(userStatus, userStatus || uiT('ui.agent.waiting_status', '等待状态'));
+  const label = agentUserStatusLabel(userStatus, userStatus || uiT('ui.agent.waiting_status', 'Ожидание статуса'));
   const targetText = formatOcrTargetForUser(status);
   const mode = status.mode || '';
   const waitingInAutoMode = userStatus === 'read_only' && mode === 'choice_advisor';
-  const displayLabel = waitingInAutoMode ? uiT('ui.agent.waiting_actionable_status', '等待可操作状态') : label;
+  const displayLabel = waitingInAutoMode ? uiT('ui.agent.waiting_actionable_status', 'Ожидание состояния, доступного для действия') : label;
   const displayPauseMessage = waitingInAutoMode && !status.agent_pause_message
-    ? uiT('ui.agent.notice.waiting_actionable', '自动推进已开启，正在等待游戏会话、OCR 台词或目标窗口进入可操作状态。')
+    ? uiT('ui.agent.notice.waiting_actionable', 'Автопродвижение включено и ожидает, пока игровая сессия, OCR-реплика или целевое окно станут доступными для действия.')
     : status.agent_pause_message;
 
   node.hidden = false;
   title.textContent = displayLabel;
   body.textContent = displayPauseMessage
     || (userStatus === 'read_only' && status.mode === 'companion'
-      ? uiT('ui.agent.notice.companion_no_advance', '游戏窗口已在前台，但伴读模式不会自动推进。需要自动推进时请切到自动推进模式。')
+      ? uiT('ui.agent.notice.companion_no_advance', 'Окно игры на переднем плане, но режим сопровождения не выполняет автопродвижение. При необходимости переключитесь на автопродвижение.')
       : '')
     || (userStatus === 'running' && status.mode === 'choice_advisor'
-      ? uiT('ui.agent.notice.auto_advance_running', '游戏窗口已在前台，Agent 会按自动推进模式继续。OCR 会在后台持续刷新。')
+      ? uiT('ui.agent.notice.auto_advance_running', 'Окно игры на переднем плане. Agent продолжит в режиме автопродвижения, а OCR будет обновляться в фоне.')
       : '')
     || (userStatus === 'running'
-      ? uiT('ui.agent.notice.running', 'Agent 正在按当前模式运行。OCR 会在后台持续刷新。')
-      : uiT('ui.agent.notice.default', 'Agent 状态会随游戏窗口、OCR 和模式设置自动更新。'));
-  target.textContent = targetText ? uiTf('ui.agent.notice.target_window', '目标窗口：{target}', { target: targetText }) : '';
+      ? uiT('ui.agent.notice.running', 'Agent работает в текущем режиме. OCR будет обновляться в фоне.')
+      : uiT('ui.agent.notice.default', 'Статус Agent автоматически обновляется по окну игры, OCR и настройкам режима.'));
+  target.textContent = targetText ? uiTf('ui.agent.notice.target_window', 'Целевое окно: {target}', { target: targetText }) : '';
 
   node.className = 'agent-user-notice neutral';
   if (
@@ -2796,8 +2879,8 @@ function buildOcrMissingLineDiagnostic(status = {}) {
   const rapidocr = status.rapidocr || {};
   const parts = [
     status.ocr_capture_diagnostic_required
-      ? uiT('ui.ocr.missing_line.capture_target_abnormal', 'OCR 截图区/窗口目标可能异常')
-      : uiT('ui.ocr.missing_line.no_available_line', 'OCR 尚未读到可用台词'),
+      ? uiT('ui.ocr.missing_line.capture_target_abnormal', 'Область OCR-захвата или целевое окно могут быть некорректны')
+      : uiT('ui.ocr.missing_line.no_available_line', 'OCR пока не прочитал доступную реплику'),
   ];
   if (status.ocr_capture_diagnostic) {
     parts.push(status.ocr_capture_diagnostic);
@@ -2897,8 +2980,8 @@ function normalizeLineText(value = '') {
 
 function formatOcrTriggerMode(value = '') {
   return value === 'after_advance'
-    ? uiT('ui.settings.trigger_after_advance', '点击对白后识别')
-    : uiT('ui.settings.trigger_interval', '按间隔识别');
+    ? uiT('ui.settings.trigger_after_advance', 'Распознавать после клика по реплике')
+    : uiT('ui.settings.trigger_interval', 'Распознавать по интервалу');
 }
 
 function formatFixedNumber(value, digits = 1) {
@@ -3116,8 +3199,8 @@ function exitPanelFullscreen() {
     panel.classList.remove('panel-fullscreen');
     const button = panel.querySelector('.panel-fullscreen-toggle');
     if (button) {
-      button.textContent = uiT('ui.button.fullscreen', '全屏');
-      button.setAttribute('aria-label', uiT('ui.button.fullscreen', '全屏'));
+      button.textContent = uiT('ui.button.fullscreen', 'Во весь экран');
+      button.setAttribute('aria-label', uiT('ui.button.fullscreen', 'Во весь экран'));
     }
   });
   document.body.classList.remove('panel-fullscreen-active');
@@ -3137,8 +3220,8 @@ function togglePanelFullscreen(panel) {
   document.body.classList.add('panel-fullscreen-active');
   const button = panel.querySelector('.panel-fullscreen-toggle');
   if (button) {
-    button.textContent = uiT('ui.button.exit_fullscreen', '退出全屏');
-    button.setAttribute('aria-label', uiT('ui.button.exit_fullscreen', '退出全屏'));
+    button.textContent = uiT('ui.button.exit_fullscreen', 'Выйти из полного экрана');
+    button.setAttribute('aria-label', uiT('ui.button.exit_fullscreen', 'Выйти из полного экрана'));
   }
 }
 
@@ -3151,8 +3234,8 @@ function initializePanelFullscreenControls() {
     const button = document.createElement('button');
     button.type = 'button';
     button.className = 'panel-fullscreen-toggle';
-    button.textContent = uiT('ui.button.fullscreen', '全屏');
-    button.setAttribute('aria-label', uiT('ui.button.fullscreen', '全屏'));
+    button.textContent = uiT('ui.button.fullscreen', 'Во весь экран');
+    button.setAttribute('aria-label', uiT('ui.button.fullscreen', 'Во весь экран'));
     button.addEventListener('click', (event) => {
       event.preventDefault();
       event.stopPropagation();
@@ -3181,7 +3264,7 @@ function effectiveCurrentLine(snapshot = {}, history = {}, status = {}) {
   return latestHistoryLine(history) || {};
 }
 
-function buildSuggestFallback(sceneId = '', diagnostic = 'no visible choices') {
+function buildSuggestFallback(sceneId = '', diagnostic = uiT('ui.const.no_visible_choices', 'видимых вариантов нет')) {
   return {
     degraded: true,
     scene_id: sceneId,
@@ -3197,13 +3280,47 @@ function renderGrid(nodeId, rows) {
   });
 }
 
+function rawStatusLabel(key, fallback = '') {
+  const raw = String(key ?? '');
+  const normalized = raw.trim().toLowerCase();
+  // Only remap short single-token status-like values; free text is passed through.
+  if (normalized.length > 40 || /\s/.test(normalized) || /[{}]/.test(normalized)) {
+    return fallback || raw;
+  }
+  const labelMap = {
+    on: 'ui.const.on',
+    off: 'ui.const.off',
+    yes: 'ui.common.yes',
+    no: 'ui.common.no',
+    true: 'ui.const.true',
+    false: 'ui.const.false',
+    auto: 'ui.const.auto',
+    active: 'ui.const.active',
+    standby: 'ui.const.standby',
+    idle: 'ui.const.idle',
+    unknown: 'ui.const.unknown',
+    diagnostic: 'ui.const.diagnostic',
+    fixed: 'ui.const.fixed',
+    dxcam: 'ui.const.dxcam',
+    smart: 'ui.const.smart',
+    bridge_sdk_level: 'ui.const.bridge_sdk_level',
+    weaker_than_bridge_sdk: 'ui.const.weaker_than_bridge_sdk',
+  };
+  const i18nKey = labelMap[normalized];
+  const fallbackText = fallback || String(key ?? '');
+  return i18nKey ? uiT(i18nKey, fallbackText) : fallbackText;
+}
+
 function renderDataRows(rows) {
-  return rows.map((row) => `
+  return rows.map((row) => {
+    const value = row.format ? formatDebugValue(row.value) : rawStatusLabel(row.value, formatDebugValue(row.value));
+    return `
     <div class="data-row">
       <dt>${escapeHtml(fieldLabel(row.label))}</dt>
-      <dd>${escapeHtml(row.value)}</dd>
+      <dd>${escapeHtml(value)}</dd>
     </div>
-  `).join('');
+  `;
+  }).join('');
 }
 
 function renderStatusGrid(rows, debugRows) {
@@ -3216,8 +3333,8 @@ function renderStatusGrid(rows, debugRows) {
       </dl>
       <details class="status-debug-panel"${debugWasOpen ? ' open' : ''}>
         <summary>
-          <span>${escapeHtml(uiT('ui.status.debug_title', '高级调试'))}</span>
-          <small>${escapeHtml(uiTf('ui.status.debug_count', '{count} 项内部状态', { count: debugRows.length }))}</small>
+          <span>${escapeHtml(uiT('ui.status.debug_title', 'Расширенная отладка'))}</span>
+          <small>${escapeHtml(uiTf('ui.status.debug_count', '{count} внутренних состояний', { count: debugRows.length }))}</small>
         </summary>
         <dl class="data-grid">
           ${renderDataRows(debugRows)}
@@ -3232,7 +3349,7 @@ function renderStackList(nodeId, items, formatter) {
   if (!items.length) {
     renderPreservingScroll(node, () => {
       node.className = 'stack-list scroll-region empty-state';
-      node.textContent = uiT('ui.empty.no_data', '暂无数据');
+      node.textContent = uiT('ui.empty.no_data', 'Нет данных');
     });
     return;
   }
@@ -3394,18 +3511,18 @@ function formatBytes(value) {
 function formatInstallPhase(phase) {
   const normalized = String(phase || '').trim();
   const mapping = {
-    queued: uiT('ui.install.phase.queued', '排队中'),
-    metadata: uiT('ui.install.phase.metadata', '获取安装信息'),
-    downloading: uiT('ui.install.phase.downloading', 'HTTPS 下载中'),
-    installing: uiT('ui.install.phase.installing', '安装器执行中'),
-    extracting: uiT('ui.install.phase.extracting', '解压安装中'),
-    languages: uiT('ui.install.phase.languages', '下载语言包中'),
-    verifying: uiT('ui.install.phase.verifying', '校验安装中'),
-    completed: uiT('ui.install.phase.completed', '安装完成'),
-    failed: uiT('ui.install.phase.failed', '安装失败'),
-    canceled: uiT('ui.install.phase.canceled', '已取消'),
+    queued: uiT('ui.install.phase.queued', 'В очереди'),
+    metadata: uiT('ui.install.phase.metadata', 'Получение метаданных установки'),
+    downloading: uiT('ui.install.phase.downloading', 'Загрузка по HTTPS'),
+    installing: uiT('ui.install.phase.installing', 'Запуск установщика'),
+    extracting: uiT('ui.install.phase.extracting', 'Распаковка установки'),
+    languages: uiT('ui.install.phase.languages', 'Загрузка языковых пакетов'),
+    verifying: uiT('ui.install.phase.verifying', 'Проверка установки'),
+    completed: uiT('ui.install.phase.completed', 'Установка завершена'),
+    failed: uiT('ui.install.phase.failed', 'Установка не удалась'),
+    canceled: uiT('ui.install.phase.canceled', 'Отменено'),
   };
-  return uiDynamicT('ui.install.phase', normalized, mapping[normalized] || normalized || uiT('ui.install.phase.waiting', '等待中'));
+  return uiDynamicT('ui.install.phase', normalized, mapping[normalized] || normalized || uiT('ui.install.phase.waiting', 'Ожидание'));
 }
 
 function formatCaptureProfile(profile) {
@@ -3609,7 +3726,7 @@ function renderInstallTaskState(kind) {
       button.hidden = false;
       setActionButtonDisabled(button, false);
     }
-    statusText.textContent = uiTf('ui.install.task.waiting', '等待 {label} 安装任务', { label });
+    statusText.textContent = uiTf('ui.install.task.waiting', 'Ожидание задачи установки {label}', { label });
     percentText.textContent = '0%';
     messageText.textContent = '';
     detailText.textContent = '';
@@ -3626,7 +3743,7 @@ function renderInstallTaskState(kind) {
     details.push(formatBytes(state.downloaded_bytes));
   }
   if (state.resume_from) {
-    details.push(uiTf('ui.install.task.resume_from', '续传自 {size}', { size: formatBytes(state.resume_from) }));
+    details.push(uiTf('ui.install.task.resume_from', 'Возобновление с {size}', { size: formatBytes(state.resume_from) }));
   }
   if (state.asset_name) {
     details.push(state.asset_name);
@@ -3681,7 +3798,7 @@ function applyRapidOcrModelsGate(rapidocr = {}) {
   const waitingRefresh = Boolean(isRecentLocalCompletedInstallTask(state) && missingModels && !installed);
   const retryableFailure = Boolean(state && state.status === 'failed' && downloadable);
   const showCard = Boolean(state && (running || waitingRefresh || retryableFailure));
-  const waitingRefreshText = uiT('ui.install.task_done_refreshing', '安装任务已结束，正在等待插件状态刷新。');
+  const waitingRefreshText = uiT('ui.install.task_done_refreshing', 'Задача выполнена — ожидание обновления статуса плагина.');
 
   if (card) {
     card.hidden = !showCard;
@@ -3693,7 +3810,7 @@ function applyRapidOcrModelsGate(rapidocr = {}) {
     if (detailText) detailText.textContent = '';
     if (progressBar) progressBar.style.width = '100%';
   } else if (!showCard) {
-    if (statusText) statusText.textContent = uiT('ui.install.waiting_task', '等待安装任务');
+    if (statusText) statusText.textContent = uiT('ui.install.waiting_task', 'Ожидание задачи установки');
     if (percentText) percentText.textContent = '0%';
     if (messageText) messageText.textContent = '';
     if (detailText) detailText.textContent = '';
@@ -3721,7 +3838,7 @@ function clearRapidOcrModelsControls() {
   if (card) {
     card.hidden = true;
   }
-  if (statusText) statusText.textContent = uiT('ui.install.waiting_task', '等待安装任务');
+  if (statusText) statusText.textContent = uiT('ui.install.waiting_task', 'Ожидание задачи установки');
   if (percentText) percentText.textContent = '0%';
   if (messageText) messageText.textContent = '';
   if (detailText) detailText.textContent = '';
@@ -3737,16 +3854,16 @@ function renderPluginUnavailable(error) {
   latestStatus = null;
   pendingModeSelection = '';
   updateModeSwitchControl('', { ready: false });
-  const pluginNotStarted = uiT('ui.diag.plugin_not_started.title', '插件尚未启动');
+  const pluginNotStarted = uiT('ui.diag.plugin_not_started.title', 'Плагин не запущен');
   const message = error instanceof Error ? error.message : String(error || pluginNotStarted);
-  document.getElementById('summaryText').textContent = pluginNotStarted;
+  setSummaryText(document.getElementById('summaryText'), pluginNotStarted);
   renderPrimaryDiagnosis({
     connection_state: 'plugin_not_started',
     last_error: null,
     primary_diagnosis: {
       severity: 'info',
       title: pluginNotStarted,
-      message: uiT('ui.diag.plugin_not_started.body', '请在插件管理页面点击"启动"按钮，启动完成后数据会自动刷新。'),
+      message: uiT('ui.diag.plugin_not_started.body', 'Нажмите "Запустить" на странице управления плагином. После запуска данные обновятся автоматически.'),
       actions: [
         diagnosisAction('refresh_all'),
       ],
@@ -3785,7 +3902,7 @@ function renderPluginUnavailable(error) {
     const actions = document.getElementById(`${kind}CardActions`);
     card.className = 'install-card neutral';
     if (chip) chip.textContent = pluginNotStarted;
-    if (desc) desc.textContent = uiT('ui.install.plugin_unavailable_body', '当前无法读取插件运行状态。请先启动或重载 galgame_plugin，启动完成后这里会显示安装和运行时状态。');
+    if (desc) desc.textContent = uiT('ui.install.plugin_unavailable_body', 'Сейчас невозможно прочитать состояние выполнения плагина. Сначала запустите или перезагрузите galgame_plugin; после запуска здесь появятся статусы установки и выполнения.');
     if (meta) meta.textContent = `${PROMPT_LABELS[kind]} · ${message}`;
     if (actions) syncActionButtons(actions, '');
     if (kind === 'rapidocr') {
@@ -3874,7 +3991,7 @@ async function fetchInstallTaskState(kind, taskId) {
     return null;
   }
   if (!response.ok) {
-    throw new Error(uiTf('ui.error.install_state_read_failed', '读取 {label} 安装状态失败: HTTP {status}', {
+    throw new Error(uiTf('ui.error.install_state_read_failed', 'Не удалось прочитать статус установки {label}: HTTP {status}', {
       label: getInstallConfig(kind).label,
       status: response.status,
     }));
@@ -3888,7 +4005,7 @@ async function fetchLatestInstallTaskState(kind) {
     return null;
   }
   if (!response.ok) {
-    throw new Error(uiTf('ui.error.latest_install_state_read_failed', '读取最近 {label} 安装状态失败: HTTP {status}', {
+    throw new Error(uiTf('ui.error.latest_install_state_read_failed', 'Не удалось прочитать последний статус установки {label}: HTTP {status}', {
       label: getInstallConfig(kind).label,
       status: response.status,
     }));
@@ -4179,6 +4296,15 @@ function initTtsPipelineControls() {
   updateTtsPipelineSwitchControl(selectedTtsPipeline, { ready: true });
 }
 
+function setSummaryText(node, text) {
+  if (!node) {
+    return;
+  }
+  const value = String(text ?? '');
+  node.textContent = value;
+  node.title = value;
+}
+
 function updateModeSwitchControl(currentMode, { ready = true } = {}) {
   const modeSwitchEl = document.getElementById('modeSwitch');
   if (!modeSwitchEl) {
@@ -4205,21 +4331,47 @@ function updateModeSwitchControl(currentMode, { ready = true } = {}) {
   }
 }
 
+let _modeSwitchResizeObserver = null;
+function initModeSwitchObserver() {
+  const modeSwitchEl = document.getElementById('modeSwitch');
+  if (!modeSwitchEl || typeof ResizeObserver === 'undefined' || _modeSwitchResizeObserver) {
+    return;
+  }
+  let raf = 0;
+  _modeSwitchResizeObserver = new ResizeObserver(() => {
+    if (raf) cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(() => {
+      raf = 0;
+      const ready = modeSwitchEl.dataset.ready === 'true';
+      if (ready && modeSwitchEl.dataset.active) {
+        updateModeSwitchControl(modeSwitchEl.dataset.active);
+      }
+    });
+  });
+  _modeSwitchResizeObserver.observe(modeSwitchEl);
+  window.addEventListener('resize', () => {
+    const ready = modeSwitchEl.dataset.ready === 'true';
+    if (ready && modeSwitchEl.dataset.active) {
+      updateModeSwitchControl(modeSwitchEl.dataset.active);
+    }
+  }, { passive: true });
+}
+
 function updateSummaryMode(currentMode) {
   const summaryNode = document.getElementById('summaryText');
   if (!summaryNode) {
     return;
   }
   if (latestStatus) {
-    summaryNode.textContent = buildStatusSummaryText({
+    setSummaryText(summaryNode, buildStatusSummaryText({
       ...latestStatus,
       mode: currentMode,
-    });
+    }));
     return;
   }
-  summaryNode.textContent = uiTf('ui.summary.mode_part', 'Режим: {mode}', {
+  setSummaryText(summaryNode, uiTf('ui.summary.mode_part', 'Режим: {mode}', {
     mode: modeLabel(currentMode, currentMode),
-  });
+  }));
 }
 
 function clearPendingModeSelection(mode) {
@@ -4242,10 +4394,10 @@ function renderStatus(status) {
   syncSettingsValue('modeSelect', currentMode);
   syncSettingsChecked('pushToggle', Boolean(status.push_notifications));
   syncSettingsValue('advanceSpeedSelect', status.advance_speed || 'medium');
-  document.getElementById('summaryText').textContent = buildStatusSummaryText({
+  setSummaryText(document.getElementById('summaryText'), buildStatusSummaryText({
     ...status,
     mode: currentMode,
-  });
+  }));
   updateModeSwitchControl(currentMode);
   updateTtsPipelineSwitchControl(normalizeTtsPipeline(status.tts_output_pipeline || selectedTtsPipeline || 'agent'));
   const currentSpeed = status.advance_speed || 'medium';
@@ -4371,7 +4523,7 @@ function renderStatus(status) {
   const suggestSection = document.getElementById('suggestPanelSection');
   const suggestPanel = document.getElementById('suggestPanel');
   if (suggestSection && suggestPanel) {
-    const noDataText = uiT('ui.empty.no_data', '暂无数据');
+    const noDataText = uiT('ui.empty.no_data', 'Нет данных');
     const hasContent = suggestPanel.textContent.trim() && suggestPanel.textContent.trim() !== noDataText;
     suggestSection.hidden = !hasContent;
   }
@@ -4554,24 +4706,24 @@ function renderGameBinding(status) {
   const gameIds = Array.isArray(status.available_game_ids) ? status.available_game_ids : [];
   const boundDescription = describeGameBindingId(boundGameId);
   currentNode.textContent = boundGameId
-    ? uiTf('ui.game.binding.fixed_title', '已固定：{title}', { title: boundDescription.title })
-    : uiT('ui.game.binding.auto_title', '自动选择游戏窗口');
+    ? uiTf('ui.game.binding.fixed_title', 'Зафиксировано: {title}', { title: boundDescription.title })
+    : uiT('ui.game.binding.auto_title', 'Автовыбор окна игры');
   if (detailNode) {
     detailNode.textContent = boundGameId
-      ? uiTf('ui.game.binding.fixed_detail', '{detail}。点“恢复自动”后，插件会重新按当前可用目标选择。', { detail: boundDescription.detail })
-      : uiT('ui.game.binding.auto_detail', '插件会优先选择当前可用目标。需要固定目标时，点击下面的候选项。');
+      ? uiTf('ui.game.binding.fixed_detail', '{detail}. После нажатия «Восстановить авто» плагин снова выберет из доступных целей.', { detail: boundDescription.detail })
+      : uiT('ui.game.binding.auto_detail', 'Плагин предпочитает текущую доступную цель. Чтобы зафиксировать цель, нажмите кандидата ниже.');
   }
 
   if (!gameIds.length) {
     listNode.className = 'binding-chip-row empty-inline';
-    listNode.textContent = uiT('ui.game.binding.no_games', '未发现可绑定游戏。请确认 Bridge/OCR/Memory Reader 已连接到游戏窗口。');
+    listNode.textContent = uiT('ui.game.binding.no_games', 'Игра для привязки не найдена. Проверьте, что Bridge/OCR/Memory Reader подключен к окну игры.');
     return;
   }
 
   const normalizedGameIds = gameIds.map((gameId) => String(gameId || '').trim()).filter(Boolean);
   if (!normalizedGameIds.length) {
     listNode.className = 'binding-chip-row empty-inline';
-    listNode.textContent = uiT('ui.game.binding.empty_ids', '可用游戏 ID 为空。');
+    listNode.textContent = uiT('ui.game.binding.empty_ids', 'Список доступных ID игр пуст.');
     return;
   }
 
@@ -4588,7 +4740,7 @@ function renderGameBinding(status) {
         const title = document.createElement('span');
         title.className = 'binding-chip-title';
         title.textContent = active
-          ? uiTf('ui.game.binding.current_title', '当前：{title}', { title: description.title })
+          ? uiTf('ui.game.binding.current_title', 'Текущее: {title}', { title: description.title })
           : description.title;
         const detail = document.createElement('span');
         detail.className = 'binding-chip-detail';
@@ -4601,7 +4753,7 @@ function renderGameBinding(status) {
   listNode.querySelectorAll('[data-game-id]').forEach((button) => {
     button.addEventListener('click', () => {
       const gameId = button.getAttribute('data-game-id') || '';
-      withButtonPending(button, uiT('ui.pending.binding', '绑定中...'), () => bindGame(gameId)).catch((error) => { console.error('[galgame] async action failed', error); });
+      withButtonPending(button, uiT('ui.pending.binding', 'Привязка...'), () => bindGame(gameId)).catch((error) => { console.error('[galgame] async action failed', error); });
     });
   });
 }
@@ -4610,26 +4762,26 @@ function describeGameBindingId(gameId) {
   const normalized = String(gameId || '').trim();
   if (!normalized) {
     return {
-      title: uiT('ui.game.binding.auto_title', '自动选择游戏窗口'),
-      detail: uiT('ui.game.binding.auto_short_detail', '插件会优先选择当前可用目标'),
+      title: uiT('ui.game.binding.auto_title', 'Автовыбор окна игры'),
+      detail: uiT('ui.game.binding.auto_short_detail', 'Плагин предпочитает текущую доступную цель'),
     };
   }
   const [prefix, ...rest] = normalized.split('-');
   const suffix = rest.join('-') || normalized;
   if (prefix === 'mem') {
     return {
-      title: uiT('ui.game.binding.memory_target', '内存读取目标'),
+      title: uiT('ui.game.binding.memory_target', 'Цель Memory Reader'),
       detail: `ID ${suffix}`,
     };
   }
   if (prefix === 'ocr') {
     return {
-      title: uiT('ui.game.binding.ocr_target', 'OCR 窗口目标'),
+      title: uiT('ui.game.binding.ocr_target', 'Цель OCR-окна'),
       detail: `ID ${suffix}`,
     };
   }
   return {
-    title: uiT('ui.game.binding.game_target', '游戏目标'),
+    title: uiT('ui.game.binding.game_target', 'Цель игры'),
     detail: normalized,
   };
 }
@@ -4720,18 +4872,18 @@ function renderCharacterProfilePanel(status = latestStatus, snapshot = latestCha
   const nextSelection = preferredName || (characters[0]?.name || '');
 
   if (mode === 'fixed' && fixedName) {
-    statusNode.textContent = uiTf('ui.character_profile.status_fixed', '固定角色：{name}', { name: fixedName });
+    statusNode.textContent = uiTf('ui.character_profile.status_fixed', 'Фиксированный персонаж: {name}', { name: fixedName });
   } else if (!displayKey || (!characters.length && snapshot && !characterCount)) {
-    statusNode.textContent = uiT('ui.character_profile.status_unavailable', '无可用档案');
+    statusNode.textContent = uiT('ui.character_profile.status_unavailable', 'Нет доступных профилей');
   } else {
-    statusNode.textContent = uiT('ui.character_profile.status_off', '关闭');
+    statusNode.textContent = uiT('ui.character_profile.status_off', 'Отключено');
   }
 
   if (!characters.length) {
     select.replaceChildren(new Option(
       displayKey
-        ? uiT('ui.character_profile.select_placeholder', '等待加载角色列表')
-        : uiT('ui.character_profile.no_game_option', '请先绑定游戏'),
+        ? uiT('ui.character_profile.select_placeholder', 'Ожидание списка персонажей')
+        : uiT('ui.character_profile.no_game_option', 'Сначала привяжите игру'),
       '',
     ));
   } else {
@@ -4749,21 +4901,21 @@ function renderCharacterProfilePanel(status = latestStatus, snapshot = latestCha
   }
 
   if (!displayKey) {
-    hintNode.textContent = uiT('ui.character_profile.hint_no_game', '请先在“插件识别”里绑定或检测到游戏目标。');
+    hintNode.textContent = uiT('ui.character_profile.hint_no_game', 'Сначала привяжите или обнаружьте игровую цель в разделе распознавания.');
   } else if (snapshot?.diagnostic) {
-    hintNode.textContent = uiTf('ui.character_profile.hint_load_failed', '角色列表加载失败：{error}', {
+    hintNode.textContent = uiTf('ui.character_profile.hint_load_failed', 'Не удалось загрузить список персонажей: {error}', {
       error: snapshot.diagnostic,
     });
   } else if (!snapshot) {
-    hintNode.textContent = uiT('ui.character_profile.status_waiting', '等待状态刷新');
+    hintNode.textContent = uiT('ui.character_profile.status_waiting', 'Ожидание обновления статуса');
   } else if (!characters.length) {
-    hintNode.textContent = uiT('ui.character_profile.hint_no_profiles', '当前游戏没有可用角色档案。');
+    hintNode.textContent = uiT('ui.character_profile.hint_no_profiles', 'Для текущей игры нет доступных профилей персонажей.');
   } else {
-    const loadedText = uiTf('ui.character_profile.hint_loaded', '已加载 {count} 个角色档案。', {
+    const loadedText = uiTf('ui.character_profile.hint_loaded', 'Загружено профилей персонажей: {count}.', {
       count: characters.length,
     });
     hintNode.textContent = profileGameId && matchReason && !boundGameId
-      ? `${loadedText} ${uiTf('ui.character_profile.hint_auto_matched', '已匹配档案：{game}', { game: profileGameId })}`
+      ? `${loadedText} ${uiTf('ui.character_profile.hint_auto_matched', 'Подобран профиль: {game}', { game: profileGameId })}`
       : loadedText;
   }
 
@@ -4850,31 +5002,31 @@ async function setCharacterProfileMode(mode) {
   const select = document.getElementById('characterProfileSelect');
   const characterName = String(select?.value || '').trim();
   if (normalized === 'fixed' && !characterName) {
-    throw new Error(uiT('ui.character_profile.error_select_required', '请先选择角色。'));
+    throw new Error(uiT('ui.character_profile.error_select_required', 'Сначала выберите персонажа.'));
   }
   const args = normalized === 'fixed'
     ? { mode: 'fixed', character_name: characterName }
     : { mode: 'off' };
-  setFlash(uiT('ui.flash.saving_character_mode', '正在保存角色档案设置...'), 'info');
+  setFlash(uiT('ui.flash.saving_character_mode', 'Сохранение настроек профиля персонажа...'), 'info');
   const payload = await callPlugin('galgame_set_character_mode', args);
-  setFlash(payload.summary || uiT('ui.flash.character_mode_saved', '角色档案设置已保存'), 'success');
+  setFlash(payload.summary || uiT('ui.flash.character_mode_saved', 'Настройки профиля персонажа сохранены'), 'success');
   await refreshAll({ preserveFlash: true, forceInsights: true, forceRefresh: true });
   await refreshCharacterProfiles({ force: true, silent: true });
 }
 
 function formatConnectionStateZh(value) {
   const normalized = String(value || '').trim();
-  return connectionStateLabel(normalized, normalized || uiT('ui.common.unknown', '未知'));
+  return connectionStateLabel(normalized, normalized || uiT('ui.common.unknown', 'Неизвестно'));
 }
 
 function formatModeZh(value) {
   const normalized = String(value || '').trim();
-  return modeLabel(normalized, normalized || uiT('ui.common.unknown_mode', '未知模式'));
+  return modeLabel(normalized, normalized || uiT('ui.common.unknown_mode', 'Неизвестный режим'));
 }
 
 function formatDataSourceZh(value) {
   const normalized = String(value || '').trim();
-  return dataSourceLabel(normalized, normalized || uiT('ui.common.unknown_source', '未知来源'));
+  return dataSourceLabel(normalized, normalized || uiT('ui.common.unknown_source', 'Неизвестный источник'));
 }
 
 function buildStatusSummaryText(status) {
@@ -4920,7 +5072,7 @@ function buildStatusSummaryText(status) {
   if (sessionId) {
     parts.push(uiTf('ui.summary.session_part', 'Сессия: {sessionId}', { sessionId }));
   }
-  parts.push(uiTf('ui.summary.seq_part', '最新序号：{seq}', { seq: lastSeq }));
+  parts.push(uiTf('ui.summary.seq_part', 'Последний seq: {seq}', { seq: lastSeq }));
 
   if (warningMessage) {
     parts.push(uiTf('ui.summary.warning_part', 'Предупреждение: {warning}', { warning: warningMessage }));
@@ -5004,7 +5156,7 @@ function renderOcrRuntime(status) {
     { label: 'ocr_background_polling', value: String(Boolean(status.ocr_background_polling || backgroundStatus.background_polling)) },
     { label: 'ocr_foreground_resume_pending', value: String(Boolean(status.ocr_foreground_resume_pending || backgroundStatus.foreground_resume_pending)) },
     { label: 'ocr_capture_backend_blocked', value: String(Boolean(status.ocr_capture_backend_blocked || backgroundStatus.capture_backend_blocked)) },
-    { label: 'capture_stage', value: ocrProfileStageLabel(captureStage, captureStage || uiT('ui.stage.default', '通用区域')) },
+    { label: 'capture_stage', value: ocrProfileStageLabel(captureStage, captureStage || uiT('ui.stage.default', 'Общая область')) },
     { label: 'capture_profile', value: formatCaptureProfile(captureProfile) || '(default)' },
     {
       label: 'capture_profile_match_source',
@@ -5247,24 +5399,24 @@ function renderSnapshotGridFromLatestData() {
 
 function formatMemoryReaderSelectionDetail(detail) {
   const mapping = {
-    auto_candidate_scan: uiT('ui.memory.detail.auto_candidate_scan', '正在自动检测游戏进程'),
-    manual_target_active: uiT('ui.memory.detail.manual_target_active', '手动锁定已启用'),
-    manual_target_exact: uiT('ui.memory.detail.manual_target_exact', '命中手动锁定进程'),
-    manual_target_rebound: uiT('ui.memory.detail.manual_target_rebound', '已按 exe 路径和进程名重新绑定'),
-    manual_target_unavailable: uiT('ui.memory.detail.manual_target_unavailable', '手动进程不可用，请重新选择'),
-    manual_pid_unimplemented: uiT('ui.memory.detail.manual_pid_unimplemented', 'auto_detect=false 但尚未锁定手动目标'),
-    no_detected_game_process: uiT('ui.memory.detail.no_detected_game_process', '未检测到可用游戏进程'),
-    detected_kirikiri_xp3: uiT('ui.memory.detail.detected_kirikiri_xp3', '通过 xp3 资源识别为 KiriKiri'),
-    detected_kirikiri_common_xp3: uiT('ui.memory.detail.detected_kirikiri_common_xp3', '通过常见 xp3 资源识别为 KiriKiri'),
-    detected_kirikiri_startup_tjs: uiT('ui.memory.detail.detected_kirikiri_startup_tjs', '通过 startup.tjs 识别为 KiriKiri'),
-    detected_kirikiri_module: uiT('ui.memory.detail.detected_kirikiri_module', '通过 krkr.dll 识别为 KiriKiri'),
-    detected_kirikiri_process_name: uiT('ui.memory.detail.detected_kirikiri_process_name', '通过进程名识别为 KiriKiri'),
-    detected_kirikiri_preset_senren_banka: uiT('ui.memory.detail.detected_kirikiri_preset_senren_banka', '通过千恋万花内建签名识别为 KiriKiri'),
-    detected_unity_module: uiT('ui.memory.detail.detected_unity_module', '通过 Unity 模块识别'),
-    detected_unity_name_or_cmdline: uiT('ui.memory.detail.detected_unity_name_or_cmdline', '通过 Unity 进程信息识别'),
-    detected_renpy_module: uiT('ui.memory.detail.detected_renpy_module', '通过 RenPy 模块识别'),
-    detected_renpy_cmdline: uiT('ui.memory.detail.detected_renpy_cmdline', '通过 RenPy 命令行识别'),
-    unknown_engine: uiT('ui.memory.detail.unknown_engine', '未知引擎'),
+    auto_candidate_scan: uiT('ui.memory.detail.auto_candidate_scan', 'Автообнаружение игрового процесса'),
+    manual_target_active: uiT('ui.memory.detail.manual_target_active', 'Ручная блокировка включена'),
+    manual_target_exact: uiT('ui.memory.detail.manual_target_exact', 'Совпадение с вручную заблокированным процессом'),
+    manual_target_rebound: uiT('ui.memory.detail.manual_target_rebound', 'Повторная привязка по exe-пути и имени процесса'),
+    manual_target_unavailable: uiT('ui.memory.detail.manual_target_unavailable', 'Ручной процесс недоступен; выберите снова'),
+    manual_pid_unimplemented: uiT('ui.memory.detail.manual_pid_unimplemented', 'auto_detect=false, но ручная цель еще не заблокирована'),
+    no_detected_game_process: uiT('ui.memory.detail.no_detected_game_process', 'Доступный игровой процесс не обнаружен'),
+    detected_kirikiri_xp3: uiT('ui.memory.detail.detected_kirikiri_xp3', 'KiriKiri обнаружен по ресурсам xp3'),
+    detected_kirikiri_common_xp3: uiT('ui.memory.detail.detected_kirikiri_common_xp3', 'KiriKiri обнаружен по распространенным ресурсам xp3'),
+    detected_kirikiri_startup_tjs: uiT('ui.memory.detail.detected_kirikiri_startup_tjs', 'KiriKiri обнаружен по startup.tjs'),
+    detected_kirikiri_module: uiT('ui.memory.detail.detected_kirikiri_module', 'KiriKiri обнаружен по krkr.dll'),
+    detected_kirikiri_process_name: uiT('ui.memory.detail.detected_kirikiri_process_name', 'KiriKiri обнаружен по имени процесса'),
+    detected_kirikiri_preset_senren_banka: uiT('ui.memory.detail.detected_kirikiri_preset_senren_banka', 'KiriKiri обнаружен по встроенной сигнатуре Senren Banka'),
+    detected_unity_module: uiT('ui.memory.detail.detected_unity_module', 'Unity обнаружен по загруженным модулям'),
+    detected_unity_name_or_cmdline: uiT('ui.memory.detail.detected_unity_name_or_cmdline', 'Unity обнаружен по информации процесса'),
+    detected_renpy_module: uiT('ui.memory.detail.detected_renpy_module', 'RenPy обнаружен по загруженным модулям'),
+    detected_renpy_cmdline: uiT('ui.memory.detail.detected_renpy_cmdline', 'RenPy обнаружен по командной строке'),
+    unknown_engine: uiT('ui.memory.detail.unknown_engine', 'Неизвестный движок'),
   };
   return uiDynamicT('ui.memory.detail', detail, mapping[detail] || detail || '');
 }
@@ -5283,17 +5435,17 @@ function renderMemoryReaderTargetStatus(status) {
   const detail = formatMemoryReaderSelectionDetail(runtime.target_selection_detail || runtime.detection_reason || '');
   if (modeText) {
     modeText.textContent = mode === 'manual'
-      ? `${uiT('ui.window.current_mode', '当前模式')}: manual${target.process_name ? ` | ${uiT('ui.window.locked', '锁定')} ${target.process_name}` : ''}`
-      : `${uiT('ui.window.current_mode', '当前模式')}: ${uiT('ui.window.auto_detect_first', '自动检测优先')}`;
+      ? `${uiT('ui.window.current_mode', 'Текущий режим')}: manual${target.process_name ? ` | ${uiT('ui.window.locked', 'Заблокировано')} ${target.process_name}` : ''}`
+      : `${uiT('ui.window.current_mode', 'Текущий режим')}: ${uiT('ui.window.auto_detect_first', 'Сначала автоопределение')}`;
   }
   if (hint) {
     const parts = [
-      processName ? `${uiT('ui.window.current_target', '当前目标')}: ${processName}${pid ? ` (${pid})` : ''}` : '',
+      processName ? `${uiT('ui.window.current_target', 'Текущая цель')}: ${processName}${pid ? ` (${pid})` : ''}` : '',
       engine ? `engine=${engine}` : '',
       detail,
       runtime.hook_code_detail ? `hook=${runtime.hook_code_detail} (${runtime.hook_code_count || 0})` : '',
     ].filter(Boolean);
-    hint.textContent = parts.join(' | ') || uiT('ui.memory.auto_hint', 'Memory Reader 会优先检测 RenPy / Unity / KiriKiri；自动失败时可手动选择进程。');
+    hint.textContent = parts.join(' | ') || uiT('ui.memory.auto_hint', 'Memory Reader сначала определяет RenPy / Unity / KiriKiri. Если автоопределение не сработало, выберите процесс вручную.');
   }
   if (autoButton) {
     autoButton.disabled = mode !== 'manual';
@@ -5318,11 +5470,11 @@ function renderLockedMemoryProcess(status) {
   if (mode === 'manual' && (processName || exePath || pid)) {
     card.innerHTML = `
       <div class="locked-window-info">
-        <p class="list-kicker">${escapeHtml(processName || uiT('ui.window.unknown_process', '未知进程'))}${pid ? ` · PID ${escapeHtml(pid)}` : ''}</p>
+        <p class="list-kicker">${escapeHtml(processName || uiT('ui.window.unknown_process', 'Неизвестный процесс'))}${pid ? ` · PID ${escapeHtml(pid)}` : ''}</p>
         <h3>${escapeHtml(engine || 'unknown')}</h3>
         <p class="result-note mono">${escapeHtml(exePath || target.process_key || '')}</p>
         <div class="window-candidate-meta">
-          <span class="status-chip active">${escapeHtml(uiT('ui.window.manual_locked', '手动锁定'))}</span>
+          <span class="status-chip active">${escapeHtml(uiT('ui.window.manual_locked', 'Ручная блокировка'))}</span>
           ${detail ? `<span class="status-chip">${escapeHtml(detail)}</span>` : ''}
         </div>
       </div>
@@ -5332,14 +5484,14 @@ function renderLockedMemoryProcess(status) {
       <div class="locked-window-info">
         <p class="list-kicker">${escapeHtml(runtime.process_name)}${runtime.pid ? ` · PID ${escapeHtml(runtime.pid)}` : ''}</p>
         <h3>${escapeHtml(runtime.engine || 'unknown')}</h3>
-        <p class="result-note">${escapeHtml(detail || uiT('ui.memory.auto_detected_target', '自动检测到 Memory Reader 目标'))}</p>
+        <p class="result-note">${escapeHtml(detail || uiT('ui.memory.auto_detected_target', 'Цель Memory Reader обнаружена автоматически'))}</p>
         <div class="window-candidate-meta">
-          <span class="status-chip active">${escapeHtml(uiT('ui.window.auto_detected', '自动检测'))}</span>
+          <span class="status-chip active">${escapeHtml(uiT('ui.window.auto_detected', 'Автоопределено'))}</span>
         </div>
       </div>
     `;
   } else {
-    card.innerHTML = `<div class="locked-window-empty">${escapeHtml(uiT('ui.memory.no_locked_target', '尚未确认 Memory Reader 目标进程。自动识别失败时，请点击“选择进程”手动锁定。'))}</div>`;
+    card.innerHTML = `<div class="locked-window-empty">${escapeHtml(uiT('ui.memory.no_locked_target', 'Целевой процесс Memory Reader еще не подтвержден. Если автоопределение не удалось, нажмите «Выбрать процесс» для ручной блокировки.'))}</div>`;
   }
 }
 
@@ -5347,23 +5499,23 @@ function renderMemoryProcessListToNode(node, processes) {
   renderPreservingScroll(node, () => {
     if (!processes.length) {
       node.className = 'stack-list scroll-region empty-state window-candidate-list';
-      node.textContent = uiT('ui.modal.no_process', '暂无候选进程');
+      node.textContent = uiT('ui.modal.no_process', 'Нет процессов-кандидатов');
     } else {
       node.className = 'stack-list scroll-region window-candidate-list';
       node.innerHTML = processes.map((item) => {
         const chips = [
-          item.is_attached ? `<span class="status-chip active">${escapeHtml(uiT('ui.window.attached', '当前附着'))}</span>` : '',
-          item.is_manual_target ? `<span class="status-chip active">${escapeHtml(uiT('ui.window.manual_locked', '手动锁定'))}</span>` : '',
+          item.is_attached ? `<span class="status-chip active">${escapeHtml(uiT('ui.window.attached', 'Сейчас подключено'))}</span>` : '',
+          item.is_manual_target ? `<span class="status-chip active">${escapeHtml(uiT('ui.window.manual_locked', 'Ручная блокировка'))}</span>` : '',
           item.engine || item.detected_engine ? `<span class="status-chip">${escapeHtml(item.engine || item.detected_engine)}</span>` : '',
         ].filter(Boolean).join('');
         return `
           <article class="list-card compact">
             <div class="window-candidate-header">
               <div class="window-candidate-summary">
-                <p class="list-kicker">${escapeHtml(item.process_name || uiT('ui.window.unknown_process', '未知进程'))} · pid ${escapeHtml(item.pid || 0)}</p>
+                <p class="list-kicker">${escapeHtml(item.process_name || uiT('ui.window.unknown_process', 'Неизвестный процесс'))} · pid ${escapeHtml(item.pid || 0)}</p>
                 <h3>${escapeHtml(formatMemoryReaderSelectionDetail(item.detection_reason || '') || item.detection_reason || 'unknown_engine')}</h3>
               </div>
-              <button class="secondary" data-memory-process-key="${escapeHtml(item.process_key || '')}">${escapeHtml(uiT('ui.window.lock_process', '锁定此进程'))}</button>
+              <button class="secondary" data-memory-process-key="${escapeHtml(item.process_key || '')}">${escapeHtml(uiT('ui.window.lock_process', 'Заблокировать процесс'))}</button>
             </div>
             <p class="result-note mono">${escapeHtml(item.exe_path || item.process_key || '')}</p>
             <div class="window-candidate-actions">
@@ -5377,7 +5529,7 @@ function renderMemoryProcessListToNode(node, processes) {
   node.querySelectorAll('[data-memory-process-key]').forEach((button) => {
     button.addEventListener('click', () => {
       const key = button.getAttribute('data-memory-process-key') || '';
-      withButtonPending(button, uiT('ui.pending.locking', '锁定中...'), () => setMemoryProcessTarget(key)).catch((error) => { console.error('[galgame] async action failed', error); });
+      withButtonPending(button, uiT('ui.pending.locking', 'Блокировка...'), () => setMemoryProcessTarget(key)).catch((error) => { console.error('[galgame] async action failed', error); });
     });
   });
 }
@@ -5394,40 +5546,40 @@ function renderMemoryProcessTargetSnapshot(snapshot, status = latestStatus) {
 
 function formatOcrWindowReason(reason) {
   const mapping = {
-    excluded_self_window: uiT('ui.ocr.window.reason.excluded_self_window', '已排除 N.E.K.O 自身窗口'),
-    excluded_overlay_window: uiT('ui.ocr.window.reason.excluded_overlay_window', '已排除 overlay / launcher / helper'),
-    excluded_helper_window: uiT('ui.ocr.window.reason.excluded_helper_window', '已排除系统或宿主辅助窗口'),
-    excluded_small_or_hidden_window: uiT('ui.ocr.window.reason.excluded_small_or_hidden_window', '已排除过小或不可用窗口'),
-    excluded_minimized_window: uiT('ui.ocr.window.reason.excluded_minimized_window', '游戏窗口已最小化，OCR 不能截图，请恢复窗口'),
-    excluded_non_game_process: uiT('ui.ocr.window.reason.excluded_non_game_process', '非游戏进程，已忽略'),
+    excluded_self_window: uiT('ui.ocr.window.reason.excluded_self_window', 'Исключено само окно N.E.K.O'),
+    excluded_overlay_window: uiT('ui.ocr.window.reason.excluded_overlay_window', 'Исключено окно overlay / launcher / helper'),
+    excluded_helper_window: uiT('ui.ocr.window.reason.excluded_helper_window', 'Исключено системное или вспомогательное окно хоста'),
+    excluded_small_or_hidden_window: uiT('ui.ocr.window.reason.excluded_small_or_hidden_window', 'Исключено слишком маленькое или недоступное окно'),
+    excluded_minimized_window: uiT('ui.ocr.window.reason.excluded_minimized_window', 'Окно игры свернуто; OCR не может его захватить. Восстановите окно.'),
+    excluded_non_game_process: uiT('ui.ocr.window.reason.excluded_non_game_process', 'Неигровой процесс проигнорирован'),
   };
   return uiDynamicT('ui.ocr.window.reason', reason, mapping[reason] || reason || 'unknown');
 }
 
 function formatOcrWindowSelectionDetail(detail) {
   const mapping = {
-    auto_candidate_scan: uiT('ui.ocr.window.detail.auto_candidate_scan', '正在自动检测游戏窗口'),
-    manual_target_active: uiT('ui.ocr.window.detail.manual_target_active', '手动锁定已启用'),
-    manual_target_exact: uiT('ui.ocr.window.detail.manual_target_exact', '命中手动锁定窗口'),
-    manual_target_rebound: uiT('ui.ocr.window.detail.manual_target_rebound', '已按签名重新绑定手动窗口'),
-    manual_target_unavailable_fallback_to_auto: uiT('ui.ocr.window.detail.manual_target_unavailable_fallback_to_auto', '手动窗口不可用，请重新锁定窗口'),
-    waiting_for_manual_window_target: uiT('ui.ocr.window.detail.waiting_for_manual_window_target', '自动检测失败，请手动锁定 OCR 目标窗口'),
-    auto_detect_needs_manual_fallback: uiT('ui.ocr.window.detail.auto_detect_needs_manual_fallback', '未找到可信自动目标，请手动选择游戏窗口'),
-    foreground_window_needs_manual_confirmation: uiT('ui.ocr.window.detail.foreground_window_needs_manual_confirmation', '当前前台窗口不像游戏，请手动选择游戏窗口'),
-    no_eligible_window: uiT('ui.ocr.window.detail.no_eligible_window', '当前没有可用游戏窗口'),
-    memory_reader_window_minimized: uiT('ui.ocr.window.detail.memory_reader_window_minimized', '游戏窗口已最小化，OCR 不能截图，请恢复窗口'),
-    memory_reader_minimized_overridden_by_foreground: uiT('ui.ocr.window.detail.memory_reader_minimized_overridden_by_foreground', '窗口标记为最小化但实际在前台，已自动恢复'),
-    memory_reader_pid: uiT('ui.ocr.window.detail.memory_reader_pid', '优先沿用 Memory Reader 命中的 PID'),
-    memory_reader_process: uiT('ui.ocr.window.detail.memory_reader_process', '优先沿用 Memory Reader 命中的进程'),
-    manual_target_overridden_by_memory_reader: uiT('ui.ocr.window.detail.manual_target_overridden_by_memory_reader', 'Memory Reader 目标与 OCR 手动目标不一致，已优先使用 Memory Reader'),
-    manual_target_overridden_by_memory_reader_pid: uiT('ui.ocr.window.detail.manual_target_overridden_by_memory_reader_pid', 'OCR 手动目标已过期，已按 Memory Reader PID 切回当前游戏'),
-    manual_target_overridden_by_memory_reader_process: uiT('ui.ocr.window.detail.manual_target_overridden_by_memory_reader_process', 'OCR 手动目标已过期，已按 Memory Reader 进程切回当前游戏'),
-    manual_target_overridden_by_memory_reader_unavailable: uiT('ui.ocr.window.detail.manual_target_overridden_by_memory_reader_unavailable', 'Memory Reader 已切到其他游戏，OCR 暂不继续读旧窗口'),
-    memory_reader_target_unavailable: uiT('ui.ocr.window.detail.memory_reader_target_unavailable', 'Memory Reader 目标窗口不可用，OCR 暂停以避免读错窗口'),
-    attached_hwnd: uiT('ui.ocr.window.detail.attached_hwnd', '优先复用当前已附着窗口'),
-    attached_pid: uiT('ui.ocr.window.detail.attached_pid', '优先复用当前已附着进程'),
-    foreground_window: uiT('ui.ocr.window.detail.foreground_window', '优先使用当前前台候选窗口'),
-    scored_candidate: uiT('ui.ocr.window.detail.scored_candidate', '按候选排序选择窗口'),
+    auto_candidate_scan: uiT('ui.ocr.window.detail.auto_candidate_scan', 'Автообнаружение окна игры'),
+    manual_target_active: uiT('ui.ocr.window.detail.manual_target_active', 'Ручная блокировка включена'),
+    manual_target_exact: uiT('ui.ocr.window.detail.manual_target_exact', 'Совпадение с вручную заблокированным окном'),
+    manual_target_rebound: uiT('ui.ocr.window.detail.manual_target_rebound', 'Ручное окно повторно привязано по сигнатуре'),
+    manual_target_unavailable_fallback_to_auto: uiT('ui.ocr.window.detail.manual_target_unavailable_fallback_to_auto', 'Ручное окно недоступно; заблокируйте окно снова'),
+    waiting_for_manual_window_target: uiT('ui.ocr.window.detail.waiting_for_manual_window_target', 'Автообнаружение не удалось; вручную заблокируйте целевое OCR-окно'),
+    auto_detect_needs_manual_fallback: uiT('ui.ocr.window.detail.auto_detect_needs_manual_fallback', 'Надежная автоцель не найдена; выберите окно игры вручную'),
+    foreground_window_needs_manual_confirmation: uiT('ui.ocr.window.detail.foreground_window_needs_manual_confirmation', 'Текущее окно переднего плана не похоже на игру; выберите окно игры вручную'),
+    no_eligible_window: uiT('ui.ocr.window.detail.no_eligible_window', 'Сейчас нет доступного окна игры'),
+    memory_reader_window_minimized: uiT('ui.ocr.window.detail.memory_reader_window_minimized', 'Окно игры свернуто; OCR не может его захватить. Восстановите окно.'),
+    memory_reader_minimized_overridden_by_foreground: uiT('ui.ocr.window.detail.memory_reader_minimized_overridden_by_foreground', 'Окно было помечено как свернутое, но фактически на переднем плане, поэтому восстановлено автоматически'),
+    memory_reader_pid: uiT('ui.ocr.window.detail.memory_reader_pid', 'Сначала повторно используется PID, найденный Memory Reader'),
+    memory_reader_process: uiT('ui.ocr.window.detail.memory_reader_process', 'Сначала повторно используется процесс, найденный Memory Reader'),
+    manual_target_overridden_by_memory_reader: uiT('ui.ocr.window.detail.manual_target_overridden_by_memory_reader', 'Цель Memory Reader отличается от ручной цели OCR, поэтому предпочтение отдано Memory Reader'),
+    manual_target_overridden_by_memory_reader_pid: uiT('ui.ocr.window.detail.manual_target_overridden_by_memory_reader_pid', 'Ручная цель OCR устарела; переключено обратно на текущую игру по PID Memory Reader'),
+    manual_target_overridden_by_memory_reader_process: uiT('ui.ocr.window.detail.manual_target_overridden_by_memory_reader_process', 'Ручная цель OCR устарела; переключено обратно на текущую игру по процессу Memory Reader'),
+    manual_target_overridden_by_memory_reader_unavailable: uiT('ui.ocr.window.detail.manual_target_overridden_by_memory_reader_unavailable', 'Memory Reader переключился на другую игру, поэтому OCR не будет продолжать читать старое окно'),
+    memory_reader_target_unavailable: uiT('ui.ocr.window.detail.memory_reader_target_unavailable', 'Целевое окно Memory Reader недоступно; OCR приостановлен, чтобы не читать неправильное окно'),
+    attached_hwnd: uiT('ui.ocr.window.detail.attached_hwnd', 'Предпочесть текущее подключенное окно'),
+    attached_pid: uiT('ui.ocr.window.detail.attached_pid', 'Предпочесть текущий подключенный процесс'),
+    foreground_window: uiT('ui.ocr.window.detail.foreground_window', 'Предпочесть текущее окно-кандидат на переднем плане'),
+    scored_candidate: uiT('ui.ocr.window.detail.scored_candidate', 'Выбрано по рейтингу кандидатов'),
   };
   return uiDynamicT('ui.ocr.window.detail', detail, mapping[detail] || detail || '');
 }
@@ -5445,29 +5597,29 @@ function renderOcrWindowTargetStatus(status) {
   const detail = formatOcrWindowSelectionDetail(runtime.target_selection_detail || '');
   let captureHint = '';
   if (runtime.capture_backend_kind === 'dxcam') {
-    captureHint = uiT('ui.ocr.window.capture_dxcam', '使用 DXcam 截图后端');
+    captureHint = uiT('ui.ocr.window.capture_dxcam', 'Используется бэкенд захвата DXcam');
   } else if (runtime.capture_backend_detail === 'dxcam_unavailable_fallback') {
-    captureHint = uiT('ui.ocr.window.capture_dxcam_unavailable', '未安装 DXcam，正在使用兼容截图；可安装 dxcam 降低遮挡或旧帧影响');
+    captureHint = uiT('ui.ocr.window.capture_dxcam_unavailable', 'DXcam не установлен, используется совместимый захват. Установка dxcam может снизить проблемы перекрытия и старых кадров.');
   } else if (runtime.capture_backend_detail === 'dxcam_failed_fallback') {
-    captureHint = uiT('ui.ocr.window.capture_dxcam_failed', 'DXcam 截图失败，已自动切到兼容截图');
+    captureHint = uiT('ui.ocr.window.capture_dxcam_failed', 'Захват DXcam не удался, выполнен автоматический переход на совместимый захват');
   } else if (runtime.capture_backend_kind) {
-    captureHint = `${uiT('ui.ocr.window.capture_compat_prefix', '使用')} ${runtime.capture_backend_kind} ${uiT('ui.ocr.window.capture_compat_suffix', '兼容截图')}`;
+    captureHint = `${uiT('ui.ocr.window.capture_compat_prefix', 'Используется')} ${runtime.capture_backend_kind} ${uiT('ui.ocr.window.capture_compat_suffix', 'совместимый захват')}`;
   }
   if (runtime.stale_capture_backend) {
-    captureHint = uiT('ui.ocr.window.capture_stale', '截图源没有更新，请切回游戏窗口或切换 DXcam 截图后端');
+    captureHint = uiT('ui.ocr.window.capture_stale', 'Источник захвата не обновляется. Вернитесь к окну игры или переключите бэкенд DXcam.');
   }
   const hintParts = [
-    effectiveProcess ? `${uiT('ui.window.current_target', '当前目标')}: ${effectiveProcess}${runtime.pid ? ` (${runtime.pid})` : ''}` : '',
-    effectiveTitle ? `${uiT('ui.window.window_label', '窗口')}: ${effectiveTitle}` : '',
+    effectiveProcess ? `${uiT('ui.window.current_target', 'Текущая цель')}: ${effectiveProcess}${runtime.pid ? ` (${runtime.pid})` : ''}` : '',
+    effectiveTitle ? `${uiT('ui.window.window_label', 'Окно')}: ${effectiveTitle}` : '',
     captureHint,
     detail,
-    runtime.last_exclude_reason ? `${uiT('ui.ocr.window.last_excluded', '最近排除')}: ${formatOcrWindowReason(runtime.last_exclude_reason)}` : '',
+    runtime.last_exclude_reason ? `${uiT('ui.ocr.window.last_excluded', 'Последнее исключение')}: ${formatOcrWindowReason(runtime.last_exclude_reason)}` : '',
   ].filter(Boolean);
 
   modeText.textContent = mode === 'manual'
-    ? `${uiT('ui.window.current_mode', '当前模式')}: manual${manualTarget.process_name ? ` | ${uiT('ui.window.locked', '锁定')} ${manualTarget.process_name}` : ''}`
-    : `${uiT('ui.window.current_mode', '当前模式')}: ${uiT('ui.window.auto_detect_first', '自动检测优先')}`;
-  hint.textContent = hintParts.join(' | ') || uiT('ui.ocr.window.auto_hint', '插件会先尝试当前前台/已绑定游戏窗口；无法可信识别时，请手动选择游戏窗口。');
+    ? `${uiT('ui.window.current_mode', 'Текущий режим')}: manual${manualTarget.process_name ? ` | ${uiT('ui.window.locked', 'Заблокировано')} ${manualTarget.process_name}` : ''}`
+    : `${uiT('ui.window.current_mode', 'Текущий режим')}: ${uiT('ui.window.auto_detect_first', 'Сначала автоопределение')}`;
+  hint.textContent = hintParts.join(' | ') || uiT('ui.ocr.window.auto_hint', 'Плагин сначала пробует текущее переднее или привязанное игровое окно. Если уверенно определить его нельзя, выберите окно игры вручную.');
   autoButton.disabled = mode !== 'manual';
 }
 
@@ -5488,10 +5640,10 @@ function renderLockedWindow(status) {
     card.innerHTML = `
       <div class="locked-window-info">
         <p class="list-kicker">${escapeHtml(processName)}${pid ? ` · PID ${escapeHtml(pid)}` : ''}</p>
-        <h3>${escapeHtml(title || uiT('ui.window.untitled', '未命名窗口'))}</h3>
+        <h3>${escapeHtml(title || uiT('ui.window.untitled', 'Окно без названия'))}</h3>
         <p class="result-note mono">${escapeHtml(windowKey)}</p>
         <div class="window-candidate-meta">
-          <span class="status-chip active">${escapeHtml(uiT('ui.window.manual_locked', '手动锁定'))}</span>
+          <span class="status-chip active">${escapeHtml(uiT('ui.window.manual_locked', 'Ручная блокировка'))}</span>
         </div>
       </div>
     `;
@@ -5499,17 +5651,17 @@ function renderLockedWindow(status) {
     const detail = formatOcrWindowSelectionDetail(runtime.target_selection_detail || '');
     card.innerHTML = `
       <div class="locked-window-info">
-        <p class="list-kicker">${escapeHtml(effectiveProcess || uiT('ui.window.auto_detect_target', '自动检测目标'))}${runtime.pid ? ` · PID ${escapeHtml(runtime.pid)}` : ''}</p>
-        <h3>${escapeHtml(effectiveTitle || uiT('ui.window.untitled', '未命名窗口'))}</h3>
-        <p class="result-note">${escapeHtml(detail || uiT('ui.ocr.window.auto_detected_target', '自动检测到可信游戏窗口'))}</p>
+        <p class="list-kicker">${escapeHtml(effectiveProcess || uiT('ui.window.auto_detect_target', 'Автоцель'))}${runtime.pid ? ` · PID ${escapeHtml(runtime.pid)}` : ''}</p>
+        <h3>${escapeHtml(effectiveTitle || uiT('ui.window.untitled', 'Окно без названия'))}</h3>
+        <p class="result-note">${escapeHtml(detail || uiT('ui.ocr.window.auto_detected_target', 'Надежное игровое окно обнаружено автоматически'))}</p>
         <div class="window-candidate-meta">
-          <span class="status-chip active">${escapeHtml(uiT('ui.window.auto_detected', '自动检测'))}</span>
-          ${runtime.target_is_foreground ? `<span class="status-chip active">${escapeHtml(uiT('ui.window.foreground', '前台窗口'))}</span>` : `<span class="status-chip warning">${escapeHtml(uiT('ui.window.not_foreground', '非前台'))}</span>`}
+          <span class="status-chip active">${escapeHtml(uiT('ui.window.auto_detected', 'Автоопределено'))}</span>
+          ${runtime.target_is_foreground ? `<span class="status-chip active">${escapeHtml(uiT('ui.window.foreground', 'Переднее окно'))}</span>` : `<span class="status-chip warning">${escapeHtml(uiT('ui.window.not_foreground', 'Не на переднем плане'))}</span>`}
         </div>
       </div>
     `;
   } else {
-    card.innerHTML = `<div class="locked-window-empty">${escapeHtml(uiT('ui.ocr.window.no_locked_target', '尚未确认 OCR 目标窗口。插件会优先尝试前台/已绑定游戏窗口；如果仍没有读到台词，请点击“选择识别窗口”手动锁定。'))}</div>`;
+    card.innerHTML = `<div class="locked-window-empty">${escapeHtml(uiT('ui.ocr.window.no_locked_target', 'Целевое окно OCR еще не подтверждено. Плагин сначала пробует переднее/привязанное игровое окно; если текст не читается, нажмите «Выбрать окно OCR» для ручной блокировки.'))}</div>`;
   }
 }
 
@@ -5517,23 +5669,23 @@ function renderOcrWindowListToNode(node, windows) {
   renderPreservingScroll(node, () => {
     if (!windows.length) {
       node.className = 'stack-list scroll-region empty-state window-candidate-list';
-      node.textContent = uiT('ui.ocr.window.no_available_window', '暂无可用游戏窗口');
+      node.textContent = uiT('ui.ocr.window.no_available_window', 'Нет доступных игровых окон');
     } else {
       node.className = 'stack-list scroll-region window-candidate-list';
       node.innerHTML = windows.map((item) => {
         const chips = [
-          item.is_attached ? `<span class="status-chip active">${escapeHtml(uiT('ui.window.attached', '当前附着'))}</span>` : '',
-          item.is_foreground ? `<span class="status-chip">${escapeHtml(uiT('ui.window.foreground', '前台窗口'))}</span>` : '',
-          item.is_manual_target ? `<span class="status-chip active">${escapeHtml(uiT('ui.window.manual_locked', '手动锁定'))}</span>` : '',
+          item.is_attached ? `<span class="status-chip active">${escapeHtml(uiT('ui.window.attached', 'Сейчас подключено'))}</span>` : '',
+          item.is_foreground ? `<span class="status-chip">${escapeHtml(uiT('ui.window.foreground', 'Переднее окно'))}</span>` : '',
+          item.is_manual_target ? `<span class="status-chip active">${escapeHtml(uiT('ui.window.manual_locked', 'Ручная блокировка'))}</span>` : '',
         ].filter(Boolean).join('');
         return `
           <article class="list-card compact">
             <div class="window-candidate-header">
               <div class="window-candidate-summary">
-                <p class="list-kicker">${escapeHtml(item.process_name || uiT('ui.window.unknown_process', '未知进程'))} · pid ${escapeHtml(item.pid || 0)}</p>
-                <h3>${escapeHtml(item.title || uiT('ui.window.untitled', '未命名窗口'))}</h3>
+                <p class="list-kicker">${escapeHtml(item.process_name || uiT('ui.window.unknown_process', 'Неизвестный процесс'))} · pid ${escapeHtml(item.pid || 0)}</p>
+                <h3>${escapeHtml(item.title || uiT('ui.window.untitled', 'Окно без названия'))}</h3>
               </div>
-              <button class="secondary" data-window-key="${escapeHtml(item.window_key || '')}">${escapeHtml(uiT('ui.window.lock_window', '锁定此窗口'))}</button>
+              <button class="secondary" data-window-key="${escapeHtml(item.window_key || '')}">${escapeHtml(uiT('ui.window.lock_window', 'Заблокировать окно'))}</button>
             </div>
             <p class="result-note mono">${escapeHtml(item.window_key || '')}</p>
             <div class="window-candidate-actions">
@@ -5547,7 +5699,7 @@ function renderOcrWindowListToNode(node, windows) {
   node.querySelectorAll('[data-window-key]').forEach((button) => {
     button.addEventListener('click', () => {
       const key = button.getAttribute('data-window-key') || '';
-      withButtonPending(button, uiT('ui.pending.locking', '锁定中...'), () => setOcrWindowTarget(key)).catch((error) => { console.error('[galgame] async action failed', error); });
+      withButtonPending(button, uiT('ui.pending.locking', 'Блокировка...'), () => setOcrWindowTarget(key)).catch((error) => { console.error('[galgame] async action failed', error); });
     });
   });
 }
@@ -5571,13 +5723,13 @@ function renderOcrWindowTargetSnapshot(snapshot, status = latestStatus) {
   renderPreservingScroll(excludedNode, () => {
     if (!excludedWindows.length) {
       excludedNode.className = 'stack-list scroll-region empty-state window-candidate-list';
-      excludedNode.textContent = uiT('ui.ocr.window.no_excluded', '暂无排除窗口');
+      excludedNode.textContent = uiT('ui.ocr.window.no_excluded', 'Исключенных окон нет');
     } else {
       excludedNode.className = 'stack-list scroll-region window-candidate-list';
       excludedNode.innerHTML = excludedWindows.map((item) => `
         <article class="list-card compact">
-          <p class="list-kicker">${escapeHtml(item.process_name || uiT('ui.window.unknown_process', '未知进程'))} · ${escapeHtml(formatOcrWindowReason(item.exclude_reason || ''))}</p>
-          <h3>${escapeHtml(item.title || uiT('ui.window.untitled', '未命名窗口'))}</h3>
+          <p class="list-kicker">${escapeHtml(item.process_name || uiT('ui.window.unknown_process', 'Неизвестный процесс'))} · ${escapeHtml(formatOcrWindowReason(item.exclude_reason || ''))}</p>
+          <h3>${escapeHtml(item.title || uiT('ui.window.untitled', 'Окно без названия'))}</h3>
           <p class="result-note mono">${escapeHtml(item.window_key || '')}</p>
         </article>
       `).join('');
@@ -5622,7 +5774,7 @@ function renderRapidOcr(status) {
   const manualGuide = status.download_guide?.rapidocr_models || {};
   const rapidocrJapanV5Note = (
     rapidocr.ocr_version === 'PP-OCRv5' && rapidocr.lang_type === 'japan'
-      ? uiT('ui.install.rapidocr.v5_japan_note', '日文识别使用 PP-OCRv5 检测/方向模型，并沿用 PP-OCRv4 日文识别模型。')
+      ? uiT('ui.install.rapidocr.v5_japan_note', 'Для японского распознавания используются модели детекции/ориентации PP-OCRv5 и японская модель распознавания PP-OCRv4.')
       : ''
   );
   applyRapidOcrModelsGate(rapidocr);
@@ -5634,14 +5786,14 @@ function renderRapidOcr(status) {
   const waitingRefresh = Boolean(isRecentLocalCompletedInstallTask(modelState) && rapidocrModelsMissing);
   const modelBusy = getInstallState('rapidocr_models').inProgress || waitingRefresh;
   const buttons = [
-    `<button id="rapidocrUseBtn" class="secondary" ${(!rapidocrUsable || selectedBackend === 'rapidocr') ? 'disabled' : ''}>${escapeHtml(selectedBackend === 'rapidocr' ? uiT('ui.install.rapidocr.using', '正在使用 RapidOCR') : uiT('ui.install.rapidocr.use', '使用 RapidOCR'))}</button>`,
-    `<button id="ocrBackendAutoBtn" class="ghost" ${selectedBackend === 'auto' ? 'disabled' : ''}>${escapeHtml(selectedBackend === 'auto' ? uiT('ui.install.ocr_auto.using', 'OCR 自动选择中') : uiT('ui.install.ocr_auto', 'OCR 自动'))}</button>`,
+    `<button id="rapidocrUseBtn" class="secondary" ${(!rapidocrUsable || selectedBackend === 'rapidocr') ? 'disabled' : ''}>${escapeHtml(selectedBackend === 'rapidocr' ? uiT('ui.install.rapidocr.using', 'Используется RapidOCR') : uiT('ui.install.rapidocr.use', 'Использовать RapidOCR'))}</button>`,
+    `<button id="ocrBackendAutoBtn" class="ghost" ${selectedBackend === 'auto' ? 'disabled' : ''}>${escapeHtml(selectedBackend === 'auto' ? uiT('ui.install.ocr_auto.using', 'Автовыбор OCR') : uiT('ui.install.ocr_auto', 'OCR авто'))}</button>`,
   ];
   if (canDownloadModels) {
     const downloadText = getInstallState('rapidocr_models').inProgress
       ? config.runningText
       : waitingRefresh
-        ? uiT('ui.install.task_done_refreshing', '安装任务已结束，正在等待插件状态刷新。')
+        ? uiT('ui.install.task_done_refreshing', 'Задача выполнена — ожидание обновления статуса плагина.')
         : lastStatus === 'failed'
           ? config.retryText
           : config.actionText;
@@ -5649,26 +5801,25 @@ function renderRapidOcr(status) {
   }
 
   let cardStatus = 'warning';
-  let chipText = uiT('ui.install.status.not_found', '未检测到');
+  let chipText = uiT('ui.install.status.not_found', 'Не найдено');
   let descText = '';
   let metaText = '';
 
   if (!rapidocr.install_supported) {
     cardStatus = 'neutral';
-    chipText = uiT('ui.install.status.unsupported', '平台不支持');
-    descText = uiT('ui.install.rapidocr.unsupported_body', 'RapidOCR 主后端目前只支持 Windows。');
+    chipText = uiT('ui.install.status.unsupported', 'Не поддерживается');
+    descText = uiT('ui.install.rapidocr.unsupported_body', 'Основной бэкенд RapidOCR требует поддерживаемую локальную среду выполнения.');
   } else if (rapidocrModelsMissing) {
     cardStatus = 'warning';
-    chipText = uiT('ui.install.status.models_missing', '模型缺失');
+    chipText = uiT('ui.install.status.models_missing', 'Нет моделей');
     const missing = Array.isArray(rapidocr.missing_model_files) ? rapidocr.missing_model_files : [];
     const totalMb = (Number(rapidocr.missing_model_total_size || 0) / (1024 * 1024)).toFixed(1);
     const langType = rapidocr.lang_type || '';
     const ocrVersion = rapidocr.ocr_version || '';
-    const modelSource = rapidocr.model_download_source || uiT('ui.status.unknown', '未知');
-    const modelCacheDir = rapidocr.model_cache_dir || uiT('ui.status.unknown', '未知');
+    const modelSource = rapidocr.model_download_source || uiT('ui.status.unknown', 'Неизвестно');
+    const modelCacheDir = rapidocr.model_cache_dir || uiT('ui.status.unknown', 'Неизвестно');
     const manualRecoveryBody = uiTf(
-      'ui.install.rapidocr.missing_models_manual_body',
-      '当前选择 lang_type={lang} + ocr_version={version}，需要下载缺失模型文件到本地缓存。自动下载会使用 ModelScope；也可按 {source} 提供的信息手动下载并放到 {dir}，再点击“刷新状态”。',
+      'ui.install.rapidocr.missing_models_manual_body', 'Текущий выбор lang_type={lang} + ocr_version={version} требует недостающие файлы моделей. Автоскачивание использует ModelScope; при необходимости скачайте вручную по {source}, поместите файлы в {dir}, затем нажмите "Обновить статус".',
       {
         lang: langType,
         version: ocrVersion,
@@ -5677,50 +5828,49 @@ function renderRapidOcr(status) {
       },
     );
     descText = uiTf(
-      'ui.install.rapidocr.missing_models_title_compact',
-      '所选语言模型未下载（{count} 个，~{size} MB）',
+      'ui.install.rapidocr.missing_models_title_compact', 'Выбранные языковые модели не загружены ({count} файлов, ~{size} МБ)',
       { count: missing.length, size: totalMb },
     );
     const downloadFailed = Boolean(modelState && modelState.status === 'failed');
     metaText = [
-      rapidocr.model_cache_dir ? `${uiT('ui.install.model_dir', '模型目录')}: ${rapidocr.model_cache_dir}` : '',
-      rapidocr.model_download_source ? `${uiT('ui.install.rapidocr.download_source', '下载来源')}: ${rapidocr.model_download_source}` : '',
-      manualGuide.url ? `${uiT('ui.install.manual_download_url', '手动下载')}: ${manualGuide.url}` : '',
-      manualGuide.code ? `${uiT('ui.install.manual_download_code', '提取码')}: ${manualGuide.code}` : '',
-      manualGuide.target_dir ? `${uiT('ui.install.manual_target_dir', '放置目录')}: ${manualGuide.target_dir}` : '',
+      rapidocr.model_cache_dir ? `${uiT('ui.install.model_dir', 'Каталог моделей')}: ${rapidocr.model_cache_dir}` : '',
+      rapidocr.model_download_source ? `${uiT('ui.install.rapidocr.download_source', 'Источник скачивания')}: ${rapidocr.model_download_source}` : '',
+      manualGuide.url ? `${uiT('ui.install.manual_download_url', 'Ручная загрузка')}: ${manualGuide.url}` : '',
+      manualGuide.code ? `${uiT('ui.install.manual_download_code', 'Код для распаковки')}: ${manualGuide.code}` : '',
+      manualGuide.target_dir ? `${uiT('ui.install.manual_target_dir', 'Каталог установки')}: ${manualGuide.target_dir}` : '',
       rapidocrJapanV5Note,
       !canDownloadModels ? manualRecoveryBody : '',
-      downloadFailed ? `${uiT('ui.install.last_error', '上次错误')}: ${modelState.error || modelState.message || ''}` : '',
+      downloadFailed ? `${uiT('ui.install.last_error', 'Последняя ошибка')}: ${modelState.error || modelState.message || ''}` : '',
     ].filter(Boolean).join('\n');
   } else if (rapidocrUsable) {
     cardStatus = 'ok';
-    chipText = uiT('ui.install.status.ready', '已就绪');
+    chipText = uiT('ui.install.status.ready', 'Готово');
     descText = usingRapidOcr
-      ? uiT('ui.install.rapidocr.active_title', 'RapidOCR 已接管当前 OCR Reader')
-      : uiT('ui.install.rapidocr.ready_body', 'RapidOCR 已就绪。无 SDK 且无有效内存文本时，它会作为 OCR Reader 后端。');
+      ? uiT('ui.install.rapidocr.active_title', 'RapidOCR уже обслуживает текущий OCR Reader')
+      : uiT('ui.install.rapidocr.ready_body', 'RapidOCR готов. Когда нет SDK и нет валидного текста из памяти, он будет работать как бэкенд OCR Reader.');
     metaText = [
-      rapidocr.detected_path ? `${uiT('ui.install.detected_path', '检测路径')}: ${rapidocr.detected_path}` : '',
-      rapidocr.model_cache_dir ? `${uiT('ui.install.model_dir', '模型目录')}: ${rapidocr.model_cache_dir}` : '',
-      usingRapidOcr ? `${uiT('ui.install.model_label', '模型')}: ${runtime.backend_model || rapidocr.selected_model || ''}` : '',
+      rapidocr.detected_path ? `${uiT('ui.install.detected_path', 'Обнаруженный путь')}: ${rapidocr.detected_path}` : '',
+      rapidocr.model_cache_dir ? `${uiT('ui.install.model_dir', 'Каталог моделей')}: ${rapidocr.model_cache_dir}` : '',
+      usingRapidOcr ? `${uiT('ui.install.model_label', 'Модель')}: ${runtime.backend_model || rapidocr.selected_model || ''}` : '',
       rapidocrJapanV5Note,
     ].filter(Boolean).join('\n');
   } else if (rapidocr.detail === 'broken_runtime') {
     cardStatus = 'error';
-    chipText = uiT('ui.install.status.broken', '异常');
-    descText = uiT('ui.install.rapidocr.broken_body', 'bundled rapidocr 包导入失败。请重建插件 venv（`uv sync --group galgame`）或重装打包版本。');
-    metaText = rapidocr.detected_path ? `${uiT('ui.install.detected_path', '检测路径')}: ${rapidocr.detected_path}` : '';
+    chipText = uiT('ui.install.status.broken', 'Повреждено');
+    descText = uiT('ui.install.rapidocr.broken_body', 'Не удалось импортировать bundled rapidocr. Пересоберите venv плагина (`uv sync --group galgame`) или переустановите packaged build.');
+    metaText = rapidocr.detected_path ? `${uiT('ui.install.detected_path', 'Обнаруженный путь')}: ${rapidocr.detected_path}` : '';
   } else {
     cardStatus = 'warning';
-    chipText = uiT('ui.install.status.not_found', '未检测到');
-    descText = uiT('ui.install.rapidocr.bundled_hint', 'RapidOCR 运行时随主程序或源码依赖提供；语言模型由 galgame 插件按需从 ModelScope 自动下载。打包版本缺运行时时请重新下载安装包，源码运行请执行 `uv sync --group galgame` 后重启。');
+    chipText = uiT('ui.install.status.not_found', 'Не найдено');
+    descText = uiT('ui.install.rapidocr.bundled_hint', 'Рантайм RapidOCR предоставляется packaged-приложением или зависимостями исходников; языковые модели galgame-плагин скачивает по требованию из ModelScope. Если рантайма нет в packaged-сборке, переустановите её; при запуске из исходников выполните `uv sync --group galgame` и перезапустите.');
   }
 
   if (modelState && !isInstallTaskTerminal(modelState)) {
     cardStatus = 'neutral';
-    chipText = uiT('ui.install.status.installing', '安装中');
+    chipText = uiT('ui.install.status.installing', 'Установка');
   } else if (modelState && modelState.status === 'failed') {
     cardStatus = 'error';
-    chipText = uiT('ui.install.status.failed', '安装失败');
+    chipText = uiT('ui.install.status.failed', 'Ошибка');
   }
 
   card.className = `install-card ${cardStatus}`;
@@ -5901,12 +6051,11 @@ function renderDxcam(status) {
   const selectedBackendLabel = captureBackendLabel(selectedCaptureBackend);
   const activeBackendLabel = activeCaptureBackend
     ? captureBackendLabel(activeCaptureBackend)
-    : uiT('ui.install.capture_backend.waiting_active', '等待下一次 OCR 截图确认');
+    : uiT('ui.install.capture_backend.waiting_active', 'Ожидание следующего OCR-захвата для подтверждения');
   const detailText = textValue(runtime.capture_backend_detail || runtime.ocr_capture_backend_detail);
   const blockedText = textValue(status.ocr_capture_backend_block_reason || runtime.ocr_window_capture_block_reason);
   title.textContent = uiTf(
-    'ui.install.capture_backend.card_title_with_backend',
-    '截图后端：{backend}',
+    'ui.install.capture_backend.card_title_with_backend', 'Бэкенд захвата: {backend}',
     { backend: activeCaptureBackend ? activeBackendLabel : selectedBackendLabel },
   );
   const captureActive = (value) => (
@@ -5915,49 +6064,46 @@ function renderDxcam(status) {
       : selectedCaptureBackend === value
   );
   syncActionButtons(actions, [
-    `<button id="smartCaptureUseBtn" class="secondary" ${captureActive('smart') ? 'disabled' : ''}>${escapeHtml(captureActive('smart') ? uiT('ui.install.smart.using', '正在使用 Smart') : uiT('ui.install.smart.use', '使用 Smart'))}</button>`,
-    `<button id="dxcamUseBtn" class="secondary" ${(!installed || captureActive('dxcam')) ? 'disabled' : ''}>${escapeHtml(captureActive('dxcam') ? uiT('ui.install.dxcam.using', '正在使用 DXcam') : uiT('ui.install.dxcam.use', '使用 DXcam'))}</button>`,
-    `<button id="captureBackendAutoBtn" class="ghost" ${captureActive('auto') ? 'disabled' : ''}>${escapeHtml(captureActive('auto') ? uiT('ui.install.capture_auto.using', '截图自动选择中') : uiT('ui.install.capture_auto', '截图自动'))}</button>`,
-    `<button id="mssUseBtn" class="ghost" ${captureActive('mss') ? 'disabled' : ''}>${escapeHtml(captureActive('mss') ? uiT('ui.install.mss.using', '正在使用 MSS') : uiT('ui.install.mss.use', '使用 MSS'))}</button>`,
-    `<button id="pyautoguiUseBtn" class="ghost" ${captureActive('pyautogui') ? 'disabled' : ''}>${escapeHtml(captureActive('pyautogui') ? uiT('ui.install.pyautogui.using', '正在使用 PyAutoGUI') : uiT('ui.install.pyautogui.use', '使用 PyAutoGUI'))}</button>`,
-    `<button id="printwindowUseBtn" class="ghost" ${captureActive('printwindow') ? 'disabled' : ''}>${escapeHtml(captureActive('printwindow') ? uiT('ui.install.printwindow.using', '正在使用 PrintWindow') : uiT('ui.install.printwindow.use', '使用 PrintWindow'))}</button>`,
+    `<button id="smartCaptureUseBtn" class="secondary" ${captureActive('smart') ? 'disabled' : ''}>${escapeHtml(captureActive('smart') ? uiT('ui.install.smart.using', 'Используется Smart') : uiT('ui.install.smart.use', 'Использовать Smart'))}</button>`,
+    `<button id="dxcamUseBtn" class="secondary" ${(!installed || captureActive('dxcam')) ? 'disabled' : ''}>${escapeHtml(captureActive('dxcam') ? uiT('ui.install.dxcam.using', 'Используется DXcam') : uiT('ui.install.dxcam.use', 'Использовать DXcam'))}</button>`,
+    `<button id="captureBackendAutoBtn" class="ghost" ${captureActive('auto') ? 'disabled' : ''}>${escapeHtml(captureActive('auto') ? uiT('ui.install.capture_auto.using', 'Автовыбор захвата') : uiT('ui.install.capture_auto', 'Захват авто'))}</button>`,
+    `<button id="mssUseBtn" class="ghost" ${captureActive('mss') ? 'disabled' : ''}>${escapeHtml(captureActive('mss') ? uiT('ui.install.mss.using', 'Используется MSS') : uiT('ui.install.mss.use', 'Использовать MSS'))}</button>`,
+    `<button id="pyautoguiUseBtn" class="ghost" ${captureActive('pyautogui') ? 'disabled' : ''}>${escapeHtml(captureActive('pyautogui') ? uiT('ui.install.pyautogui.using', 'Используется PyAutoGUI') : uiT('ui.install.pyautogui.use', 'Использовать PyAutoGUI'))}</button>`,
+    `<button id="printwindowUseBtn" class="ghost" ${captureActive('printwindow') ? 'disabled' : ''}>${escapeHtml(captureActive('printwindow') ? uiT('ui.install.printwindow.using', 'Используется PrintWindow') : uiT('ui.install.printwindow.use', 'Использовать PrintWindow'))}</button>`,
   ].join(''));
 
   if (!dxcam.install_supported) {
     card.className = 'install-card neutral';
     chip.textContent = activeCaptureBackend
-      ? uiT('ui.install.status.ready', '已就绪')
-      : uiT('ui.install.status.unsupported', '平台不支持');
+      ? uiT('ui.install.status.ready', 'Готово')
+      : uiT('ui.install.status.unsupported', 'Не поддерживается');
     desc.textContent = uiTf(
-      'ui.install.capture_backend.desc',
-      '当前选择：{selected}；实际后端：{active}。',
+      'ui.install.capture_backend.desc', 'Выбрано: {selected}; активный бэкенд: {active}.',
       { selected: selectedBackendLabel, active: activeBackendLabel },
     );
-    meta.textContent = uiT('ui.install.capture_backend.dxcam_unsupported_meta', 'DXcam 当前平台不可用；可继续使用 MSS、PyAutoGUI 或 PrintWindow。');
+    meta.textContent = uiT('ui.install.capture_backend.dxcam_unsupported_meta', 'DXcam недоступен на этой платформе; MSS, PyAutoGUI или PrintWindow можно использовать дальше.');
   } else if (installed) {
     card.className = `install-card ${usingDxcam ? 'ok' : 'neutral'}`;
-    chip.textContent = uiT('ui.install.status.ready', '已就绪');
+    chip.textContent = uiT('ui.install.status.ready', 'Готово');
     desc.textContent = uiTf(
-      'ui.install.capture_backend.desc',
-      '当前选择：{selected}；实际后端：{active}。',
+      'ui.install.capture_backend.desc', 'Выбрано: {selected}; активный бэкенд: {active}.',
       { selected: selectedBackendLabel, active: activeBackendLabel },
     );
     meta.textContent = detailText
-      ? uiTf('ui.install.capture_backend.detail_meta', '后端详情：{detail}', { detail: detailText })
-      : uiT('ui.install.capture_backend.visible_window_meta', '截图要求游戏窗口可见；不会绕过系统后台截图限制。');
+      ? uiTf('ui.install.capture_backend.detail_meta', 'Детали бэкенда: {detail}', { detail: detailText })
+      : uiT('ui.install.capture_backend.visible_window_meta', 'Для захвата окно игры должно быть видимым; ограничения фонового захвата ОС не обходятся.');
   } else {
     card.className = 'install-card warning';
     chip.textContent = activeCaptureBackend
-      ? uiT('ui.install.status.ready', '已就绪')
-      : uiT('ui.install.status.not_found', '未检测到');
+      ? uiT('ui.install.status.ready', 'Готово')
+      : uiT('ui.install.status.not_found', 'Не найдено');
     desc.textContent = uiTf(
-      'ui.install.capture_backend.desc',
-      '当前选择：{selected}；实际后端：{active}。',
+      'ui.install.capture_backend.desc', 'Выбрано: {selected}; активный бэкенд: {active}.',
       { selected: selectedBackendLabel, active: activeBackendLabel },
     );
     meta.textContent = blockedText
-      ? uiTf('ui.install.capture_backend.blocked_meta', '后端受阻：{detail}', { detail: blockedText })
-      : uiT('ui.install.capture_backend.dxcam_missing_meta', 'DXcam 不可用时会继续使用 MSS、PyAutoGUI 或 PrintWindow 等截图后端。');
+      ? uiTf('ui.install.capture_backend.blocked_meta', 'Бэкенд заблокирован: {detail}', { detail: blockedText })
+      : uiT('ui.install.capture_backend.dxcam_missing_meta', 'Если DXcam недоступен, MSS, PyAutoGUI или PrintWindow могут продолжить работу как бэкенд захвата.');
   }
 
   rebindCardButton('smartCaptureUseBtn', () => setOcrBackendSelection({ captureBackend: 'smart' }));
@@ -5986,59 +6132,58 @@ function renderTextractor(status) {
   const installed = Boolean(textractor.installed);
   const runtimeBlocked = runtime.detail === 'invalid_textractor_path';
   let cardStatus = 'warning';
-  let chipText = uiT('ui.install.status.not_installed', '未安装');
+  let chipText = uiT('ui.install.status.not_installed', 'Не установлено');
   let descText = '';
   let metaText = '';
 
   if (!textractor.install_supported) {
     cardStatus = 'neutral';
-    chipText = uiT('ui.install.status.unsupported', '平台不支持');
-    descText = uiT('ui.install.textractor.unsupported_body', 'Textractor 读内存兜底仅在 Windows 上启用，而且当前优先级已经低于 OCR Reader。');
+    chipText = uiT('ui.install.status.unsupported', 'Не поддерживается');
+    descText = uiT('ui.install.textractor.unsupported_body', 'Резерв чтения памяти Textractor включается только в Windows, и теперь его приоритет ниже OCR Reader.');
   } else if (installed) {
     cardStatus = 'ok';
-    chipText = uiT('ui.install.status.installed', '已安装');
+    chipText = uiT('ui.install.status.installed', 'Установлено');
     descText = runtimeBlocked
-      ? uiT('ui.install.textractor.ready_blocked_title', 'Textractor 已安装，等待 Memory Reader 手动/实验性接管')
-      : uiT('ui.install.textractor.ready_title', 'Textractor 已就绪，但仅作为实验性兜底');
-    metaText = textractor.detected_path ? `${uiT('ui.install.detected_path', '检测路径')}: ${textractor.detected_path}` : '';
+      ? uiT('ui.install.textractor.ready_blocked_title', 'Textractor установлен и ожидает ручного/экспериментального перехвата Memory Reader')
+      : uiT('ui.install.textractor.ready_title', 'Textractor готов, но только как экспериментальный резерв');
+    metaText = textractor.detected_path ? `${uiT('ui.install.detected_path', 'Обнаруженный путь')}: ${textractor.detected_path}` : '';
   } else {
-    descText = uiT('ui.install.textractor.missing_body', 'Textractor 仅影响实验性 Memory Reader 链路，不影响当前 Bridge SDK > OCR Reader 的正式运行顺序。');
+    descText = uiT('ui.install.textractor.missing_body', 'Textractor влияет только на экспериментальный путь Memory Reader и не влияет на официальный порядок выполнения Bridge SDK > OCR Reader.');
     metaText = [
-      textractor.expected_executable_path ? `${uiT('ui.install.expected_path', '预期安装位置')}: ${textractor.expected_executable_path}` : '',
-      manualGuide.url ? `${uiT('ui.install.manual_download_url', '手动下载')}: ${manualGuide.url}` : '',
-      manualGuide.code ? `${uiT('ui.install.manual_download_code', '提取码')}: ${manualGuide.code}` : '',
-      manualGuide.target_dir ? `${uiT('ui.install.manual_target_dir', '放置目录')}: ${manualGuide.target_dir}` : '',
+      textractor.expected_executable_path ? `${uiT('ui.install.expected_path', 'Ожидаемый путь установки')}: ${textractor.expected_executable_path}` : '',
+      manualGuide.url ? `${uiT('ui.install.manual_download_url', 'Ручная загрузка')}: ${manualGuide.url}` : '',
+      manualGuide.code ? `${uiT('ui.install.manual_download_code', 'Код для распаковки')}: ${manualGuide.code}` : '',
+      manualGuide.target_dir ? `${uiT('ui.install.manual_target_dir', 'Каталог установки')}: ${manualGuide.target_dir}` : '',
     ].filter(Boolean).join('\n');
   }
 
   if (installState && !isInstallTaskTerminal(installState)) {
     cardStatus = 'neutral';
-    chipText = uiT('ui.install.status.installing', '安装中');
-    descText = uiT('ui.install.textractor.installing_body', '下载通过 HTTPS 进行，页面会通过 SSE 接收实时进度。Textractor 完成后只会补强实验性 Memory Reader 路径。');
+    chipText = uiT('ui.install.status.installing', 'Установка');
+    descText = uiT('ui.install.textractor.installing_body', 'Загрузка идет по HTTPS, а эта страница получает ход выполнения через SSE. После завершения Textractor только усиливает экспериментальный путь Memory Reader.');
   } else if (installState && installState.status === 'failed') {
     cardStatus = 'error';
-    chipText = uiT('ui.install.status.failed', '安装失败');
-    const errorText = installState.error || installState.message || uiT('ui.install.task_failed_retry', '后台安装任务失败，你可以再次点击按钮重试。');
+    chipText = uiT('ui.install.status.failed', 'Ошибка');
+    const errorText = installState.error || installState.message || uiT('ui.install.task_failed_retry', 'Фоновая установка не удалась. Можно нажать кнопку еще раз и повторить.');
     const failedPhase = installState.failed_phase || '';
     let phaseHint = '';
     if (failedPhase === 'fetch_release') {
-      phaseHint = uiT('ui.install.textractor.failed_fetch_release_hint', '无法连接 GitHub 服务。请检查网络/GitHub 可达性，或在 plugin.toml 的 [memory_reader] 中配置 textractor_proxy 代理地址。这通常不是插件安装逻辑损坏。');
+      phaseHint = uiT('ui.install.textractor.failed_fetch_release_hint', 'Не удается подключиться к GitHub. Проверьте сеть/доступность GitHub или настройте textractor_proxy в [memory_reader] файла plugin.toml. Обычно это не означает, что установщик плагина поврежден.');
     } else if (failedPhase === 'downloading') {
-      phaseHint = uiT('ui.install.textractor.failed_downloading_hint', 'Textractor 下载中断、HTTP 请求失败或文件校验失败。请确认网络稳定后重试。');
+      phaseHint = uiT('ui.install.textractor.failed_downloading_hint', 'Загрузка Textractor была прервана, HTTP-запрос завершился ошибкой или проверка файла не прошла. Проверьте стабильность сети и повторите попытку.');
     } else if (failedPhase === 'extracting') {
-      phaseHint = uiT('ui.install.textractor.failed_extracting_hint', 'Textractor 安装包解压或安装后验证失败。建议按下面的路径手动安装。');
+      phaseHint = uiT('ui.install.textractor.failed_extracting_hint', 'Не удалось распаковать архив Textractor или проверить установку. Рекомендуется установить вручную по пути ниже.');
     }
     const expectedPath = textractor.expected_executable_path || 'TextractorCLI.exe';
     const manualGuide = uiTf(
-      'ui.install.textractor.manual_install_guide',
-      '手动安装：从 https://github.com/Artikash/Textractor/releases 下载最新 zip，解压后确保 TextractorCLI.exe 位于 {path}，然后刷新状态。',
+      'ui.install.textractor.manual_install_guide', 'Ручная установка: скачайте последний zip с https://github.com/Artikash/Textractor/releases, распакуйте его, убедитесь, что TextractorCLI.exe находится в {path}, затем обновите статус.',
       { path: expectedPath },
     );
     descText = [errorText, phaseHint, manualGuide].filter(Boolean).join('\n');
   } else if (installState && installState.status === 'completed' && !installed) {
     cardStatus = 'neutral';
-    chipText = uiT('ui.install.status.completed', '已完成');
-    descText = installState.message || uiT('ui.install.task_done_refreshing', '安装任务已结束，正在等待插件状态刷新。');
+    chipText = uiT('ui.install.status.completed', 'Завершено');
+    descText = installState.message || uiT('ui.install.task_done_refreshing', 'Задача выполнена — ожидание обновления статуса плагина.');
   }
 
   card.className = `install-card ${cardStatus}`;
@@ -6089,13 +6234,13 @@ function renderOcrProfile(status) {
   const autoApplyInput = document.getElementById('ocrProfileAutoApplyRecommendedInput');
   let autoRecalibrateReason = '';
   if (!Boolean(runtime.enabled)) {
-    autoRecalibrateReason = uiT('ui.ocr_profile.auto_recalibrate.disabled_reader', 'OCR Reader 未启用');
+    autoRecalibrateReason = uiT('ui.ocr_profile.auto_recalibrate.disabled_reader', 'OCR Reader отключен');
   } else if (runtime.detail === 'unsupported_platform') {
-    autoRecalibrateReason = uiT('ui.ocr_profile.auto_recalibrate.unsupported_platform', '当前平台不是 Windows');
+    autoRecalibrateReason = uiT('ui.ocr_profile.auto_recalibrate.unsupported_platform', 'Текущая платформа не Windows');
   } else if (runtime.detail === 'capture_backend_unavailable') {
-    autoRecalibrateReason = uiT('ui.ocr_profile.auto_recalibrate.capture_backend_unavailable', '当前截图后端不可用');
+    autoRecalibrateReason = uiT('ui.ocr_profile.auto_recalibrate.capture_backend_unavailable', 'Текущий бэкенд захвата недоступен');
   } else if (!runtime.process_name || !Number(runtime.width || 0) || !Number(runtime.height || 0)) {
-    autoRecalibrateReason = uiT('ui.ocr_profile.auto_recalibrate.no_target_window', '当前没有已附着的 OCR 目标窗口');
+    autoRecalibrateReason = uiT('ui.ocr_profile.auto_recalibrate.no_target_window', 'Нет прикрепленного целевого окна OCR');
   }
   const recommendedProfile = runtime.recommended_capture_profile
     || runtime.profile?.recommended_capture_profile
@@ -6115,10 +6260,9 @@ function renderOcrProfile(status) {
   );
   const recommendedHint = recommendedProfile && Object.keys(recommendedProfile).length
     ? uiTf(
-      'ui.ocr_profile.recommended_hint',
-      '建议校准: {stage} {profile} ({reason}, confidence={confidence}, manual={manual})',
+      'ui.ocr_profile.recommended_hint', 'Рекомендуемая калибровка: {stage} {profile} ({reason}, confidence={confidence}, manual={manual})',
       {
-        stage: ocrProfileStageLabel(recommendedStage, recommendedStage || uiT('ui.stage.dialogue', '对白区')),
+        stage: ocrProfileStageLabel(recommendedStage, recommendedStage || uiT('ui.stage.dialogue', 'Область диалога')),
         profile: formatCaptureProfile(recommendedProfile),
         reason: recommendedReason || 'auto',
         confidence: formatFixedNumber(recommendedConfidence, 2),
@@ -6131,44 +6275,44 @@ function renderOcrProfile(status) {
 
   if (runtime.process_name) {
     hint.textContent = [
-      uiTf('ui.ocr_profile.current_target', '当前 OCR 目标: {process} ({pid})', {
+      uiTf('ui.ocr_profile.current_target', 'Текущая цель OCR: {process} ({pid})', {
         process: runtime.process_name,
         pid: runtime.pid || 0,
       }),
-      runtime.window_title ? uiTf('ui.ocr_profile.window_title', '窗口: {title}', { title: runtime.window_title }) : '',
-      runtime.width && runtime.height ? uiTf('ui.ocr_profile.window_size', '尺寸: {width}x{height}', {
+      runtime.window_title ? uiTf('ui.ocr_profile.window_title', 'Окно: {title}', { title: runtime.window_title }) : '',
+      runtime.width && runtime.height ? uiTf('ui.ocr_profile.window_size', 'Размер: {width}x{height}', {
         width: runtime.width,
         height: runtime.height,
       }) : '',
       runtime.capture_stage
-        ? uiTf('ui.ocr_profile.runtime_stage', '运行阶段: {stage}', {
+        ? uiTf('ui.ocr_profile.runtime_stage', 'Этап выполнения: {stage}', {
           stage: ocrProfileStageLabel(runtime.capture_stage, runtime.capture_stage),
         })
         : '',
       runtime.capture_profile_match_source
-        ? uiTf('ui.ocr_profile.match_source', '命中来源: {source}', {
+        ? uiTf('ui.ocr_profile.match_source', 'Источник совпадения: {source}', {
           source: ocrCaptureMatchSourceLabel(runtime.capture_profile_match_source, runtime.capture_profile_match_source),
         })
         : '',
-      runtime.capture_profile_bucket_key ? uiTf('ui.ocr_profile.bucket', '命中桶: {bucket}', { bucket: runtime.capture_profile_bucket_key }) : '',
-      runtime.detail ? uiTf('ui.ocr_profile.status', '状态: {status}', { status: runtime.detail }) : '',
-      runtime.takeover_reason ? uiTf('ui.ocr_profile.takeover_reason', '接管原因: {reason}', { reason: runtime.takeover_reason }) : '',
+      runtime.capture_profile_bucket_key ? uiTf('ui.ocr_profile.bucket', 'Бакет совпадения: {bucket}', { bucket: runtime.capture_profile_bucket_key }) : '',
+      runtime.detail ? uiTf('ui.ocr_profile.status', 'Статус: {status}', { status: runtime.detail }) : '',
+      runtime.takeover_reason ? uiTf('ui.ocr_profile.takeover_reason', 'Причина перехвата: {reason}', { reason: runtime.takeover_reason }) : '',
       recommendedHint,
-      pendingRollback ? uiTf('ui.ocr_profile.rollback_observing', '推荐回滚观察中: {count}/2', {
+      pendingRollback ? uiTf('ui.ocr_profile.rollback_observing', 'Наблюдение за откатом рекомендации: {count}/2', {
         count: runtime.capture_profile_rollback_failure_count || 0,
       }) : '',
-      rollbackReason ? uiTf('ui.ocr_profile.rollback_status', '推荐回滚状态: {reason}', { reason: rollbackReason }) : '',
-      uiTf('ui.ocr_profile.auto_recalibrate_status', '自动重校准: {status}', {
-        status: autoRecalibrateReason || uiT('ui.ocr_profile.available', '可用'),
+      rollbackReason ? uiTf('ui.ocr_profile.rollback_status', 'Статус отката рекомендации: {reason}', { reason: rollbackReason }) : '',
+      uiTf('ui.ocr_profile.auto_recalibrate_status', 'Автоперекалибровка: {status}', {
+        status: autoRecalibrateReason || uiT('ui.ocr_profile.available', 'Доступно'),
       }),
       isAihongProcessName(currentProcessName || runtime.process_name)
-        ? uiT('ui.ocr_profile.aihong_stage_hint', '哀鸿支持按对白区 / 菜单区分别保存')
+        ? uiT('ui.ocr_profile.aihong_stage_hint', 'The Lamenting Geese поддерживает отдельное сохранение для диалогов и меню')
         : '',
     ].filter(Boolean).join(' | ');
   } else {
     hint.textContent = isAihongProcessName(currentProcessName)
-      ? uiT('ui.ocr_profile.no_target_aihong_hint', '当前还没有附着的 OCR 目标进程。你可以先手动填写 TheLamentingGeese.exe，并分别预存哀鸿的对白区 / 菜单区截图范围。自动重校准需要先附着到真实游戏窗口。')
-      : uiT('ui.ocr_profile.no_target_hint', '当前还没有附着的 OCR 目标进程。你也可以先手动填写 process_name，把截图校准预先存起来。自动重校准需要先附着到真实游戏窗口。');
+      ? uiT('ui.ocr_profile.no_target_aihong_hint', 'Целевой процесс OCR еще не прикреплен. Можно вручную указать TheLamentingGeese.exe и заранее сохранить области диалогов и меню. Для автоперекалибровки сначала нужно прикрепить реальное окно игры.')
+      : uiT('ui.ocr_profile.no_target_hint', 'Целевой процесс OCR еще не прикреплен. Можно вручную указать process_name и заранее сохранить калибровку снимка. Для автоперекалибровки сначала нужно прикрепить реальное окно игры.');
   }
 
   if (!processInput.value || document.activeElement !== processInput) {
@@ -6182,23 +6326,23 @@ function renderOcrProfile(status) {
   setInputValueIfIdle(topInput, profileValues.top);
   setInputValueIfIdle(bottomInput, profileValues.bottom);
   autoRecalibrateButton.disabled = Boolean(autoRecalibrateReason);
-  autoRecalibrateButton.title = autoRecalibrateReason || uiT('ui.ocr_profile.auto_recalibrate.title', '使用当前附着窗口自动重校准对白区');
+  autoRecalibrateButton.title = autoRecalibrateReason || uiT('ui.ocr_profile.auto_recalibrate.title', 'Автоматически перекалибровать область диалога по текущему прикрепленному окну');
   if (applyRecommendedButton) {
     const applyBlocked = !recommendedProfile
       || !Object.keys(recommendedProfile).length
       || recommendedManualPresent;
     applyRecommendedButton.disabled = applyBlocked;
     applyRecommendedButton.title = recommendedManualPresent
-      ? uiT('ui.ocr_profile.apply_recommended.manual_present_title', '已有手动 profile，推荐不会自动覆盖；可直接手动保存校准。')
+      ? uiT('ui.ocr_profile.apply_recommended.manual_present_title', 'Ручной profile уже существует, поэтому рекомендация не будет перезаписана автоматически. Можно сохранить калибровку вручную.')
       : (applyBlocked
-        ? uiT('ui.ocr_profile.apply_recommended.blocked_title', '当前没有可应用的推荐 profile')
-        : uiT('ui.ocr_profile.apply_recommended.title', '应用当前推荐 profile，并保留自动回滚点'));
+        ? uiT('ui.ocr_profile.apply_recommended.blocked_title', 'Нет рекомендуемого profile для применения')
+        : uiT('ui.ocr_profile.apply_recommended.title', 'Применить текущий рекомендуемый profile и сохранить точку автоотката'));
   }
   if (rollbackButton) {
     rollbackButton.disabled = !pendingRollback;
     rollbackButton.title = pendingRollback
-      ? uiT('ui.ocr_profile.rollback.title', '回滚最近一次推荐 profile 应用')
-      : uiT('ui.ocr_profile.rollback.blocked_title', '当前没有待回滚的推荐 profile');
+      ? uiT('ui.ocr_profile.rollback.title', 'Откатить последнее применение рекомендуемого profile')
+      : uiT('ui.ocr_profile.rollback.blocked_title', 'Нет рекомендуемого profile, ожидающего отката');
   }
   if (autoApplyInput && document.activeElement !== autoApplyInput) {
     autoApplyInput.checked = Boolean(runtime.capture_profile_auto_apply_enabled);
@@ -6243,14 +6387,14 @@ function renderHistory(history) {
     stability: 'diagnostic',
     line_id: runtime.last_poll_completed_at || runtime.last_capture_completed_at || '',
     text: runtime.last_raw_ocr_text
-      ? uiTf('ui.history.last_raw_ocr', '最近 raw OCR：{text}', { text: runtime.last_raw_ocr_text })
+      ? uiTf('ui.history.last_raw_ocr', 'Последний raw OCR: {text}', { text: runtime.last_raw_ocr_text })
       : buildOcrMissingLineDiagnostic(latestStatus || {}),
     is_diagnostic: true,
   }];
   renderStackList('linesList', fallbackItems, (item) => `
     <article class="list-card">
-      <p class="list-kicker">${escapeHtml(item.is_diagnostic ? uiT('ui.history.ocr_diagnostic', 'OCR 诊断') : (item.speaker || uiT('ui.history.narrator', '旁白')))} · ${escapeHtml(item.scene_id || '')} · ${escapeHtml(item.stability || '')}</p>
-      <h3>${escapeHtml(item.is_diagnostic ? uiT('ui.history.no_stable_line', '未写入稳定台词') : (item.line_id || ''))}</h3>
+      <p class="list-kicker">${escapeHtml(item.is_diagnostic ? uiT('ui.history.ocr_diagnostic', 'Диагностика OCR') : (item.speaker || uiT('ui.history.narrator', 'Рассказчик')))} · ${escapeHtml(item.scene_id || '')} · ${escapeHtml(item.stability || '')}</p>
+      <h3>${escapeHtml(item.is_diagnostic ? uiT('ui.history.no_stable_line', 'Стабильная реплика не записана') : (item.line_id || ''))}</h3>
       <p>${escapeHtml(item.text || '')}</p>
     </article>
   `);
@@ -6273,11 +6417,16 @@ function renderHistory(history) {
 }
 
 function formatInsightMeta(payload) {
-  const inputSource = payload.input_source || (latestStatus && latestStatus.active_data_source) || 'unknown';
-  const semantic = payload.semantic_granularity
-    || (payload.semantic_degraded ? 'weaker_than_bridge_sdk' : 'bridge_sdk_level');
-  const fallback = payload.fallback_used ? uiT('ui.common.yes', '是') : uiT('ui.common.no', '否');
-  return uiTf('ui.suggest.meta', '输入源={inputSource} | degraded={degraded} | 语义粒度={semantic} | 使用回退={fallback}', {
+  const inputSource = dataSourceLabel(
+    payload.input_source || (latestStatus && latestStatus.active_data_source) || 'unknown',
+    'unknown',
+  );
+  const semantic = rawStatusLabel(
+    payload.semantic_granularity
+    || (payload.semantic_degraded ? 'weaker_than_bridge_sdk' : 'bridge_sdk_level'),
+  );
+  const fallback = payload.fallback_used ? uiT('ui.common.yes', 'Да') : uiT('ui.common.no', 'Нет');
+  return uiTf('ui.suggest.meta', 'источник ввода={inputSource} | degraded={degraded} | семантическая детализация={semantic} | fallback={fallback}', {
     inputSource,
     degraded: Boolean(payload.degraded),
     semantic,
@@ -6382,7 +6531,7 @@ function renderAgentStatusGrid(rows, summaryRows) {
     const visibleSummaryRows = Array.isArray(summaryRows) ? summaryRows : [];
     if (!visibleRows.length) {
       container.className = 'data-grid scroll-region empty-state';
-      container.textContent = uiT('ui.agent.empty_status', 'Agent 正在整理小本本，等第一次状态刷新。');
+      container.textContent = uiT('ui.agent.empty_status', 'Agent приводит заметки в порядок и ждет первое обновление статуса.');
       return;
     }
     container.className = 'data-grid scroll-region';
@@ -6390,8 +6539,8 @@ function renderAgentStatusGrid(rows, summaryRows) {
       ${renderDataRows(visibleRows)}
       <details class="status-debug-panel"${debugWasOpen ? ' open' : ''}>
         <summary>
-          <span>${escapeHtml(uiT('ui.agent.summary_debug', 'Summary 调试'))}</span>
-          <small>${escapeHtml(uiTf('ui.agent.summary_debug_count', '{count} 项内部状态', { count: visibleSummaryRows.length }))}</small>
+          <span>${escapeHtml(uiT('ui.agent.summary_debug', 'Отладка Summary'))}</span>
+          <small>${escapeHtml(uiTf('ui.agent.summary_debug_count', '{count} внутренних состояний', { count: visibleSummaryRows.length }))}</small>
         </summary>
         <dl class="data-grid">
           ${renderDataRows(visibleSummaryRows)}
@@ -6403,10 +6552,11 @@ function renderAgentStatusGrid(rows, summaryRows) {
 
 function formatDebugValue(value) {
   if (value == null || value === '') {
-    return '';
+    return '—';
   }
   if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {
-    return String(value);
+    const text = String(value);
+    return text.trim() ? text : '—';
   }
   try {
     return JSON.stringify(value);
@@ -6444,7 +6594,7 @@ function renderSuggest(payload) {
             <h3>${escapeHtml(item.text || '')}</h3>
             <p>${escapeHtml(item.reason || '')}</p>
           </article>
-        `).join('') : `<div class="empty-inline agent-suggest-empty"><span class="agent-suggest-empty-face" aria-hidden="true">(=^..^=)</span><span>${escapeHtml(payload.diagnostic || uiT('ui.agent.empty_suggest', '还没有建议，等画面出现选项再轻轻递上来。'))}</span></div>`}
+        `).join('') : `<div class="empty-inline agent-suggest-empty"><span class="agent-suggest-empty-face" aria-hidden="true">(=^..^=)</span><span>${escapeHtml(payload.diagnostic || uiT('ui.agent.empty_suggest', 'Советов пока нет. Они появятся, когда на экране будут варианты выбора.'))}</span></div>`}
       </div>
     `;
   });
@@ -6458,7 +6608,7 @@ function renderSuggest(payload) {
 async function refreshInsights(snapshot, { force = false, history = {}, status = {} } = {}) {
   const mode = String(status.mode || '').trim();
   if (mode === 'silent') {
-    const diagnostic = uiT('ui.suggest.silent_diagnostic', '静默模式：不自动生成建议。');
+    const diagnostic = uiT('ui.suggest.silent_diagnostic', 'Тихий режим: предложения не создаются автоматически.');
     const suggest = buildSuggestFallback('', diagnostic);
     latestInsights.suggestKey = 'silent';
     latestInsights.suggestPayload = suggest;
@@ -6488,7 +6638,7 @@ async function refreshInsights(snapshot, { force = false, history = {}, status =
       : Promise.resolve(latestInsights.suggestPayload)
     : Promise.resolve(buildSuggestFallback(
       currentSceneId,
-      visibleChoiceMenu ? uiT('ui.suggest.companion_diagnostic', '伴读模式：不自动生成选项建议。') : 'no visible choices',
+      visibleChoiceMenu ? uiT('ui.suggest.companion_diagnostic', 'Режим сопровождения: подсказки выбора не создаются автоматически.') : uiT('ui.const.no_visible_choices', 'видимых вариантов нет'),
     ));
 
   const suggest = await suggestPromise;
@@ -6501,7 +6651,7 @@ async function refreshInsights(snapshot, { force = false, history = {}, status =
   restoreRefreshScrollState(scrollState);
 }
 
-function renderInsightsPending(message = uiT('ui.suggest.pending', '选项建议正在后台刷新...')) {
+function renderInsightsPending(message = uiT('ui.suggest.pending', 'Подсказки выбора обновляются в фоне...')) {
   const scrollState = captureRefreshScrollState();
   renderSuggest(buildSuggestFallback('', message));
   restoreRefreshScrollState(scrollState);
@@ -6788,7 +6938,7 @@ async function refreshAll(options = {}) {
         return false;
       }
       if (isPluginNotStartedError(error)) {
-        setFlash(uiT('ui.flash.plugin_not_started', '插件尚未启动。请在插件管理页面点击"启动"按钮。'), 'info');
+        setFlash(uiT('ui.flash.plugin_not_started', 'Плагин еще не запущен. Нажмите "Запустить" на странице управления плагинами.'), 'info');
       } else {
         setFlash(error instanceof Error ? error.message : String(error), 'error');
       }
@@ -6870,7 +7020,7 @@ async function startInstall(kind, force = false, { navigate = true } = {}) {
     task_id: '',
     status: 'queued',
     phase: 'queued',
-    message: uiTf('ui.install.task.creating', '正在创建 {label} 后台安装任务...', { label: config.label }),
+    message: uiTf('ui.install.task.creating', 'Создание фоновой задачи установки {label}...', { label: config.label }),
     progress: 0.01,
     updated_at: Date.now() / 1000,
   };
@@ -6878,7 +7028,7 @@ async function startInstall(kind, force = false, { navigate = true } = {}) {
   clearInstallReconnectTimer(kind);
   if (button) {
     button.disabled = true;
-    button.textContent = uiT('ui.pending.installing', '准备安装...');
+    button.textContent = uiT('ui.pending.installing', 'Подготовка установки...');
   }
   if (latestStatus) {
     renderStatus(latestStatus);
@@ -6894,7 +7044,7 @@ async function startInstall(kind, force = false, { navigate = true } = {}) {
       body: JSON.stringify({ force }),
     });
     if (!response.ok) {
-      throw new Error(uiTf('ui.error.install_task_create_failed', '创建 {label} 安装任务失败: HTTP {status}', {
+      throw new Error(uiTf('ui.error.install_task_create_failed', 'Не удалось создать задачу установки {label}: HTTP {status}', {
         label: config.label,
         status: response.status,
       }));
@@ -6903,7 +7053,7 @@ async function startInstall(kind, force = false, { navigate = true } = {}) {
     const payload = await response.json();
     const taskId = payload.task_id || payload.run_id;
     if (!taskId) {
-      throw new Error(uiTf('ui.error.install_task_id_missing', '未获取到 {label} 安装 task_id', { label: config.label }));
+      throw new Error(uiTf('ui.error.install_task_id_missing', 'Не получен task_id установки {label}', { label: config.label }));
     }
 
     state.currentTaskId = taskId;
@@ -6948,12 +7098,12 @@ async function setOcrBackendSelection({ backendSelection = null, captureBackend 
     args.capture_backend = captureBackend;
   }
   const label = backendSelection
-    ? uiTf('ui.ocr.backend_selection_label', 'OCR 后端切换为 {backend}', { backend: backendSelection })
-    : uiTf('ui.ocr.capture_backend_selection_label', '截图后端切换为 {backend}', { backend: captureBackend });
+    ? uiTf('ui.ocr.backend_selection_label', 'OCR-бэкенд переключен на {backend}', { backend: backendSelection })
+    : uiTf('ui.ocr.capture_backend_selection_label', 'Бэкенд захвата переключен на {backend}', { backend: captureBackend });
   try {
-    setFlash(uiTf('ui.flash.saving_named_setting', '正在{label}...', { label }), 'info');
+    setFlash(uiTf('ui.flash.saving_named_setting', 'Сохранение {label}...', { label }), 'info');
     await callPlugin('galgame_set_ocr_backend', args);
-    setFlash(uiTf('ui.flash.named_setting_saved', '{label} 已保存', { label }), 'success');
+    setFlash(uiTf('ui.flash.named_setting_saved', '{label} сохранено', { label }), 'success');
     await refreshAll({ preserveFlash: true, forceInsights: true });
   } catch (error) {
     setFlash(error instanceof Error ? error.message : String(error), 'error');
@@ -6963,18 +7113,18 @@ async function setOcrBackendSelection({ backendSelection = null, captureBackend 
 async function setRapidOcrLang(payload = {}) {
   if (rapidOcrLangRequestPending) {
     rapidOcrLangQueuedPayload = { ...payload };
-    setFlash(uiT('ui.flash.saving_rapidocr_lang', '正在保存 RapidOCR 识别语言...'), 'info');
+    setFlash(uiT('ui.flash.saving_rapidocr_lang', 'Сохранение языка распознавания RapidOCR...'), 'info');
     return;
   }
   rapidOcrLangRequestPending = true;
   setRapidOcrLangControlsDisabled(true);
   let saved = false;
   try {
-    setFlash(uiT('ui.flash.saving_rapidocr_lang', '正在保存 RapidOCR 识别语言...'), 'info');
+    setFlash(uiT('ui.flash.saving_rapidocr_lang', 'Сохранение языка распознавания RapidOCR...'), 'info');
     const result = await callPlugin('galgame_set_rapidocr_lang', payload);
     saved = true;
     if (!rapidOcrLangQueuedPayload) {
-      setFlash(result.summary || uiT('ui.flash.rapidocr_lang_saved', 'RapidOCR 识别语言已保存'), 'success');
+      setFlash(result.summary || uiT('ui.flash.rapidocr_lang_saved', 'Язык распознавания RapidOCR сохранён'), 'success');
     }
   } catch (error) {
     if (!rapidOcrLangQueuedPayload) {
@@ -7037,22 +7187,22 @@ async function saveMode({ auto = false } = {}) {
   const visionMaxRaw = document.getElementById('llmVisionMaxImagePxInput')?.value || '';
   const visionMaxImagePx = Number(visionMaxRaw || 768);
   if (!['auto', 'memory_reader', 'ocr_reader'].includes(readerMode)) {
-    setFlash(uiT('ui.flash.invalid_reader_mode', '文本读取模式无效。'), 'error');
+    setFlash(uiT('ui.flash.invalid_reader_mode', 'Недопустимый режим чтения текста.'), 'error');
     clearPendingModeSelection(mode);
     return;
   }
   if (!Number.isFinite(ocrPollInterval) || ocrPollInterval < 0.5 || ocrPollInterval > 10) {
-    setFlash(uiT('ui.flash.invalid_ocr_interval', 'OCR/DXcam 识别间隔必须在 0.5 到 10 秒之间。'), 'error');
+    setFlash(uiT('ui.flash.invalid_ocr_interval', 'Интервал OCR/DXcam должен быть от 0.5 до 10 секунд.'), 'error');
     clearPendingModeSelection(mode);
     return;
   }
   if (!['interval', 'after_advance'].includes(ocrTriggerMode)) {
-    setFlash(uiT('ui.flash.invalid_ocr_trigger', 'OCR 触发方式无效。'), 'error');
+    setFlash(uiT('ui.flash.invalid_ocr_trigger', 'Недопустимый режим запуска OCR.'), 'error');
     clearPendingModeSelection(mode);
     return;
   }
   if (!Number.isFinite(visionMaxImagePx) || visionMaxImagePx < 64 || visionMaxImagePx > 2048) {
-    setFlash(uiT('ui.flash.invalid_vision_max', 'Vision 最大边长必须在 64 到 2048 之间。'), 'error');
+    setFlash(uiT('ui.flash.invalid_vision_max', 'Максимальная сторона Vision должна быть от 64 до 2048.'), 'error');
     clearPendingModeSelection(mode);
     return;
   }
@@ -7064,8 +7214,8 @@ async function saveMode({ auto = false } = {}) {
       updateSummaryMode(mode);
     }
     settingsSaveInFlight = true;
-    updateSettingsDirtyHint(auto ? uiT('ui.pending.auto_saving', '正在自动保存...') : uiT('ui.pending.saving', '保存中...'));
-    setFlash(auto ? uiT('ui.flash.auto_saving_settings', '正在自动保存设置...') : uiT('ui.flash.saving_settings', '正在保存设置...'), 'info');
+    updateSettingsDirtyHint(auto ? uiT('ui.pending.auto_saving', 'Автосохранение...') : uiT('ui.pending.saving', 'Сохранение...'));
+    setFlash(auto ? uiT('ui.flash.auto_saving_settings', 'Автосохранение настроек...') : uiT('ui.flash.saving_settings', 'Сохранение настроек...'), 'info');
     await callPlugin('galgame_set_mode', {
       mode,
       push_notifications: pushNotifications,
@@ -7088,7 +7238,7 @@ async function saveMode({ auto = false } = {}) {
     if (requestId !== modeSaveRequestId) {
       return;
     }
-    setFlash(auto ? uiT('ui.flash.settings_auto_saved', '设置已自动保存') : uiT('ui.flash.settings_saved', '设置已保存'), 'success');
+    setFlash(auto ? uiT('ui.flash.settings_auto_saved', 'Настройки автосохранены') : uiT('ui.flash.settings_saved', 'Настройки сохранены'), 'success');
     settingsDirty = false;
     settingsSaveInFlight = false;
     updateSettingsDirtyHint();
@@ -7120,12 +7270,12 @@ async function bindGame(gameId = '') {
   const normalized = String(gameId || '').trim();
   try {
     setFlash(normalized
-      ? uiTf('ui.flash.binding_game', '正在绑定 {gameId}...', { gameId: normalized })
-      : uiT('ui.flash.restoring_auto_select', '正在恢复自动选择...'), 'info');
+      ? uiTf('ui.flash.binding_game', 'Привязка {gameId}...', { gameId: normalized })
+      : uiT('ui.flash.restoring_auto_select', 'Восстановление авто выбора...'), 'info');
     await callPlugin('galgame_bind_game', { game_id: normalized });
     setFlash(normalized
-      ? uiTf('ui.flash.game_bound', '已绑定 {gameId}', { gameId: normalized })
-      : uiT('ui.flash.auto_select_restored', '已恢复自动选择'), 'success');
+      ? uiTf('ui.flash.game_bound', '{gameId} привязан', { gameId: normalized })
+      : uiT('ui.flash.auto_select_restored', 'Авто выбор восстановлен'), 'success');
     latestCharacterProfileSnapshot = null;
     lastCharacterProfileGameId = '';
     await refreshAll({ preserveFlash: true, forceInsights: true });
@@ -7137,13 +7287,13 @@ async function bindGame(gameId = '') {
 
 async function setStandby(standby) {
   try {
-    setFlash(standby ? uiT('ui.flash.entering_standby', '正在进入待机...') : uiT('ui.flash.resuming_active', '正在恢复活跃...'), 'info');
+    setFlash(standby ? uiT('ui.flash.entering_standby', 'Переход в ожидание...') : uiT('ui.flash.resuming_active', 'Возврат к активности...'), 'info');
     const payload = await callPlugin('galgame_agent_command', {
       action: 'set_standby',
       standby,
     });
     latestAgentReply = payload.result || latestAgentReply;
-    setFlash(standby ? uiT('ui.flash.standby_enabled', '已切换到待机') : uiT('ui.flash.active_resumed', '已恢复活跃'), 'success');
+    setFlash(standby ? uiT('ui.flash.standby_enabled', 'Переключено в ожидание') : uiT('ui.flash.active_resumed', 'Активность восстановлена'), 'success');
     refreshAll({ preserveFlash: true, forceInsights: true }).catch((error) => {
       console.warn('[galgame_plugin ui] refresh after standby change failed', error);
     });
@@ -7155,16 +7305,16 @@ async function setStandby(standby) {
 async function resumeAgentFromButton() {
   const action = document.getElementById('standbyOffBtn').dataset.resumeAction || 'noop';
   if (action === 'focus') {
-    setFlash(uiT('ui.flash.resume_focus_pause', '当前是窗口失焦暂停。请切回游戏窗口，Agent 会自动继续；恢复活跃只解除手动待机。'), 'info');
+    setFlash(uiT('ui.flash.resume_focus_pause', 'Текущая пауза вызвана потерей фокуса окна. Вернитесь к окну игры, и Agent продолжит автоматически; кнопка возобновления снимает только ручное ожидание.'), 'info');
     refreshAll({ preserveFlash: true, silent: true }).catch((error) => { console.error('[galgame] async action failed', error); });
     return;
   }
   if (action === 'read_only') {
-    setFlash(uiT('ui.flash.resume_read_only_mode', '当前为伴读/静默模式，不会自动点击。需要自动推进时请切到“自动推进”。'), 'info');
+    setFlash(uiT('ui.flash.resume_read_only_mode', 'Текущий режим сопровождения/тишины не нажимает автоматически. Для автопродвижения переключитесь на Auto Advance.'), 'info');
     return;
   }
   if (action === 'noop') {
-    setFlash(uiT('ui.flash.no_manual_standby', 'Agent 当前没有手动待机。'), 'info');
+    setFlash(uiT('ui.flash.no_manual_standby', 'Agent не находится в ручном ожидании.'), 'info');
     return;
   }
   await setStandby(false);
@@ -7173,20 +7323,20 @@ async function resumeAgentFromButton() {
 async function askAgent(action) {
   const prompt = document.getElementById('agentPromptInput')?.value.trim() || '';
   if (!prompt) {
-    setFlash(uiT('ui.flash.agent_prompt_required', '请输入要发送给 Agent 的文本'), 'error');
+    setFlash(uiT('ui.flash.agent_prompt_required', 'Введите текст для отправки Agent'), 'error');
     return;
   }
 
   try {
-    setFlash(action === 'query_context' ? uiT('ui.flash.querying_context', '正在查询上下文...') : uiT('ui.flash.sending_agent', '正在发送给 Agent...'), 'info');
+    setFlash(action === 'query_context' ? uiT('ui.flash.querying_context', 'Запрос контекста...') : uiT('ui.flash.sending_agent', 'Отправка Agent...'), 'info');
     const payload = await callPlugin(
       'galgame_agent_command',
       action === 'query_context'
         ? { action, context_query: prompt }
         : { action, message: prompt },
     );
-    latestAgentReply = payload.result || uiT('ui.agent.no_reply', 'Agent 未返回文本');
-    setFlash(uiT('ui.flash.agent_responded', 'Agent 已响应'), 'success');
+    latestAgentReply = payload.result || uiT('ui.agent.no_reply', 'Agent не вернул текст');
+    setFlash(uiT('ui.flash.agent_responded', 'Agent ответил'), 'success');
     await refreshAll({ preserveFlash: true, forceInsights: true });
   } catch (error) {
     setFlash(error instanceof Error ? error.message : String(error), 'error');
@@ -7197,13 +7347,13 @@ function readProfileNumber(id, label) {
   const raw = document.getElementById(id).value.trim();
   const value = Number(raw);
   if (!raw) {
-    throw new Error(uiTf('ui.error.field_required', '{field} 不能为空', { field: label }));
+    throw new Error(uiTf('ui.error.field_required', '{field} обязательно', { field: label }));
   }
   if (!Number.isFinite(value)) {
-    throw new Error(uiTf('ui.error.field_must_be_number', '{field} 必须是数字', { field: label }));
+    throw new Error(uiTf('ui.error.field_must_be_number', '{field} должно быть числом', { field: label }));
   }
   if (value < 0 || value >= 1) {
-    throw new Error(uiTf('ui.error.field_range_0_099', '{field} 必须在 0.00 到 0.99 之间', { field: label }));
+    throw new Error(uiTf('ui.error.field_range_0_099', '{field} должно быть между 0.00 и 0.99', { field: label }));
   }
   return value;
 }
@@ -7233,7 +7383,7 @@ async function saveOcrCaptureProfile() {
     if (gamePresetSelect) {
       gamePresetSelect.value = 'auto';
     }
-    setFlash(payload.summary || uiT('ui.flash.ocr_profile_saved', 'OCR 截图校准已保存'), 'success');
+    setFlash(payload.summary || uiT('ui.flash.ocr_profile_saved', 'Калибровка снимка OCR сохранена'), 'success');
     await refreshAll({ preserveFlash: true, forceInsights: true });
   } catch (error) {
     setFlash(error instanceof Error ? error.message : String(error), 'error');
@@ -7253,7 +7403,7 @@ async function clearOcrCaptureProfile() {
       save_scope: saveScope,
       clear: true,
     });
-    setFlash(payload.summary || uiT('ui.flash.ocr_profile_cleared', 'OCR 截图校准已清空'), 'success');
+    setFlash(payload.summary || uiT('ui.flash.ocr_profile_cleared', 'Калибровка снимка OCR очищена'), 'success');
     await refreshAll({ preserveFlash: true, forceInsights: true });
   } catch (error) {
     setFlash(error instanceof Error ? error.message : String(error), 'error');
@@ -7264,7 +7414,7 @@ async function autoRecalibrateOcrDialogueProfile() {
   try {
     const payload = await callPlugin('galgame_auto_recalibrate_ocr_dialogue_profile', {});
     const sampleText = String(payload.sample_text || '').trim();
-    const summary = payload.summary || uiT('ui.flash.ocr_dialogue_auto_recalibrated', 'OCR 对白区已自动重校准');
+    const summary = payload.summary || uiT('ui.flash.ocr_dialogue_auto_recalibrated', 'Область диалога OCR автоматически перекалибрована');
     setFlash(sampleText ? `${summary} | ${sampleText}` : summary, 'success');
     const saveScopeSelect = document.getElementById('ocrProfileSaveScopeSelect');
     saveScopeSelect.value = 'window_bucket';
@@ -7282,7 +7432,7 @@ async function applyRecommendedOcrCaptureProfile() {
       enable_auto_apply: Boolean(autoApplyInput?.checked),
       allow_manual_override: false,
     });
-    setFlash(payload.summary || uiT('ui.flash.ocr_recommended_profile_applied', 'OCR 推荐截图校准已应用'), 'success');
+    setFlash(payload.summary || uiT('ui.flash.ocr_recommended_profile_applied', 'Рекомендуемая калибровка снимка OCR применена'), 'success');
     await refreshAll({ preserveFlash: true, forceInsights: true });
   } catch (error) {
     setFlash(error instanceof Error ? error.message : String(error), 'error');
@@ -7294,7 +7444,7 @@ async function rollbackOcrCaptureProfileRecommendation() {
     const payload = await callPlugin('galgame_rollback_ocr_capture_profile', {
       confirm: true,
     });
-    setFlash(payload.summary || uiT('ui.flash.ocr_recommended_profile_rolled_back', 'OCR 推荐截图校准已回滚'), 'success');
+    setFlash(payload.summary || uiT('ui.flash.ocr_recommended_profile_rolled_back', 'Рекомендуемая калибровка снимка OCR откачена'), 'success');
     await refreshAll({ preserveFlash: true, forceInsights: true });
   } catch (error) {
     setFlash(error instanceof Error ? error.message : String(error), 'error');
@@ -7324,7 +7474,7 @@ async function openMemoryProcessModal() {
   modal.hidden = false;
   renderPreservingScroll(modalList, () => {
     modalList.className = 'stack-list scroll-region empty-state window-candidate-list';
-    modalList.textContent = uiT('ui.memory.loading_processes', '正在加载可用进程...');
+    modalList.textContent = uiT('ui.memory.loading_processes', 'Загрузка доступных процессов...');
   });
   const refreshed = await refreshMemoryProcessTargetsIfNeeded({
     reason: 'open_memory_process_modal',
@@ -7332,7 +7482,7 @@ async function openMemoryProcessModal() {
     silent: false,
   });
   if (!refreshed && !latestMemoryProcessSnapshot) {
-    setFlash(uiT('ui.flash.memory_process_refresh_failed', 'Memory Reader 进程列表刷新失败，请稍后重试。'), 'warning');
+    setFlash(uiT('ui.flash.memory_process_refresh_failed', 'Не удалось обновить список процессов Memory Reader. Попробуйте позже.'), 'warning');
   }
   const snapshot = latestMemoryProcessSnapshot || {};
   renderMemoryProcessListToNode(modalList, snapshot.processes || []);
@@ -7345,14 +7495,14 @@ function closeMemoryProcessModal() {
 
 async function setMemoryProcessTarget(processKey) {
   try {
-    setFlash(uiT('ui.flash.locking_memory_process', '正在锁定 Memory Reader 进程...'), 'info');
+    setFlash(uiT('ui.flash.locking_memory_process', 'Блокировка процесса Memory Reader...'), 'info');
     const payload = await callPlugin('galgame_set_memory_reader_target', {
       process_key: processKey,
       clear: false,
     });
     const target = payload.process_target || {};
-    setFlash(uiTf('ui.flash.memory_process_locked', '已锁定 Memory Reader 进程：{process}', {
-      process: target.process_name || processKey || uiT('ui.memory.target_process', '目标进程'),
+    setFlash(uiTf('ui.flash.memory_process_locked', 'Процесс Memory Reader заблокирован: {process}', {
+      process: target.process_name || processKey || uiT('ui.memory.target_process', 'целевой процесс'),
     }), 'success');
     closeMemoryProcessModal();
     refreshAll({ preserveFlash: true, forceInsights: true }).catch((error) => {
@@ -7370,9 +7520,9 @@ async function setMemoryProcessTarget(processKey) {
 
 async function clearMemoryProcessTarget() {
   try {
-    setFlash(uiT('ui.flash.clearing_memory_process_lock', '正在清除 Memory Reader 手动进程锁定...'), 'info');
+    setFlash(uiT('ui.flash.clearing_memory_process_lock', 'Очистка ручной блокировки процесса Memory Reader...'), 'info');
     await callPlugin('galgame_set_memory_reader_target', { clear: true });
-    setFlash(uiT('ui.flash.memory_process_auto_restored', 'Memory Reader 已恢复自动进程检测'), 'success');
+    setFlash(uiT('ui.flash.memory_process_auto_restored', 'Автоопределение процесса Memory Reader восстановлено'), 'success');
     await refreshAll({ preserveFlash: true, forceInsights: true });
     refreshMemoryProcessTargetsIfNeeded({
       reason: 'clear_memory_process',
@@ -7408,7 +7558,7 @@ async function openOcrWindowModal() {
   modal.hidden = false;
   renderPreservingScroll(modalList, () => {
     modalList.className = 'stack-list scroll-region empty-state window-candidate-list';
-    modalList.textContent = uiT('ui.ocr.window.loading_windows', '正在加载可用游戏窗口...');
+    modalList.textContent = uiT('ui.ocr.window.loading_windows', 'Загрузка доступных игровых окон...');
   });
   const refreshed = await refreshOcrWindowTargetsIfNeeded({
     reason: 'open_window_modal',
@@ -7416,7 +7566,7 @@ async function openOcrWindowModal() {
     silent: false,
   });
   if (!refreshed && !latestOcrWindowSnapshot) {
-    setFlash(uiT('ui.flash.ocr_window_refresh_failed', 'OCR 窗口列表刷新失败，请稍后重试。'), 'warning');
+    setFlash(uiT('ui.flash.ocr_window_refresh_failed', 'Не удалось обновить список окон OCR. Попробуйте позже.'), 'warning');
   }
   const snapshot = latestOcrWindowSnapshot || {};
   renderOcrWindowListToNode(modalList, snapshot.windows || []);
@@ -7429,14 +7579,14 @@ function closeOcrWindowModal() {
 
 async function setOcrWindowTarget(windowKey) {
   try {
-    setFlash(uiT('ui.flash.locking_ocr_window', '正在锁定 OCR 识别窗口...'), 'info');
+    setFlash(uiT('ui.flash.locking_ocr_window', 'Блокировка окна распознавания OCR...'), 'info');
     const payload = await callPlugin('galgame_set_ocr_window_target', {
       window_key: windowKey,
       clear: false,
     });
     const target = payload.window_target || {};
-    const targetName = target.process_name || target.normalized_title || uiT('ui.ocr.window.target_window', '目标窗口');
-    setFlash(uiTf('ui.flash.ocr_window_locked', '已锁定 OCR 识别窗口：{target}。后台正在刷新识别状态。', {
+    const targetName = target.process_name || target.normalized_title || uiT('ui.ocr.window.target_window', 'целевое окно');
+    setFlash(uiTf('ui.flash.ocr_window_locked', 'Окно распознавания OCR заблокировано: {target}. Статус распознавания обновляется в фоне.', {
       target: targetName,
     }), 'success');
     closeOcrWindowModal();
@@ -7455,11 +7605,11 @@ async function setOcrWindowTarget(windowKey) {
 
 async function clearOcrWindowTarget() {
   try {
-    setFlash(uiT('ui.flash.clearing_ocr_window', '正在清除 OCR 目标窗口...'), 'info');
+    setFlash(uiT('ui.flash.clearing_ocr_window', 'Очистка целевого окна OCR...'), 'info');
     const payload = await callPlugin('galgame_set_ocr_window_target', {
       clear: true,
     });
-    setFlash(payload.summary || uiT('ui.flash.ocr_window_cleared', '已清除 OCR 目标窗口。插件会重新尝试自动检测；识别不到时再手动选择。'), 'success');
+    setFlash(payload.summary || uiT('ui.flash.ocr_window_cleared', 'Целевое окно OCR очищено. Плагин снова попробует автоопределение; если распознавание не сработает, выберите окно вручную.'), 'success');
     refreshAll({ preserveFlash: true, forceInsights: true }).catch((error) => {
       console.warn('[galgame_plugin ui] refresh after OCR target clear failed', error);
     });
@@ -7474,7 +7624,7 @@ async function clearOcrWindowTarget() {
 }
 
 async function clearOcrWindowTargetWithFeedback() {
-  await withButtonPending('ocrWindowAutoBtn', uiT('ui.pending.clearing', '清除中...'), clearOcrWindowTarget);
+  await withButtonPending('ocrWindowAutoBtn', uiT('ui.pending.clearing', 'Очистка...'), clearOcrWindowTarget);
 }
 
 function expandAndScrollTo(elementId) {
@@ -7503,7 +7653,7 @@ function revealCaptureBackendSettings() {
 }
 
 async function refreshStatusAndWindowsFromAction() {
-  setFlash(uiT('ui.flash.refreshing_status_and_windows', '正在刷新状态和窗口列表...'), 'info');
+  setFlash(uiT('ui.flash.refreshing_status_and_windows', 'Обновление статуса и списка окон...'), 'info');
   const loaded = await refreshAll({ preserveFlash: true, forceInsights: true, showInsightPending: true });
   const windowsLoaded = loaded
     ? await refreshOcrWindowTargetsIfNeeded({
@@ -7515,9 +7665,9 @@ async function refreshStatusAndWindowsFromAction() {
   setFlash(
     loaded
       ? (windowsLoaded
-        ? uiT('ui.flash.status_and_windows_refreshed', '状态和窗口列表已刷新。')
-        : uiT('ui.flash.status_refreshed_windows_failed', '状态已刷新；窗口列表刷新失败，请稍后重试。'))
-      : uiT('ui.flash.status_refresh_failed', '状态刷新失败，请稍后重试。'),
+        ? uiT('ui.flash.status_and_windows_refreshed', 'Статус и список окон обновлены.')
+        : uiT('ui.flash.status_refreshed_windows_failed', 'Статус обновлен; список окон обновить не удалось. Попробуйте позже.'))
+      : uiT('ui.flash.status_refresh_failed', 'Не удалось обновить статус. Попробуйте позже.'),
     loaded && windowsLoaded ? 'success' : 'warning',
   );
 }
@@ -7613,11 +7763,11 @@ async function handleDiagnosisAction(action) {
       break;
     case 'debug_details':
       revealDebugDetails();
-      setFlash(uiT('ui.flash.debug_details_expanded', '已展开 OCR 运行时调试详情。'), 'info');
+      setFlash(uiT('ui.flash.debug_details_expanded', 'Детали отладки runtime OCR раскрыты.'), 'info');
       break;
     case 'line_details':
       revealLineDetails();
-      setFlash(uiT('ui.flash.line_details_revealed', '已定位到当前台词识别详情。'), 'info');
+      setFlash(uiT('ui.flash.line_details_revealed', 'Открыты детали распознавания текущей реплики.'), 'info');
       break;
     case 'recalibrate_ocr':
       await autoRecalibrateOcrDialogueProfile();
@@ -7630,7 +7780,7 @@ async function handleDiagnosisAction(action) {
     case 'show_rapidocr_models_guide':
       navigateToInstallPanel('rapidocr', { scrollToSection: false });
       expandAndScrollTo('rapidocrCard');
-      setFlash(uiT('ui.flash.rapidocr_manual_guide_revealed', '已定位到 RapidOCR 模型说明。请按卡片中的下载来源和目录提示手动放置模型。'), 'info');
+      setFlash(uiT('ui.flash.rapidocr_manual_guide_revealed', 'Переход к инструкции по моделям RapidOCR. Используйте источник скачивания и целевой каталог на карточке, чтобы вручную разместить файлы моделей.'), 'info');
       break;
     case 'install_dxcam':
       if (hasInstallFlow('dxcam')) {
@@ -7638,12 +7788,12 @@ async function handleDiagnosisAction(action) {
       } else {
         navigateToInstallPanel('dxcam', { scrollToSection: false });
         expandAndScrollTo('dxcamCard');
-        setFlash(uiT('ui.flash.dxcam_hint_revealed', '已定位到 DXcam 状态卡片。请按卡片说明操作（重装打包版 / uv sync --group galgame）。'), 'info');
+        setFlash(uiT('ui.flash.dxcam_hint_revealed', 'Перешли к баннеру состояния DXcam. Следуйте инструкциям на баннере (переустановить упакованную сборку / uv sync --group galgame).'), 'info');
       }
       break;
     case 'capture_backend':
       revealCaptureBackendSettings();
-      setFlash(uiT('ui.flash.capture_backend_settings_revealed', '已定位到截图方式设置。可以切换 DXcam、MSS、PyAutoGUI 或 PrintWindow。'), 'info');
+      setFlash(uiT('ui.flash.capture_backend_settings_revealed', 'Открыты настройки способа захвата. Можно переключить DXcam, MSS, PyAutoGUI или PrintWindow.'), 'info');
       break;
     case 'install_textractor':
       await startInstall('textractor', false);
@@ -7655,10 +7805,10 @@ async function handleDiagnosisAction(action) {
       await resetTutorialGuide();
       break;
     case 'focus_game':
-      setFlash(uiT('ui.flash.focus_game_window', '请切回游戏窗口。窗口回到前台后，插件会在下一轮刷新中继续识别。'), 'info');
+      setFlash(uiT('ui.flash.focus_game_window', 'Вернитесь в окно игры. Когда оно снова будет на переднем плане, распознавание продолжится при следующем обновлении.'), 'info');
       break;
     default:
-      setFlash(uiT('ui.flash.action_unavailable', '这个操作暂时不可用。'), 'warning');
+      setFlash(uiT('ui.flash.action_unavailable', 'Это действие пока недоступно.'), 'warning');
       break;
   }
 }
@@ -7670,7 +7820,7 @@ function isFirstRunInstallAction(action) {
 }
 
 function handleFirstRunActionClick(button, action) {
-  return withButtonPending(button, uiT('ui.pending.processing', '处理中...'), () => {
+  return withButtonPending(button, uiT('ui.pending.processing', 'Обработка...'), () => {
     if (isFirstRunInstallAction(action)) {
       hideOnboardingWithoutSkipping();
     }
@@ -7699,8 +7849,8 @@ function setPluginSettingsTab(name = 'recognition') {
 }
 
 function syncPluginStatusSectionLabels() {
-  const collapseLabel = uiT('ui.button.collapse', '隐藏');
-  const expandLabel = uiT('ui.button.expand', '展开');
+  const collapseLabel = uiT('ui.button.collapse', 'Скрыть');
+  const expandLabel = uiT('ui.button.expand', 'Развернуть');
   document.querySelectorAll('.plugin-status-section').forEach((section) => {
     const summary = section.querySelector('.plugin-status-section-head');
     if (!summary) {
@@ -7718,9 +7868,9 @@ function syncPluginStatusHubSummaryLabels() {
   if (!hub || !summary) {
     return;
   }
-  const collapseLabel = uiT('ui.button.collapse', '隐藏');
-  const expandLabel = uiT('ui.button.expand', '展开');
-  const titleLabel = uiT('ui.plugin_status.title', '插件状态');
+  const collapseLabel = uiT('ui.button.collapse', 'Скрыть');
+  const expandLabel = uiT('ui.button.expand', 'Развернуть');
+  const titleLabel = uiT('ui.plugin_status.title', 'Состояние плагина');
   const isOpen = hub.hasAttribute('open');
   summary.setAttribute('data-label-collapse', collapseLabel);
   summary.setAttribute('data-label-expand', expandLabel);
@@ -7752,7 +7902,7 @@ function navigateToInstallPanel(kind, { scrollToSection = true } = {}) {
   if (advancedSettings && !advancedSettings.classList.contains('open')) {
     advancedSettings.classList.add('open');
     if (advancedToggleBtn) {
-      advancedToggleBtn.textContent = uiT('ui.advanced.collapse_settings', '收起高级设置');
+      advancedToggleBtn.textContent = uiT('ui.advanced.collapse_settings', 'Свернуть расширенные настройки');
     }
     const firstRunGuide = document.getElementById('firstRunGuide');
     if (firstRunGuide) {
@@ -7811,11 +7961,11 @@ async function initialize() {
   }
 
   storageRemove(`${PLUGIN_ID}:last_ui_state:v1`);
-  renderInsightsPending(uiT('ui.suggest.initial_pending', '等待首轮状态刷新；选项建议会在后台更新。'));
-    setFlash(uiT('ui.flash.loading_status', '正在加载插件状态...'), 'info');
+  renderInsightsPending(uiT('ui.suggest.initial_pending', 'Ожидание первого обновления статуса; подсказки выбора будут обновляться в фоне.'));
+    setFlash(uiT('ui.flash.loading_status', 'Загрузка состояния плагина...'), 'info');
   const loaded = await refreshAll({ forceInsights: false, showInsightPending: true });
   if (loaded) {
-    setFlash(uiT('ui.flash.loaded_status', '插件状态已加载；窗口列表、依赖状态和选项建议正在后台更新。'), 'success');
+    setFlash(uiT('ui.flash.loaded_status', 'Состояние плагина загружено; список окон, зависимости и советы обновляются в фоне.'), 'success');
   }
   runBackgroundTask('refresh Memory Reader processes', () => (
     refreshMemoryProcessTargetsIfNeeded({
@@ -7837,12 +7987,13 @@ async function initialize() {
   ]));
   initTtsPipelineControls();
   initInspectorPanel();
+  initModeSwitchObserver();
   startAutoRefresh();
 }
 
 document.getElementById('refreshBtn').addEventListener('click', async () => {
-  await withButtonPending('refreshBtn', uiT('ui.pending.refreshing', '刷新中...'), async () => {
-    setFlash(uiT('ui.flash.refreshing_plugin_status', '正在刷新插件状态...'), 'info');
+  await withButtonPending('refreshBtn', uiT('ui.pending.refreshing', 'Обновление...'), async () => {
+    setFlash(uiT('ui.flash.refreshing_plugin_status', 'Обновление статуса плагина...'), 'info');
     const loaded = await refreshAll({ forceInsights: true, showInsightPending: true });
     if (loaded) {
       refreshMemoryProcessTargetsIfNeeded({
@@ -7865,8 +8016,8 @@ document.getElementById('refreshBtn').addEventListener('click', async () => {
     if (loaded) {
       setFlash(
         windowsLoaded
-          ? uiT('ui.flash.status_windows_refreshed_insights_pending', '状态和窗口列表已刷新；选项建议在后台更新。')
-          : uiT('ui.flash.status_refreshed_windows_failed', '状态已刷新；窗口列表刷新失败，请稍后重试。'),
+          ? uiT('ui.flash.status_windows_refreshed_insights_pending', 'Статус и список окон обновлены; подсказки выбора обновляются в фоне.')
+          : uiT('ui.flash.status_refreshed_windows_failed', 'Статус обновлен; список окон обновить не удалось. Попробуйте позже.'),
         windowsLoaded ? 'success' : 'warning',
       );
     }
@@ -7879,7 +8030,7 @@ document.getElementById('primaryDiagnosisPanel').addEventListener('click', (even
     return;
   }
   const action = button.getAttribute('data-primary-action') || '';
-  withButtonPending(button, uiT('ui.pending.processing', '处理中...'), () => handleDiagnosisAction(action)).catch((error) => {
+  withButtonPending(button, uiT('ui.pending.processing', 'Обработка...'), () => handleDiagnosisAction(action)).catch((error) => {
     setFlash(error instanceof Error ? error.message : String(error), 'error');
   });
 });
@@ -7899,12 +8050,12 @@ document.getElementById('resetTutorialBtn')?.addEventListener('click', (event) =
   if (!button) {
     return;
   }
-  withButtonPending(button, uiT('ui.pending.processing', '处理中...'), () => handleDiagnosisAction('reset_tutorial')).catch((error) => {
+  withButtonPending(button, uiT('ui.pending.processing', 'Обработка...'), () => handleDiagnosisAction('reset_tutorial')).catch((error) => {
     setFlash(error instanceof Error ? error.message : String(error), 'error');
   });
 });
 document.getElementById('saveModeBtn').addEventListener('click', () => {
-  withButtonPending('saveModeBtn', uiT('ui.pending.saving', '保存中...'), saveMode).catch((error) => { console.error('[galgame] async action failed', error); });
+  withButtonPending('saveModeBtn', uiT('ui.pending.saving', 'Сохранение...'), saveMode).catch((error) => { console.error('[galgame] async action failed', error); });
 });
 SETTINGS_CONTROL_IDS.forEach((id) => {
   const node = document.getElementById(id);
@@ -7924,13 +8075,13 @@ SETTINGS_CONTROL_IDS.forEach((id) => {
   node.addEventListener('change', markDirty);
 });
 document.getElementById('clearBindBtn').addEventListener('click', async () => {
-  await withButtonPending('clearBindBtn', uiT('ui.pending.restoring', '恢复中...'), () => bindGame(''));
+  await withButtonPending('clearBindBtn', uiT('ui.pending.restoring', 'Восстановление...'), () => bindGame(''));
 });
 document.getElementById('standbyOnBtn').addEventListener('click', () => {
-  withButtonPending('standbyOnBtn', uiT('ui.pending.switching', '切换中...'), () => setStandby(true)).catch((error) => { console.error('[galgame] async action failed', error); });
+  withButtonPending('standbyOnBtn', uiT('ui.pending.switching', 'Переключение...'), () => setStandby(true)).catch((error) => { console.error('[galgame] async action failed', error); });
 });
 document.getElementById('standbyOffBtn').addEventListener('click', () => {
-  withButtonPending('standbyOffBtn', uiT('ui.pending.processing', '处理中...'), resumeAgentFromButton).catch((error) => { console.error('[galgame] async action failed', error); });
+  withButtonPending('standbyOffBtn', uiT('ui.pending.processing', 'Обработка...'), resumeAgentFromButton).catch((error) => { console.error('[galgame] async action failed', error); });
 });
 document.querySelector('.agent-panel-tabs')?.addEventListener('click', (event) => {
   const target = eventElement(event.target);
@@ -7959,20 +8110,20 @@ document.querySelector('.plugin-settings-tabs')?.addEventListener('click', (even
   setPluginSettingsTab(tab.getAttribute('data-settings-tab') || 'recognition');
 });
 document.getElementById('queryContextBtn')?.addEventListener('click', () => {
-  withButtonPending('queryContextBtn', uiT('ui.pending.querying', '查询中...'), () => askAgent('query_context')).catch((error) => { console.error('[galgame] async action failed', error); });
+  withButtonPending('queryContextBtn', uiT('ui.pending.querying', 'Запрос...'), () => askAgent('query_context')).catch((error) => { console.error('[galgame] async action failed', error); });
 });
 document.getElementById('sendMessageBtn')?.addEventListener('click', () => {
-  withButtonPending('sendMessageBtn', uiT('ui.pending.sending', '发送中...'), () => askAgent('send_message')).catch((error) => { console.error('[galgame] async action failed', error); });
+  withButtonPending('sendMessageBtn', uiT('ui.pending.sending', 'Отправка...'), () => askAgent('send_message')).catch((error) => { console.error('[galgame] async action failed', error); });
 });
 document.getElementById('characterProfileFixedBtn')?.addEventListener('click', () => {
-  withButtonPending('characterProfileFixedBtn', uiT('ui.pending.saving', '保存中...'), () => (
+  withButtonPending('characterProfileFixedBtn', uiT('ui.pending.saving', 'Сохранение...'), () => (
     setCharacterProfileMode('fixed')
   )).catch((error) => {
     setFlash(error instanceof Error ? error.message : String(error), 'error');
   });
 });
 document.getElementById('characterProfileOffBtn')?.addEventListener('click', () => {
-  withButtonPending('characterProfileOffBtn', uiT('ui.pending.saving', '保存中...'), () => (
+  withButtonPending('characterProfileOffBtn', uiT('ui.pending.saving', 'Сохранение...'), () => (
     setCharacterProfileMode('off')
   )).catch((error) => {
     setFlash(error instanceof Error ? error.message : String(error), 'error');
@@ -7984,7 +8135,7 @@ document.getElementById('characterProfileRefreshBtn')?.addEventListener('click',
     silent: false,
   }).then((refreshed) => {
     if (refreshed) {
-      setFlash(uiT('ui.flash.character_profiles_refreshed', '角色档案列表已刷新'), 'success');
+      setFlash(uiT('ui.flash.character_profiles_refreshed', 'Список профилей персонажей обновлен'), 'success');
     }
   }).catch((error) => {
     setFlash(error instanceof Error ? error.message : String(error), 'error');
@@ -8007,7 +8158,7 @@ document.getElementById('memoryProcessRefreshBtn').addEventListener('click', () 
     silent: false,
   }).then((refreshed) => {
     if (!refreshed) {
-      setFlash(uiT('ui.flash.memory_process_refresh_failed', 'Memory Reader 进程列表刷新失败，请稍后重试。'), 'warning');
+      setFlash(uiT('ui.flash.memory_process_refresh_failed', 'Не удалось обновить список процессов Memory Reader. Попробуйте позже.'), 'warning');
     }
   }).catch((error) => {
     setFlash(error instanceof Error ? error.message : String(error), 'error');
@@ -8030,7 +8181,7 @@ document.getElementById('ocrWindowRefreshBtn').addEventListener('click', () => {
     silent: false,
   }).then((refreshed) => {
     if (!refreshed) {
-      setFlash(uiT('ui.flash.ocr_window_refresh_failed', 'OCR 窗口列表刷新失败，请稍后重试。'), 'warning');
+      setFlash(uiT('ui.flash.ocr_window_refresh_failed', 'Не удалось обновить список окон OCR. Попробуйте позже.'), 'warning');
     }
   }).catch((error) => {
     setFlash(error instanceof Error ? error.message : String(error), 'error');
@@ -8160,8 +8311,8 @@ if (advancedToggleBtn) {
     if (el) {
       el.classList.toggle('open');
       advancedToggleBtn.textContent = el.classList.contains('open')
-        ? uiT('ui.advanced.collapse_settings', '收起高级设置')
-        : uiT('ui.advanced.settings', '高级设置');
+        ? uiT('ui.advanced.collapse_settings', 'Свернуть расширенные настройки')
+        : uiT('ui.advanced.settings', 'Расширенные настройки');
       if (el.classList.contains('open')) {
         const firstRunGuide = document.getElementById('firstRunGuide');
         if (firstRunGuide) {

@@ -8,7 +8,7 @@
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
   <title data-i18n="ui.app.title">Помощник Galgame</title>
-  <link rel="stylesheet" href="./style.css?v=20260508-settings-neko-console">
+  <link rel="stylesheet" href="./style.css?v=20261120-ru-i18n-layout-fix">
 </head>
 <body>
   <div class="page-shell">
@@ -34,14 +34,13 @@
       <header class="hero">
         <div>
           <h1 class="hero-title"><span class="neko-ears" aria-hidden="true">🐱</span> <span data-i18n="ui.app.title">Помощник Galgame</span></h1>
-          <span id="summaryText" class="summary-pill" data-i18n="ui.summary.waiting_refresh">Ожидание первого обновления</span>
         </div>
         <div class="hero-right">
           <div class="hero-controls">
             <div class="mode-switch" id="modeSwitch">
               <button class="mode-btn" data-mode="silent" data-i18n="ui.mode.silent">Тихий</button>
-              <button class="mode-btn" data-mode="companion" data-i18n="ui.mode.companion">Компаньон</button>
-              <button class="mode-btn" data-mode="choice_advisor" data-i18n="ui.mode.choice_advisor">Советник</button>
+              <button class="mode-btn" data-mode="companion" data-i18n="ui.mode.companion">Сопровождение</button>
+              <button class="mode-btn" data-mode="choice_advisor" data-i18n="ui.mode.choice_advisor">Автопродвижение</button>
               <button class="mode-btn" data-mode="narrator" data-i18n="ui.mode.narrator">Рассказчик</button>
             </div>
             <div class="tts-pipeline-switch" id="ttsPipelineSwitch">
@@ -56,9 +55,9 @@
             </div>
             <select id="modeSelect" hidden>
               <option value="silent" data-i18n="ui.mode.silent">Тихий</option>
-              <option value="companion" selected data-i18n="ui.mode.companion">Компаньон</option>
-              <option value="choice_advisor" data-i18n="ui.mode.choice_advisor">Советник</option>
-              <option value="narrator" data-i18n="ui.mode.narrator">Рассказчик</option>
+              <option value="companion" data-i18n="ui.mode.companion">Сопровождение</option>
+              <option value="choice_advisor" data-i18n="ui.mode.choice_advisor">Автопродвижение</option>
+              <option value="narrator" selected data-i18n="ui.mode.narrator">Рассказчик</option>
             </select>
             <select id="advanceSpeedSelect" hidden>
               <option value="slow" data-i18n="ui.speed.slow">Медленно</option>
@@ -71,6 +70,11 @@
           </div>
         </div>
       </header>
+
+      <div class="status-strip" id="statusStrip">
+        <span class="status-strip-kicker" data-i18n="ui.plugin_status.kicker">N.E.K.O STATUS</span>
+        <span id="summaryText" class="summary-pill status-strip-text" title="" data-i18n="ui.summary.waiting_refresh">Ожидание первого обновления</span>
+      </div>
 
       <section class="play-assist-hub" aria-labelledby="playAssistHubTitle">
         <div class="play-assist-hub-head">
@@ -695,6 +699,6 @@
   </div>
 
   <script src="./i18n.js?v=20260509-ui-i18n-storage-locale"></script>
-  <script src="./main.js?v=20260519-character-profile-runtime-target"></script>
+  <script src="./main.js?v=20261120-ru-fallbacks-debug-labels"></script>
 </body>
 </html>

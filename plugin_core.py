@@ -44,7 +44,9 @@ from .models import (
     DATA_SOURCE_NONE,
     DATA_SOURCE_OCR_READER,
     MODE_COMPANION,
+    MODE_NARRATOR,
     MODES,
+    TTS_OUTPUT_PIPELINES,
     OCR_CAPTURE_PROFILE_SAVE_SCOPE_PROCESS_FALLBACK,
     OCR_CAPTURE_PROFILE_SAVE_SCOPE_WINDOW_BUCKET,
     OCR_CAPTURE_PROFILE_STAGE_CONFIG,
@@ -96,6 +98,7 @@ from .models import (
     STORE_RAPIDOCR_OCR_VERSION,
     STORE_READER_MODE,
     STORE_SESSION_ID,
+    STORE_TTS_OUTPUT_PIPELINE,
     build_ocr_capture_profile_bucket_key,
     compute_ocr_window_aspect_ratio,
     json_copy,
@@ -332,7 +335,7 @@ class GalgamePlugin(
         self._rapidocr_models_lock = threading.Lock()
         self._cfg = None
         self._state = build_initial_state(
-            mode=MODE_COMPANION,
+            mode=MODE_NARRATOR,
             push_notifications=True,
             advance_speed=ADVANCE_SPEED_MEDIUM,
         )
@@ -2387,9 +2390,12 @@ class GalgamePlugin(
             )
 
     def _set_runtime_from_store(self, restored: dict[str, Any], warnings: list[str]) -> None:
+        fallback_mode = self._cfg.default_mode if self._cfg is not None else MODE_NARRATOR
+        if fallback_mode not in MODES:
+            fallback_mode = MODE_NARRATOR
         with self._state_lock:
             self._state = build_initial_state(
-                mode=str(restored.get(STORE_MODE, MODE_COMPANION)),
+                mode=str(restored.get(STORE_MODE, fallback_mode)),
                 push_notifications=bool(restored.get(STORE_PUSH_NOTIFICATIONS, True)),
                 advance_speed=str(restored.get(STORE_ADVANCE_SPEED, ADVANCE_SPEED_MEDIUM)),
             )
@@ -3186,7 +3192,9 @@ class GalgamePlugin(
             return Err(SdkError(f"failed to load galgame_plugin config: {exc}"))
 
         try:
-            restored, warnings = self._persist.load()
+            restored, warnings = self._persist.load(
+                default_mode=self._cfg.default_mode if self._cfg is not None else None
+            )
             self._set_runtime_from_store(restored, warnings)
         except Exception as exc:
             self._record_error(

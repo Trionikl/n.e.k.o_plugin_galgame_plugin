@@ -28,6 +28,7 @@ from market_plugins.galgame_plugin.models import (
     STORE_RAPIDOCR_LANG_TYPE,
     STORE_RAPIDOCR_OCR_VERSION,
     STORE_READER_MODE,
+    STORE_TTS_OUTPUT_PIPELINE,
     normalize_rapidocr_ocr_version,
 )
 from market_plugins.galgame_plugin.plugin_core import GalgamePlugin
@@ -125,6 +126,7 @@ def test_galgame_config_overrides_apply_valid_values_and_ignore_invalid(tmp_path
         STORE_RAPIDOCR_OCR_VERSION: "PP-OCRv5",
         STORE_RAPIDOCR_AUTO_DETECT_LANG: False,
         STORE_RAPIDOCR_AUTO_DETECT_LAST_LANG: "japan",
+        STORE_TTS_OUTPUT_PIPELINE: "direct",
     }.items():
         store.persist_config_override(key, value)
 
@@ -159,6 +161,7 @@ def test_galgame_config_overrides_apply_valid_values_and_ignore_invalid(tmp_path
     assert plugin._cfg.rapidocr.rapidocr_lang_type == "korean"
     assert plugin._cfg.rapidocr.rapidocr_auto_detect_lang is False
     assert plugin._cfg.rapidocr.rapidocr_auto_detect_last_lang == "japan"
+    assert plugin._cfg.tts_output_pipeline == "direct"
 
     store.persist_config_override(STORE_READER_MODE, "bad")
     store.persist_config_override(STORE_OCR_BACKEND_SELECTION, "bad")

@@ -86,5 +86,7 @@
   "entries.galgame_get_recent_lines.name": "최근 대사 가져오기",
   "entries.galgame_get_recent_lines.description": "최근 안정 대사와 관측된 후보 대사를 반환합니다.",
   "entries.galgame_get_push_history.name": "푸시 기록 가져오기",
-  "entries.galgame_get_push_history.description": "원문 대사 없이 최근 컨텍스트 푸시 메타데이터를 반환합니다."
+  "entries.galgame_get_push_history.description": "원문 대사 없이 최근 컨텍스트 푸시 메타데이터를 반환합니다.",
+  "entries.galgame_set_tts_pipeline.name": "TTS 출력 파이프라인",
+  "entries.galgame_set_tts_pipeline.description": "TTS 출력 파이프라인을 선택: Agent 경유, 직접, 또는 꺼짐."
 }

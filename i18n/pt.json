@@ -86,5 +86,7 @@
   "entries.galgame_get_recent_lines.name": "Obter falas recentes",
   "entries.galgame_get_recent_lines.description": "Retorna falas recentes estáveis e observadas.",
   "entries.galgame_get_push_history.name": "Obter histórico de envios",
-  "entries.galgame_get_push_history.description": "Retorna metadados recentes de envios de contexto sem texto bruto das falas."
+  "entries.galgame_get_push_history.description": "Retorna metadados recentes de envios de contexto sem texto bruto das falas.",
+  "entries.galgame_set_tts_pipeline.name": "Canal de saída TTS",
+  "entries.galgame_set_tts_pipeline.description": "Escolha o canal de saída TTS: via agente, direto ou desligado."
 }

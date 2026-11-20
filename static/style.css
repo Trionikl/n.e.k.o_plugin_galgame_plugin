@@ -73,8 +73,15 @@ body::before {
 .page-shell {
   position: relative;
   z-index: 1;
-  width: min(1240px, calc(100vw - 32px));
+  width: calc(100vw - 48px);
+  max-width: 100%;
   margin: 24px auto 40px;
+}
+
+@media (max-width: 640px) {
+  .page-shell {
+    width: calc(100vw - 32px);
+  }
 }
 
 #mainView {
@@ -187,6 +194,33 @@ h1 {
   background: rgba(64, 197, 241, 0.10);
   color: var(--brand-strong);
   font-size: 13px;
+}
+
+.status-strip {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin: 0 0 18px;
+  min-width: 0;
+}
+
+.status-strip-kicker {
+  flex: 0 0 auto;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.status-strip-text {
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: none;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .primary-diagnosis,
@@ -2174,15 +2208,16 @@ button[disabled] {
 
 .flash-message {
   position: fixed;
-  top: 18px;
+  bottom: 20px;
   right: 24px;
-  z-index: 1100;
+  z-index: 900;
   width: min(420px, calc(100vw - 32px));
   margin: 0;
   padding: 12px 14px;
   border-radius: var(--radius-sm);
   font-size: 14px;
   box-shadow: 0 12px 30px rgba(31, 42, 51, 0.14);
+  pointer-events: none;
 }
 
 .flash-message.success {
@@ -3616,7 +3651,8 @@ body:not(.onboarding-active) #onboardingView {
 
 .mode-switch {
   position: relative;
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 4px;
   min-width: min(100%, 360px);
   padding: 5px;
@@ -3674,10 +3710,10 @@ body:not(.onboarding-active) #onboardingView {
 
 .mode-btn {
   position: relative;
-  flex: 1 1 0;
+  grid-column: auto;
   min-width: 0;
   min-height: 38px;
-  padding: 8px 14px 10px;
+  padding: 8px 10px 10px;
   border-radius: 7px;
   background: transparent;
   color: var(--muted);
@@ -3688,6 +3724,8 @@ body:not(.onboarding-active) #onboardingView {
   transition: color 180ms ease, background 180ms ease, transform 100ms ease;
   z-index: 2;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   -webkit-user-select: none;
   user-select: none;
 }
@@ -4465,8 +4503,6 @@ body:not(.onboarding-active) #onboardingView {
 
 .hero-controls { flex-wrap: wrap; max-width: 100%; }
 .hero-actions { flex-wrap: wrap; justify-content: flex-end; }
-.mode-switch { min-width: min(100%, 520px); flex-wrap: wrap; }
-.mode-btn { white-space: nowrap; }
 .tts-pipeline-switch {
   display: flex;
   gap: 4px;
@@ -4508,4 +4544,41 @@ body:not(.onboarding-active) #onboardingView {
   .mode-switch { min-width: 100%; }
   .tts-pipeline-switch, .speed-switch { width: 100%; justify-content: center; flex-wrap: wrap; }
   .hero-controls { align-items: stretch; }
+}
+
+/* ---- scrollbars (neon teal on light) ---- */
+body,
+.scroll-region,
+.inspector-panel,
+.data-grid,
+.status-grid-panel,
+.modal-body,
+.stack-list {
+  scrollbar-width: thin;
+  scrollbar-color: var(--brand) rgba(64, 197, 241, 0.14);
+}
+
+::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(64, 197, 241, 0.55);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--brand);
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
 }

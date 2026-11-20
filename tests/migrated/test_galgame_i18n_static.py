@@ -165,8 +165,8 @@ def test_ui_locale_bundles_have_same_nonempty_keys() -> None:
 
 def test_ui_index_contains_galgame_dashboard_content() -> None:
     html = (STATIC_ROOT / "index.html").read_text(encoding="utf-8")
-    assert '<title data-i18n="ui.app.title">Galgame 游玩助手</title>' in html
-    assert "让猫娘陪你一起玩 Galgame" in html
+    assert '<title data-i18n="ui.app.title">Помощник Galgame</title>' in html
+    assert "Пусть кошкодевочка играет в Galgame вместе с вами" in html
     for text in ["RapidOCR", "依赖安装", "DXcam", "Textractor", "OCR 截图校准"]:
         assert text in html
     for element_id in [
